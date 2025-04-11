@@ -115,11 +115,11 @@ function prompt($message) {
     echo $message . ": ";
     return trim(fgets(STDIN));
 }
-
+global $non_interactive;
 $non_interactive = isset($options['non-interactive']);
 
 function getOptionOrPrompt($key, $promptMessage, $required = false, $default = '', $optionsGlobal = []) {
-    global $options, $non_interactive;
+    global $options;
     if (isset($options[$key])) {
         return $options[$key];
     } else {
