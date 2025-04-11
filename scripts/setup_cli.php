@@ -173,14 +173,14 @@ $base_url = rtrim($base_url, '/');
 
 // Locale, Timezone, Currency
 echo "\n=== Localization ===\n";
-$locale = getOptionOrPrompt('locale', "Enter the locale (e.g. en_US)", true);
-$timezone = getOptionOrPrompt('timezone', "Enter the timezone (e.g. UTC or America/New_York)", true);
-$currency_code = getOptionOrPrompt('currency', "Enter the currency code (e.g. USD)", true);
+$locale = getOptionOrPrompt('locale', "Enter the locale (e.g. en_US)", true, "en_US");
+$timezone = getOptionOrPrompt('timezone', "Enter the timezone (e.g. UTC or America/New_York)", true, "UTC");
+$currency_code = getOptionOrPrompt('currency', "Enter the currency code (e.g. USD)", true, "USD");
 
 // Company Details
 echo "\n=== Company Details ===\n";
 $company_name = getOptionOrPrompt('company-name', "Company Name", true);
-$country = getOptionOrPrompt('country', "Country (e.g. United States)", true);
+$country = getOptionOrPrompt('country', "Country (e.g. United States)", true, "United States");
 $address = getOptionOrPrompt('address', "Address (optional)", false);
 $city = getOptionOrPrompt('city', "City (optional)", false);
 $state = getOptionOrPrompt('state', "State/Province (optional)", false);
