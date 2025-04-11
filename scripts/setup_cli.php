@@ -115,16 +115,21 @@ function prompt($message) {
     echo $message . ": ";
     return trim(fgets(STDIN));
 }
-global $non_interactive;
+
 $non_interactive = isset($options['non-interactive']);
 
 function getOptionOrPrompt($key, $promptMessage, $required = false, $default = '', $optionsGlobal = []) {
-    global $options;
+    global $options, $non_interactive;
     if (isset($options[$key])) {
         return $options[$key];
     } else {
         if ($non_interactive && $required) {
-            die("Missing required argument: --$key\n");
+            if ($default == '') {
+                die("Missing required argument: --$key\n");
+            } else {
+                $val = $default;
+                return $val;
+            }
         }
         
         if (!$non_interactive) {
@@ -148,15 +153,6 @@ if (file_exists('../config.php')) {
     echo "Database is already configured in config.php.\n";
     echo "To re-run the setup, remove config.php and run this script again.\n";
     exit;
-}
-
-// If non-interactive is set, ensure all required arguments are present
-if ($non_interactive) {
-    foreach (array_keys($required_args) as $arg) {
-        if (!isset($options[$arg])) {
-            die("Missing required argument: --$arg\n");
-        }
-    }
 }
 
 // Database Setup
@@ -214,6 +210,15 @@ if (strlen($user_password_plain) < 8) {
 
 if (!preg_match('/^[a-zA-Z0-9.\-\/]+$/', $host)) {
     die("Invalid host format.\n");
+}
+
+// If non-interactive is set, ensure all required arguments are present
+if ($non_interactive) {
+    foreach (array_keys($required_args) as $arg) {
+        if (!isset($options[$arg])) {
+            die("Missing required argument: --$arg\n");
+        }
+    }
 }
 
 // Test Database
