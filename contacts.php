@@ -9,10 +9,26 @@ if (isset($_GET['client_id'])) {
     require_once "includes/inc_all_client.php";
     $client_query = "AND contact_client_id = $client_id";
     $client_url = "client_id=$client_id&";
+    // Overide Filter Header Archived
+    if (isset($_GET['archived']) && $_GET['archived'] == 1) {
+        $archived = 1;
+        $archive_query = "contact_archived_at IS NOT NULL";
+    } else {
+        $archived = 0;
+        $archive_query = "contact_archived_at IS NULL";
+    }
 } else {
     require_once "includes/inc_client_overview_all.php";
     $client_query = '';
     $client_url = '';
+    // Overide Filter Header Archived
+    if (isset($_GET['archived']) && $_GET['archived'] == 1) {
+        $archived = 1;
+        $archive_query = "(client_archived_at IS NOT NULL OR contact_archived_at IS NOT NULL)";
+    } else {
+        $archived = 0;
+        $archive_query = "(client_archived_at IS NULL AND contact_archived_at IS NULL)";
+    }
 }
 
 // Tags Filter
@@ -55,7 +71,7 @@ $sql = mysqli_query($mysqli, "SELECT SQL_CALC_FOUND_ROWS contacts.*, clients.*, 
     LEFT JOIN users ON user_id = contact_user_id
     LEFT JOIN contact_tags ON contact_tags.contact_id = contacts.contact_id
     LEFT JOIN tags ON tags.tag_id = contact_tags.tag_id
-    WHERE contact_$archive_query
+    WHERE $archive_query
     $tag_query
     AND (contact_name LIKE '%$q%' OR contact_title LIKE '%$q%' OR location_name LIKE '%$q%'  OR contact_email LIKE '%$q%' OR contact_department LIKE '%$q%' OR contact_phone LIKE '%$phone_query%' OR contact_extension LIKE '%$q%' OR contact_mobile LIKE '%$phone_query%' OR tag_name LIKE '%$q%' OR client_name LIKE '%$q%')
     $access_permission_query
@@ -110,7 +126,7 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                 </div>
 
                 <div class="col-md-3">
-                    <div class="input-group">
+                    <div class="input-group mb-3 mb-md-0">
                         <select onchange="this.form.submit()" class="form-control select2" name="tags[]" data-placeholder="- Select Tags -" multiple>
 
                             <?php
@@ -137,7 +153,7 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
 
                 <?php if ($client_url) { ?> 
                 <div class="col-md-2">
-                    <div class="input-group">
+                    <div class="input-group mb-3 mb-md-0">
                         <select class="form-control select2" name="location" onchange="this.form.submit()">
                             <option value="">- All Locations -</option>
 
@@ -165,7 +181,7 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                 </div>
                 <?php } else { ?>
                 <div class="col-md-2">
-                    <div class="input-group">
+                    <div class="input-group mb-3 mb-md-0">
                         <select class="form-control select2" name="client" onchange="this.form.submit()">
                             <option value="" <?php if ($client == "") { echo "selected"; } ?>>- All Clients -</option>
 
@@ -319,7 +335,7 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                         } else {
                             $contact_phone_display = "<div><i class='fas fa-fw fa-phone mr-2'></i><a href='tel:$contact_phone'>$contact_phone$contact_extension_display</a></div>";
                         }
-                        $contact_mobile_country_code = nullable_htmlentities($row['contact_phone_country_code']);
+                        $contact_mobile_country_code = nullable_htmlentities($row['contact_mobile_country_code']);
                         $contact_mobile = nullable_htmlentities(formatPhoneNumber($row['contact_mobile'], $contact_mobile_country_code));
                         if (empty($contact_mobile)) {
                             $contact_mobile_display = "";
@@ -374,7 +390,7 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                         $sql_related_assets = mysqli_query($mysqli, "SELECT * FROM assets WHERE asset_contact_id = $contact_id ORDER BY asset_id DESC");
                         $asset_count = mysqli_num_rows($sql_related_assets);
                         if ($asset_count) { 
-                            $asset_count_display = "<span class='mr-2 badge badge-pill badge-dark p-2' title='$asset_count Assets'><i class='fas fa-fw fa-desktop mr-2'></i>$asset_count</span>";
+                            $asset_count_display = "<span class='mr-2 mb-1 badge badge-pill badge-dark p-2' title='$asset_count Assets'><i class='fas fa-fw fa-desktop mr-2'></i>$asset_count</span>";
                         } else {
                             $asset_count_display = '';
                         }
@@ -383,7 +399,7 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                         $sql_related_credentials = mysqli_query($mysqli, "SELECT * FROM credentials WHERE credential_contact_id = $contact_id ORDER BY credential_id DESC");
                         $credential_count = mysqli_num_rows($sql_related_credentials);
                         if ($credential_count) { 
-                            $credential_count_display = "<span class='mr-2 badge badge-pill badge-secondary p-2' title='$credential_count Credentials'><i class='fas fa-fw fa-key mr-2'></i>$credential_count</span>";
+                            $credential_count_display = "<span class='mr-2 mb-1 badge badge-pill badge-secondary p-2' title='$credential_count Credentials'><i class='fas fa-fw fa-key mr-2'></i>$credential_count</span>";
                         } else {
                             $credential_count_display = '';
                         }
@@ -392,7 +408,7 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                         $sql_related_software = mysqli_query($mysqli, "SELECT * FROM software, software_contacts WHERE software.software_id = software_contacts.software_id AND software_contacts.contact_id = $contact_id");
                         $software_count = mysqli_num_rows($sql_related_software);
                         if ($software_count) { 
-                            $software_count_display = "<span class='mr-2 badge badge-pill badge-secondary p-2' title='$software_count Licenses'><i class='fas fa-fw fa-cube mr-2'></i>$software_count</span>";
+                            $software_count_display = "<span class='mr-2 mb-1 badge badge-pill badge-secondary p-2' title='$software_count Licenses'><i class='fas fa-fw fa-cube mr-2'></i>$software_count</span>";
                         } else {
                             $software_count_display = '';
                         }
@@ -401,7 +417,7 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                         $sql_related_tickets = mysqli_query($mysqli, "SELECT * FROM tickets WHERE ticket_contact_id = $contact_id");
                         $ticket_count = mysqli_num_rows($sql_related_tickets);
                         if ($ticket_count) { 
-                            $ticket_count_display = "<span class='mr-2 badge badge-pill badge-secondary p-2' title='$ticket_count Tickets'><i class='fas fa-fw fa-life-ring mr-2'></i>$ticket_count</span>";
+                            $ticket_count_display = "<span class='mr-2 mb-1 badge badge-pill badge-secondary p-2' title='$ticket_count Tickets'><i class='fas fa-fw fa-life-ring mr-2'></i>$ticket_count</span>";
                         } else {
                             $ticket_count_display = '';
                         }
@@ -410,7 +426,7 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                         $sql_related_documents = mysqli_query($mysqli, "SELECT * FROM documents, contact_documents WHERE documents.document_id = contact_documents.document_id AND contact_documents.contact_id = $contact_id");
                         $document_count = mysqli_num_rows($sql_related_documents);
                         if ($document_count) { 
-                            $document_count_display = "<span class='mr-2 badge badge-pill badge-secondary p-2' title='$document_count Documents'><i class='fas fa-fw fa-file-alt mr-2'></i>$document_count</span>";
+                            $document_count_display = "<span class='mr-2 mb-1 badge badge-pill badge-secondary p-2' title='$document_count Documents'><i class='fas fa-fw fa-file-alt mr-2'></i>$document_count</span>";
                         } else {
                             $document_count_display = '';
                         }
@@ -445,11 +461,7 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                                 </div>
                             </td>
                             <td>
-                                <a class="text-dark" href="#"
-                                    data-toggle="ajax-modal"
-                                    data-modal-size="lg"
-                                    data-ajax-url="ajax/ajax_contact_details.php?<?php echo $client_url; ?>"
-                                    data-ajax-id="<?php echo $contact_id; ?>">
+                                <a class="text-dark" href="contact_details.php?client_id=<?php echo $client_id; ?>&contact_id=<?php echo $contact_id; ?>">
                                     <div class="media">
                                         <?php if ($contact_photo) { ?>
                                             <span class="fa-stack fa-2x mr-3 text-center">

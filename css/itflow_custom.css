@@ -20,10 +20,10 @@
   }
 }
 
-.grab-cursor {
-    cursor: grab;
+.drag-handle {
+    cursor: grab !important;
 }
 
-.grab-cursor:active {
-    cursor: grabbing;
+.drag-handle:active {
+    cursor: grabbing !important;
 }

@@ -9,6 +9,14 @@ if (isset($_GET['client_id'])) {
     require_once "includes/inc_all_client.php";
     $client_query = "AND location_client_id = $client_id";
     $client_url = "client_id=$client_id&";
+    // Overide Filter Header Archived
+    if (isset($_GET['archived']) && $_GET['archived'] == 1) {
+        $archived = 1;
+        $archive_query = "location_archived_at IS NOT NULL";
+    } else {
+        $archived = 0;
+        $archive_query = "location_archived_at IS NULL";
+    }
 } else {
     require_once "includes/inc_client_overview_all.php";
     $client_query = '';
@@ -24,6 +32,14 @@ if (!$client_url) {
         // Default - any
         $client_query = '';
         $client = '';
+    }
+    // Overide Filter Header Archived
+    if (isset($_GET['archived']) && $_GET['archived'] == 1) {
+        $archived = 1;
+        $archive_query = "(client_archived_at IS NOT NULL OR location_archived_at IS NOT NULL)";
+    } else {
+        $archived = 0;
+        $archive_query = "(client_archived_at IS NULL AND location_archived_at IS NULL)";
     }
 }
 
@@ -45,9 +61,9 @@ $sql = mysqli_query(
     LEFT JOIN clients ON client_id = location_client_id
     LEFT JOIN location_tags ON location_tags.location_id = locations.location_id
     LEFT JOIN tags ON tags.tag_id = location_tags.tag_id
-    WHERE location_$archive_query
+    WHERE $archive_query
     $tag_query
-    AND (location_name LIKE '%$q%' OR location_description LIKE '%$q%' OR location_address LIKE '%$q%' OR location_phone LIKE '%$phone_query%' OR tag_name LIKE '%$q%' OR client_name LIKE '%$q%')
+    AND (location_name LIKE '%$q%' OR location_description LIKE '%$q%' OR location_address LIKE '%$q%' OR location_city LIKE '%$q%' OR location_state LIKE '%$q%' OR location_zip LIKE '%$q%' OR location_country LIKE '%$q%' OR location_phone LIKE '%$phone_query%' OR tag_name LIKE '%$q%' OR client_name LIKE '%$q%')
     $access_permission_query
     $client_query
     GROUP BY location_id
@@ -99,7 +115,7 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                 </div>
 
                 <div class="col-md-3">
-                    <div class="input-group">
+                    <div class="input-group mb-3 mb-md-0">
                         <select onchange="this.form.submit()" class="form-control select2" name="tags[]" data-placeholder="- Select Tags -" multiple>
                             <?php
                             $sql_tags_filter = mysqli_query($mysqli, "
@@ -126,7 +142,7 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                 <div class="col-md-2"></div>
                 <?php } else { ?>
                 <div class="col-md-2">
-                    <div class="input-group">
+                    <div class="input-group mb-3 mb-md-0">
                         <select class="form-control select2" name="client" onchange="this.form.submit()">
                             <option value="" <?php if ($client == "") { echo "selected"; } ?>>- All Clients -</option>
 
@@ -333,7 +349,7 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                                     </div>
                                 </a>
                             </td>
-                            <td><a href="//maps.<?php echo $session_map_source; ?>.com?q=<?php echo "$location_address $location_zip"; ?>" target="_blank"><?php echo $location_address; ?><br><?php echo "$location_city $location_state $location_zip"; ?></a></td>
+                            <td><a href="//maps.<?php echo $session_map_source; ?>.com?q=<?php echo "$location_address $location_zip"; ?>" target="_blank"><?php echo $location_address; ?><br><?php echo "$location_city $location_state $location_zip<br><small>$location_country</small>"; ?></a></td>
                             <td>
                                 <?php echo $location_phone_display; ?>
                                 <?php echo $location_fax_display; ?>

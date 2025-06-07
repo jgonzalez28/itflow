@@ -9,10 +9,26 @@ if (isset($_GET['client_id'])) {
     require_once "includes/inc_all_client.php";
     $client_query = "AND software_client_id = $client_id";
     $client_url = "client_id=$client_id&";
+    // Overide Filter Header Archived
+    if (isset($_GET['archived']) && $_GET['archived'] == 1) {
+        $archived = 1;
+        $archive_query = "software_archived_at IS NOT NULL";
+    } else {
+        $archived = 0;
+        $archive_query = "software_archived_at IS NULL";
+    }
 } else {
     require_once "includes/inc_client_overview_all.php";
     $client_query = '';
     $client_url = '';
+    // Overide Filter Header Archived
+    if (isset($_GET['archived']) && $_GET['archived'] == 1) {
+        $archived = 1;
+        $archive_query = "(client_archived_at IS NOT NULL OR software_archived_at IS NOT NULL)";
+    } else {
+        $archived = 0;
+        $archive_query = "(client_archived_at IS NULL AND software_archived_at IS NULL)";
+    }
 }
 
 // Perms
@@ -36,7 +52,7 @@ $sql = mysqli_query(
     LEFT JOIN clients ON client_id = software_client_id
     LEFT JOIN vendors ON vendor_id = software_vendor_id
     WHERE software_template = 0
-    AND software_$archive_query
+    AND $archive_query
     AND (software_name LIKE '%$q%' OR software_type LIKE '%$q%' OR software_key LIKE '%$q%' OR client_name LIKE '%$q%')
     $access_permission_query
     $client_query
@@ -90,7 +106,7 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                     <div class="col-md-2"></div>
                     <?php } else { ?>
                     <div class="col-md-2">
-                        <div class="input-group">
+                        <div class="input-group mb-3 mb-md-0">
                             <select class="form-control select2" name="client" onchange="this.form.submit()">
                                 <option value="" <?php if ($client == "") { echo "selected"; } ?>>- All Clients -</option>
 
@@ -131,7 +147,7 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
             <hr>
             <div class="table-responsive-sm">
                 <table class="table table-borderless table-hover">
-                    <thead class="text-dark <?php if ($num_rows[0] == 0) { echo "d-none"; } ?>">
+                    <thead class="text-dark <?php if ($num_rows[0] == 0) { echo "d-none"; } ?> text-nowrap">
                     <tr>
                         <th>
                             <a class="text-secondary" href="?<?php echo $url_query_strings_sort; ?>&sort=software_name&order=<?php echo $disp; ?>">

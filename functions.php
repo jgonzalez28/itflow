@@ -705,7 +705,17 @@ function sendSingleEmail($config_smtp_host, $config_smtp_username, $config_smtp_
         $mail->SMTPAuth   = $smtp_auth;                             // Enable SMTP authentication
         $mail->Username   = $config_smtp_username;                  // SMTP username
         $mail->Password   = $config_smtp_password;                  // SMTP password
-        $mail->SMTPSecure = $config_smtp_encryption;                // Enable TLS encryption, `ssl` also accepted
+        if ($config_smtp_encryption == 'None') {
+            $mail->SMTPOptions = array(
+                'ssl' => array(
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+            ));
+            $mail->SMTPSecure = false;
+            $mail->SMTPAutoTLS = false;
+        } else {
+            $mail->SMTPSecure = $config_smtp_encryption;            // Enable TLS encryption, `ssl` also accepted
+        }
         $mail->Port       = $config_smtp_port;                      // TCP port to connect to
 
         //Recipients
@@ -1487,7 +1497,7 @@ function appNotify($type, $details, $action = null, $client_id = 0, $entity_id =
     $sql = mysqli_query($mysqli, "SELECT user_id FROM users 
         WHERE user_type = 1 AND user_status = 1 AND user_archived_at IS NULL
     ");
-    
+
     while ($row = mysqli_fetch_array($sql)) {
         $user_id = intval($row['user_id']);
 
@@ -1535,7 +1545,7 @@ function getFallback($data) {
  * @param int    $id            The record's id.
  * @param string $field         The field (column) to retrieve.
  * @param string $escape_method The escape method: 'sql' (default, auto-detects int), 'html', 'json', or 'int'.
- * 
+ *
  * @return mixed The escaped field value, or null if not found or invalid input.
  */
 function getFieldById($table, $id, $field, $escape_method = 'sql') {
@@ -1614,10 +1624,14 @@ function getFieldById($table, $id, $field, $escape_method = 'sql') {
 }
 
 // Recursive function to display folder options - Used in folders files and documents
-function display_folder_options($parent_folder_id, $client_id, $indent = 0) {
+function display_folder_options($parent_folder_id, $client_id, $folder_location = 0, $indent = 0) {
     global $mysqli;
 
-    $sql_folders = mysqli_query($mysqli, "SELECT * FROM folders WHERE parent_folder = $parent_folder_id AND folder_location = 1 AND folder_client_id = $client_id ORDER BY folder_name ASC");
+    $folder_location = intval($folder_location);
+    // 0 = Document Folders
+    // 1 = File Folders
+
+    $sql_folders = mysqli_query($mysqli, "SELECT * FROM folders WHERE parent_folder = $parent_folder_id AND folder_location = $folder_location AND folder_client_id = $client_id ORDER BY folder_name ASC");
     while ($row = mysqli_fetch_array($sql_folders)) {
         $folder_id = intval($row['folder_id']);
         $folder_name = nullable_htmlentities($row['folder_name']);
@@ -1627,13 +1641,14 @@ function display_folder_options($parent_folder_id, $client_id, $indent = 0) {
 
         // Check if this folder is selected
         $selected = '';
-        if ((isset($_GET['folder_id']) && $_GET['folder_id'] == $folder_id) || (isset($_POST['folder']) && $_POST['folder'] == $folder_id)) {
+        if ((isset($_GET['folder_id']) && intval($_GET['folder_id']) === $folder_id) ||
+            (isset($_POST['folder']) && intval($_POST['folder']) === $folder_id)) {
             $selected = 'selected';
         }
 
         echo "<option value=\"$folder_id\" $selected>$indentation$folder_name</option>";
 
         // Recursively display subfolders
-        display_folder_options($folder_id, $client_id, $indent + 1);
+        display_folder_options($folder_id, $client_id, $folder_location, $indent + 1);
     }
 }

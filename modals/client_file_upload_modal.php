@@ -37,14 +37,14 @@
                                 <option value="0">/</option>
                                 <?php
                                 // Start displaying folder options from the root (parent_folder = 0)
-                                display_folder_options(0, $client_id);
+                                display_folder_options(0, $client_id, 1);
                                 ?>
                             </select>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <input type="file" class="form-control-file" name="file[]" multiple id="fileInput" accept=".jpg, .jpeg, .gif, .png, .webp, .pdf, .txt, .md, .doc, .docx, .odt, .csv, .xls, .xlsx, .ods, .pptx, .odp, .zip, .tar, .gz, .xml, .msg, .json, .wav, .mp3, .ogg, .mov, .mp4, .av1, .ovpn, .cfg, .ps1, .vsdx, .drawio, .pfx, .unf, .key">
+                        <input type="file" class="form-control-file" name="file[]" multiple id="fileInput" accept=".jpg, .jpeg, .gif, .png, .webp, .pdf, .txt, .md, .doc, .docx, .odt, .csv, .xls, .xlsx, .ods, .pptx, .odp, .zip, .tar, .gz, .xml, .msg, .json, .wav, .mp3, .ogg, .mov, .mp4, .av1, .ovpn, .cfg, .ps1, .vsdx, .drawio, .pfx, .unf, .key, .stk, .bat">
                     </div>
                     <small class="text-secondary">Up to 20 files can be uploaded at once by holding down CTRL and selecting files</small>
 

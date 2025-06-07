@@ -94,7 +94,7 @@ if (isset($_GET['asset_id'])) {
     $ticket_count = mysqli_num_rows($sql_related_tickets);
 
     // Related Recurring Tickets Query
-    $sql_related_recurring_tickets = mysqli_query($mysqli, "SELECT * FROM recurring_tickets 
+    $sql_related_recurring_tickets = mysqli_query($mysqli, "SELECT recurring_tickets.* FROM recurring_tickets 
         LEFT JOIN recurring_ticket_assets ON recurring_tickets.recurring_ticket_id = recurring_ticket_assets.recurring_ticket_id
         WHERE recurring_ticket_asset_id = $asset_id OR recurring_ticket_assets.asset_id = $asset_id
         GROUP BY recurring_tickets.recurring_ticket_id
@@ -244,7 +244,7 @@ if (isset($_GET['asset_id'])) {
                         data-ajax-id="<?php echo $asset_id; ?>">
                         <i class="fas fa-fw fa-edit"></i>
                     </button>
-                    <h3 class="text-bold"><i class="fa fa-fw text-secondary fa-<?php echo $device_icon; ?> mr-3"></i><?php echo $asset_name; ?></h3>
+                    <h4 class="text-bold"><i class="fa fa-fw text-secondary fa-<?php echo $device_icon; ?> mr-3"></i><?php echo $asset_name; ?></h4>
                     <?php if ($asset_photo) { ?>
                         <img class="img-fluid img-circle p-3" alt="asset_photo" src="<?php echo "uploads/clients/$client_id/$asset_photo"; ?>">
                     <?php } ?>
@@ -378,34 +378,47 @@ if (isset($_GET['asset_id'])) {
                 <div class="dropdown dropleft">
                     <button type="button" class="btn btn-outline-primary" data-toggle="dropdown"><i class="fas fa-link mr-2"></i>Link</button>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item text-dark" href="#" data-toggle="modal" data-target="#linkSoftwareModal">
+                        <a class="dropdown-item text-dark" href="#"
+                            data-toggle="ajax-modal"
+                            data-ajax-url="ajax/ajax_asset_link_software.php"
+                            data-ajax-id="<?php echo $asset_id; ?>">
                             <i class="fa fa-fw fa-cube mr-2"></i>License
                         </a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item text-dark" href="#" data-toggle="modal" data-target="#linkCredentialModal">
+                        <a class="dropdown-item text-dark" href="#"
+                            data-toggle="ajax-modal"
+                            data-ajax-url="ajax/ajax_asset_link_credential.php"
+                            data-ajax-id="<?php echo $asset_id; ?>">
                             <i class="fa fa-fw fa-key mr-2"></i>Credential
                         </a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item text-dark" href="#" data-toggle="modal" data-target="#linkServiceModal">
+                        <a class="dropdown-item text-dark" href="#"
+                            data-toggle="ajax-modal"
+                            data-ajax-url="ajax/ajax_asset_link_service.php"
+                            data-ajax-id="<?php echo $asset_id; ?>">
                             <i class="fa fa-fw fa-stream mr-2"></i>Service
                         </a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item text-dark" href="#" data-toggle="modal" data-target="#linkDocumentModal">
+                        <a class="dropdown-item text-dark" href="#"
+                            data-toggle="ajax-modal"
+                            data-ajax-url="ajax/ajax_asset_link_document.php"
+                            data-ajax-id="<?php echo $asset_id; ?>">
                             <i class="fa fa-fw fa-folder mr-2"></i>Document
                         </a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item text-dark" href="#" data-toggle="modal" data-target="#linkFileModal">
+                        <a class="dropdown-item text-dark" href="#"
+                            data-toggle="ajax-modal"
+                            data-ajax-url="ajax/ajax_asset_link_file.php"
+                            data-ajax-id="<?php echo $asset_id; ?>">
                             <i class="fa fa-fw fa-paperclip mr-2"></i>File
-                        </a>
-                        
-                        
+                        </a>     
                     </div>
                 </div>
             </div>
 
             <div class="card card-dark">
                 <div class="card-header py-2">
-                    <h3 class="card-title mt-2"><i class="fa fa-fw fa-ethernet mr-2"></i><?php echo $asset_name; ?> Network Interfaces</h3>
+                    <h3 class="card-title mt-2"><i class="fa fa-fw fa-ethernet mr-2"></i>Interfaces</h3>
                     <div class="card-tools">      
                         <div class="btn-group">
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAssetInterfaceModal">
@@ -1192,11 +1205,5 @@ require_once "modals/recurring_ticket_add_modal.php";
 require_once "modals/credential_add_modal.php";
 require_once "modals/client_document_add_modal.php";
 require_once "modals/client_file_upload_modal.php";
-
-require_once "modals/asset_link_software_modal.php";
-require_once "modals/asset_link_credential_modal.php";
-require_once "modals/asset_link_service_modal.php";
-require_once "modals/asset_link_document_modal.php";
-require_once "modals/asset_link_file_modal.php";
 
 require_once "includes/footer.php";

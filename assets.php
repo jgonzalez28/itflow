@@ -9,10 +9,26 @@ if (isset($_GET['client_id'])) {
     require_once "includes/inc_all_client.php";
     $client_query = "AND asset_client_id = $client_id";
     $client_url = "client_id=$client_id&";
+    // Overide Filter Header Archived
+    if (isset($_GET['archived']) && $_GET['archived'] == 1) {
+        $archived = 1;
+        $archive_query = "asset_archived_at IS NOT NULL";
+    } else {
+        $archived = 0;
+        $archive_query = "asset_archived_at IS NULL";
+    }
 } else {
     require_once "includes/inc_client_overview_all.php";
     $client_query = '';
     $client_url = '';
+    // Overide Filter Header Archived
+    if (isset($_GET['archived']) && $_GET['archived'] == 1) {
+        $archived = 1;
+        $archive_query = "(client_archived_at IS NOT NULL OR asset_archived_at IS NOT NULL)";
+    } else {
+        $archived = 0;
+        $archive_query = "(client_archived_at IS NULL AND asset_archived_at IS NULL)";
+    }
 }
 
 // Perms
@@ -71,7 +87,7 @@ $row = mysqli_fetch_assoc(mysqli_query($mysqli, "
         LEFT JOIN contacts ON asset_contact_id = contact_id 
         LEFT JOIN locations ON asset_location_id = location_id 
         LEFT JOIN asset_interfaces ON interface_asset_id = asset_id AND interface_primary = 1
-        WHERE asset_$archive_query
+        WHERE $archive_query
         $access_permission_query
         $client_query
     ) AS filtered_assets;
@@ -105,7 +121,7 @@ $sql = mysqli_query(
     LEFT JOIN contacts ON asset_contact_id = contact_id 
     LEFT JOIN locations ON asset_location_id = location_id 
     LEFT JOIN asset_interfaces ON interface_asset_id = asset_id AND interface_primary = 1
-    WHERE asset_$archive_query
+    WHERE $archive_query
     AND (asset_name LIKE '%$q%' OR asset_description LIKE '%$q%' OR asset_type LIKE '%$q%' OR interface_ip LIKE '%$q%' OR interface_ipv6 LIKE '%$q%' OR asset_make LIKE '%$q%' OR asset_model LIKE '%$q%' OR asset_serial LIKE '%$q%' OR asset_os LIKE '%$q%' OR contact_name LIKE '%$q%' OR location_name LIKE '%$q%' OR client_name LIKE '%$q%')
     AND ($type_query)
     $access_permission_query
@@ -205,7 +221,7 @@ if (mysqli_num_rows($os_sql) > 0) {
                 </div>
                 <?php if ($client_url) { ?>
                 <div class="col-md-2">
-                    <div class="input-group">
+                    <div class="input-group mb-3 mb-md-0">
                         <select class="form-control select2" name="location" onchange="this.form.submit()">
                             <option value="">- All Locations -</option>
 
@@ -233,7 +249,7 @@ if (mysqli_num_rows($os_sql) > 0) {
                 </div>
                 <?php } else { ?>
                 <div class="col-md-2">
-                    <div class="input-group">
+                    <div class="input-group mb-3 mb-md-0">
                         <select class="form-control select2" name="client" onchange="this.form.submit()">
                             <option value="" <?php if ($client == "") { echo "selected"; } ?>>- All Clients -</option>
 
@@ -338,7 +354,7 @@ if (mysqli_num_rows($os_sql) > 0) {
 
             <div class="table-responsive">
                 <table class="table border table-hover">
-                    <thead class="thead-light <?php if (!$num_rows[0]) { echo "d-none"; } ?>">
+                    <thead class="thead-light <?php if (!$num_rows[0]) { echo "d-none"; } ?> text-nowrap">
                     <tr>
                         <td class="bg-light pr-0">
                             <div class="form-check">
@@ -519,7 +535,7 @@ if (mysqli_num_rows($os_sql) > 0) {
                         if ($contact_name) {
                             $contact_name_display = "<a href='#' 
                                 data-toggle='ajax-modal'
-                                data-modal-size='lg'
+                                data-modal-size='xl'
                                 data-ajax-url='ajax/ajax_contact_details.php'
                                 data-ajax-id='$asset_contact_id'>
                                 $contact_name $contact_archive_display
@@ -550,11 +566,7 @@ if (mysqli_num_rows($os_sql) > 0) {
                                 </div>
                             </td>
                             <td>
-                                <a class="text-dark" href="#"
-                                    data-toggle="ajax-modal"
-                                    data-modal-size="lg"
-                                    data-ajax-url="ajax/ajax_asset_details.php?<?php echo $client_url; ?>"
-                                    data-ajax-id="<?php echo $asset_id; ?>">
+                                <a class="text-dark" href="asset_details.php?client_id=<?php echo $client_id; ?>&asset_id=<?php echo $asset_id; ?>">
                                     <div class="media">
                                         <i class="fa fa-fw fa-2x fa-<?php echo $device_icon; ?> mr-3 mt-1"></i>
                                         <div class="media-body">
