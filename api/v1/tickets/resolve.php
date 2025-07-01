@@ -19,7 +19,7 @@ if (!empty($client_id) AND !empty($ticket_id)) {
 
     // Check insert & get insert ID
     if ($update_sql) {
-        $update_count = mysqli_affected_rows($update_sql);
+        $update_count = mysqli_affected_rows($mysqli);
 
         // Logging
         logAction("Ticket", "Edit", "$ticket_prefix$ticket_number $subject via API ($api_key_name)", $client_id, $ticket_id);
