@@ -13,6 +13,7 @@ if (!empty($client_id) AND !empty($ticket_id)) {
 
     $ticket_prefix = sanitizeInput($ticket_row['ticket_prefix']);
     $ticket_number = intval($ticket_row['ticket_number']);
+    $subject = $ticket_row['ticket_subject'];
    
     // Resolve the ticket
     $update_sql = mysqli_query($mysqli, "UPDATE tickets SET ticket_status = 4, ticket_resolved_at = NOW() WHERE ticket_id = $ticket_id AND ticket_client_id = $client_id");
