@@ -154,7 +154,7 @@ new Sortable(document.querySelector('table#tasks tbody'), {
             order: index
         }));
 
-        $.post('ajax.php', {
+        $.post('/agent/ajax.php', {
             update_task_templates_order: true,
             ticket_template_id: <?php echo $ticket_template_id; ?>,
             positions: positions
