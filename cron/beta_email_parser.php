@@ -722,31 +722,47 @@ foreach ($messages as $message) {
         // ignore inline replacement errors
     }
 
-    // Collect non-inline attachments from the high-level Attachment API
+    // Attachments (inline CID replacement + collect non-inline)
+    $attachments = [];
+    $inline_cids = [];
+
     try {
         foreach ($message->attachments() as $att) {
-            if (!$att) continue;
+            $name    = $att->filename() ?: 'attachment';
+            $content = (string)$att->contents();
+            $cid     = $att->contentId();                 // Content-ID for inline parts
+            $mime    = (string)($att->contentType() ?: 'application/octet-stream');
 
-            $name = $att->filename() ?: 'attachment';
-            $content = $att->contents();
-            $cid = null;
-            try { $cid = $att->contentId(); } catch (\Throwable $e) { $cid = null; }
-            $cid_trim = $cid ? trim((string)$cid, "<> \t\r\n") : null;
+            // If it has a CID, attempt to inline it into the HTML body
+            if (!empty($cid) && !empty($message_body)) {
+                $cid_trim = trim((string)$cid, "<> \t\r\n");
 
-            // Skip inline ones we already embedded
-            if ($cid_trim && isset($inline_cids[$cid_trim])) {
-                continue;
+                // Only inline if the body actually references it (prevents incorrectly hiding real attachments)
+                // Covers: src="cid:abc", src="cid:<abc>", etc.
+                if ($cid_trim !== '' && preg_match('/cid:\s*<?' . preg_quote($cid_trim, '/') . '>?/i', $message_body)) {
+                    $dataUri = "data:$mime;base64," . base64_encode($content);
+
+                    $message_body = str_replace(
+                        ["cid:$cid_trim", "cid:<$cid_trim>", "cid:$cid"],
+                        $dataUri,
+                        $message_body
+                    );
+
+                    $inline_cids[$cid_trim] = true;
+                    continue; // don't save as a ticket attachment
+                }
             }
 
-            if ($content !== null && $content !== '') {
+            // Otherwise treat it as a normal attachment
+            if ($content !== '') {
                 $attachments[] = [
-                    'name' => $name,
-                    'content' => $content,
+                    'name'    => $name,
+                    'content' => $content
                 ];
             }
         }
     } catch (\Throwable $e) {
-        // ignore
+        // ignore attachment parse errors
     }
 
     // 1. Reply to existing ticket with the number in subject
