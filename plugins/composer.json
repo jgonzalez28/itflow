@@ -1,6 +1,5 @@
 {
     "require": {
-        "webklex/php-imap": "^6.2",
-        "directorytree/imapengine": "^1.22"
+        "webklex/php-imap": "^6.2"
     }
 }
