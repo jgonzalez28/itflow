@@ -12,7 +12,7 @@ if (isset($_POST['add_network'])) {
 
     require_once 'network_model.php';
 
-    mysqli_query($mysqli,"INSERT INTO networks SET network_name = '$name', network_description = '$description', network_vlan = $vlan, network = '$network', network_subnet = '$subnet', network_gateway = '$gateway', network_primary_dns = '$primary_dns', network_secondary_dns = '$secondary_dns', network_dhcp_range = '$dhcp_range', network_notes = '$notes', network_location_id = $location_id, network_client_id = $client_id");
+    mysqli_query($mysqli,"INSERT INTO networks SET network_name = '$name', network_description = '$description', network_vlan = $vlan, network = '$network', network_subnet = '$subnet', network_gateway = '$gateway', network_primary_dns = '$primary_dns', network_secondary_dns = '$secondary_dns', network_notes = '$notes', network_location_id = $location_id, network_client_id = $client_id");
 
     $network_id = mysqli_insert_id($mysqli);
 
@@ -31,7 +31,7 @@ if (isset($_POST['edit_network'])) {
     $network_id = intval($_POST['network_id']);
     require_once 'network_model.php';
 
-    mysqli_query($mysqli,"UPDATE networks SET network_name = '$name', network_description = '$description', network_vlan = $vlan, network = '$network', network_subnet = '$subnet', network_gateway = '$gateway', network_primary_dns = '$primary_dns', network_secondary_dns = '$secondary_dns', network_dhcp_range = '$dhcp_range', network_notes = '$notes', network_location_id = $location_id WHERE network_id = $network_id");
+    mysqli_query($mysqli,"UPDATE networks SET network_name = '$name', network_description = '$description', network_vlan = $vlan, network = '$network', network_gateway = '$gateway', network_primary_dns = '$primary_dns', network_secondary_dns = '$secondary_dns', network_dhcp_range = '$dhcp_range', network_notes = '$notes', network_location_id = $location_id WHERE network_id = $network_id");
 
     logAction("Network", "Edit", "$session_name edited network $name", $client_id, $network_id);
 
@@ -174,12 +174,12 @@ if (isset($_POST['export_networks_csv'])) {
         $f = fopen('php://memory', 'w');
 
         //set column headers
-        $fields = array('Name', 'Description', 'vLAN', 'IP/Network', 'Subnet Mask', 'Gateway', 'Primary DNS', 'Secondary DNS', 'DHCP Range');
+        $fields = array('Name', 'Description', 'VLAN', 'Network (CIDR)', 'Gateway', 'IP Range', 'Primary DNS', 'Secondary DNS');
         fputcsv($f, $fields, $delimiter, $enclosure, $escape);
 
         //output each row of the data, format line as csv and write to file pointer
         while ($row = $sql->fetch_assoc()) {
-            $lineData = array($row['network_name'], $row['network_description'], $row['network_vlan'], $row['network'], $row['network_subnet'], $row['network_gateway'], $row['network_primary_dns'], $row['network_secondary_dns'], $row['network_dhcp_range']);
+            $lineData = array($row['network_name'], $row['network_description'], $row['network_vlan'], $row['network'], $row['network_gateway'], $row['network_dhcp_range'], $row['network_primary_dns'], $row['network_secondary_dns']);
             fputcsv($f, $lineData, $delimiter, $enclosure, $escape);
         }
 
