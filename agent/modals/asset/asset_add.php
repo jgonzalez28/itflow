@@ -118,7 +118,7 @@ ob_start();
                     <label>Description</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fa fa-fw fa-angle-right"></i></span>
+                            <span class="input-group-text"><i class="fa fa-fw fa-align-left"></i></span>
                         </div>
                         <input type="text" class="form-control" name="description" placeholder="Description of the asset" maxlength="255">
                     </div>

@@ -105,7 +105,7 @@ ob_start();
                     <label>Description</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fa fa-fw fa-align-left"></i></span>
+                            <span class="input-group-text"><i class="fas fa-fw fa-align-left"></i></span>
                         </div>
                         <input type="text" class="form-control" name="description" placeholder="Guest WiFi, VoIP VLAN, Server LAN, WAN Uplink">
                     </div>

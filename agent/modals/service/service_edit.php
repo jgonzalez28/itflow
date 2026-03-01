@@ -129,7 +129,7 @@ ob_start();
                     <label>Description <strong class="text-danger">*</strong></label>
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fa fa-fw fa-info-circle"></i></span>
+                            <span class="input-group-text"><i class="fa fa-fw fa-align-left"></i></span>
                         </div>
                         <input type="text" class="form-control" name="description" placeholder="Description of Service" maxlength="200" value="<?php echo $service_description ?>" required>
                     </div>
