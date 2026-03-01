@@ -333,7 +333,7 @@ ob_start();
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fa fa-fw fa-ethernet"></i></span>
                         </div>
-                        <input type="text" class="form-control" name="mac" value="<?= $asset_mac ?>" placeholder="MAC Address" data-inputmask="'alias': 'mac'" maxlength="200" data-mask>
+                        <input type="text" class="form-control" name="mac" value="<?= $asset_mac ?>" placeholder="00:11:22:AA:BB:CC" data-inputmask="'alias': 'mac'" maxlength="200" data-mask>
                     </div>
                 </div>
 
@@ -343,7 +343,7 @@ ob_start();
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fa fa-fw fa-ethernet"></i></span>
                         </div>
-                        <input type="text" class="form-control" name="ipv6" value="<?= $asset_ipv6 ?>" placeholder="ex. 2001:0db8:0000:0000:0000:ff00:0042:8329" maxlength="200">
+                        <input type="text" class="form-control" name="ipv6" value="<?= $asset_ipv6 ?>" placeholder="2001:0db8:1000::3" maxlength="200">
                     </div>
                 </div>
 
