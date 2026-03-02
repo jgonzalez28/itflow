@@ -527,7 +527,7 @@ if (isset($_GET['project_id'])) {
                                     <?php if ($task_completed_at) { ?>
                                         <i class="far fa-check-square text-success mr-2"></i>
                                     <?php } else { ?>
-                                        <a href="post.php?complete_task=<?php echo $task_id; ?>">
+                                        <a href="post.php?complete_task=<?= $task_id ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>">
                                             <i class="far fa-square text-secondary mr-2"></i>
                                         </a>
                                     <?php } ?>

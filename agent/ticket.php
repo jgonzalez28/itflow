@@ -913,11 +913,11 @@ if (isset($_GET['ticket_id'])) {
                                         <i class="fas fa-ellipsis-v"></i>
                                     </button>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item text-success" href="post.php?complete_all_tasks=<?php echo $ticket_id; ?>">
+                                        <a class="dropdown-item text-success" href="post.php?complete_all_tasks=<?= $ticket_id ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>">
                                             <i class="fas fa-fw fa-check-double mr-2"></i>Mark All Complete
                                         </a>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="post.php?undo_complete_all_tasks=<?php echo $ticket_id; ?>">
+                                        <a class="dropdown-item" href="post.php?undo_complete_all_tasks=<?= $ticket_id ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>">
                                             <i class="far fa-fw fa-square mr-2"></i>Mark All Incomplete
                                         </a>
                                         <div class="dropdown-divider"></div>
@@ -933,6 +933,7 @@ if (isset($_GET['ticket_id'])) {
 
                             <?php if (empty($ticket_resolved_at) && lookupUserPermission("module_support") >= 2) { ?>
                                 <form action="post.php" method="post" autocomplete="off">
+                                    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                     <input type="hidden" name="ticket_id" value="<?php echo $ticket_id; ?>">
                                     <div class="form-group px-2 pt-3">
                                         <div class="input-group input-group-sm">
@@ -1016,7 +1017,7 @@ if (isset($_GET['ticket_id'])) {
                                                     <?php } ?>
 
                                                 <?php } else { ?>
-                                                    <a href="post.php?complete_task=<?php echo $task_id; ?>">
+                                                    <a href="post.php?complete_task=<?= $task_id ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>">
                                                         <i class="far fa-square text-dark"></i>
                                                     </a>
                                                 <?php } ?>
@@ -1049,7 +1050,7 @@ if (isset($_GET['ticket_id'])) {
                                                                     </a>
                                                                 <?php } ?>
                                                                 <?php if ($task_completed_at) { ?>
-                                                                    <a class="dropdown-item" href="post.php?undo_complete_task=<?php echo $task_id; ?>">
+                                                                    <a class="dropdown-item" href="post.php?undo_complete_task=<?= $task_id ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>">
                                                                         <i class="fas fa-fw fa-arrow-circle-left mr-2"></i>Mark incomplete
                                                                     </a>
                                                                 <?php } ?>
