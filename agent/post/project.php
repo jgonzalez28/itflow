@@ -160,13 +160,13 @@ if (isset($_GET['archive_project'])) {
 
 }
 
-if (isset($_GET['unarchive_project'])) {
+if (isset($_GET['restore_project'])) {
 
     validateCSRFToken($_GET['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
-    $project_id = intval($_GET['unarchive_project']);
+    $project_id = intval($_GET['restore_project']);
 
     // Get Project Name and Client ID for logging
     $sql = mysqli_query($mysqli, "SELECT project_name, project_client_id FROM projects WHERE project_id = $project_id");
@@ -176,9 +176,9 @@ if (isset($_GET['unarchive_project'])) {
 
     mysqli_query($mysqli, "UPDATE projects SET project_archived_at = NULL WHERE project_id = $project_id");
 
-    logAction("Project", "Unarchive", "$session_name unarchived project $project_name", $client_id, $project_id);
+    logAction("Project", "Restore", "$session_name restored project $project_name", $client_id, $project_id);
 
-    flash_alert("Project <strong>$project_name</strong> unarchived");
+    flash_alert("Project <strong>$project_name</strong> restored");
 
     redirect();
 
