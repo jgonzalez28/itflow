@@ -8,6 +8,10 @@ defined('FROM_POST_HANDLER') || die("Direct file access is not allowed");
 
 if (isset($_POST['create_recurring_expense'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
+    enforceUserPermission('module_financial', 2);
+
     $frequency = intval($_POST['frequency']);
     $day = intval($_POST['day']);
     $month = intval($_POST['month']);
@@ -39,6 +43,10 @@ if (isset($_POST['create_recurring_expense'])) {
 
 if (isset($_POST['edit_recurring_expense'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
+    enforceUserPermission('module_financial', 2);
+
     $recurring_expense_id = intval($_POST['recurring_expense_id']);
     $frequency = intval($_POST['frequency']);
     $day = intval($_POST['day']);
@@ -68,6 +76,11 @@ if (isset($_POST['edit_recurring_expense'])) {
 }
 
 if (isset($_GET['delete_recurring_expense'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
+
+    enforceUserPermission('module_financial', 2);
+
     $recurring_expense_id = intval($_GET['delete_recurring_expense']);
 
     // Get Recurring Expense Details for Logging
