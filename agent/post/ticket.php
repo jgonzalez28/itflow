@@ -2295,6 +2295,79 @@ if (isset($_POST['add_invoice_from_ticket'])) {
 
 }
 
+if (isset($_POST['add_quote_from_ticket'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
+
+    enforceUserPermission('module_support', 2);
+    enforceUserPermission('module_sales', 2);
+
+    require_once 'quote_model.php';
+
+    $ticket_id = intval($_POST['ticket_id']);
+    $item_name = sanitizeInput($_POST['item_name']);
+    $item_description = sanitizeInput($_POST['item_description']);
+    $qty = floatval($_POST['qty']);
+    $price = floatval($_POST['price']);
+    $tax_id = intval($_POST['tax_id']);
+
+    // Totals
+    $subtotal = $price * $qty;
+    $tax_amount = 0;
+    if ($tax_id > 0) {
+        $sql = mysqli_query($mysqli, "SELECT * FROM taxes WHERE tax_id = $tax_id");
+        $row = mysqli_fetch_assoc($sql);
+        $tax_percent = floatval($row['tax_percent']);
+        $tax_amount = $subtotal * $tax_percent / 100;
+    }
+    $total = floatval($subtotal + $tax_amount);
+
+    // Ticket info
+    $sql = mysqli_query(
+        $mysqli,
+        "SELECT ticket_prefix, ticket_number, ticket_client_id FROM tickets WHERE ticket_id = $ticket_id LIMIT 1"
+    );
+    $row = mysqli_fetch_assoc($sql);
+    $ticket_prefix = sanitizeInput($row['ticket_prefix']);
+    $ticket_number = intval($row['ticket_number']);
+    $client_id = intval($row['ticket_client_id']);
+
+    // Atomically increment and get the new quote number
+    mysqli_query($mysqli, "
+        UPDATE settings
+        SET
+            config_quote_next_number = LAST_INSERT_ID(config_quote_next_number),
+            config_quote_next_number = config_quote_next_number + 1
+        WHERE company_id = 1
+    ");
+
+    $quote_number = mysqli_insert_id($mysqli);
+
+    //Generate a unique URL key for clients to access
+    $quote_url_key = randomString(32);
+
+    mysqli_query($mysqli,"INSERT INTO quotes SET quote_prefix = '$config_quote_prefix', quote_number = $quote_number, quote_scope = '$scope', quote_date = '$date', quote_expire = '$expire', quote_amount = $total, quote_currency_code = '$session_company_currency', quote_category_id = $category, quote_status = 'Draft', quote_url_key = '$quote_url_key', quote_client_id = $client_id");
+
+    $quote_id = mysqli_insert_id($mysqli);
+
+    // Add line item
+    mysqli_query($mysqli, "INSERT INTO invoice_items SET item_name = '$item_name', item_description = '$item_description', item_quantity = $qty, item_price = $price, item_subtotal = $subtotal, item_tax = $tax_amount, item_total = $total, item_order = 1, item_tax_id = $tax_id, item_quote_id = $quote_id");
+
+    // Add internal note to ticket, and link to invoice in database
+    mysqli_query($mysqli, "INSERT INTO ticket_replies SET ticket_reply = 'Created quote <a href=\"quote.php?quote_id=$quote_id\">$config_quote_prefix$quote_number</a> for this ticket.', ticket_reply_type = 'Internal', ticket_reply_time_worked = '00:01:00', ticket_reply_by = $session_user_id, ticket_reply_ticket_id = $ticket_id");
+    mysqli_query($mysqli, "UPDATE tickets SET ticket_quote_id = $quote_id WHERE ticket_id = $ticket_id LIMIT 1");
+
+    // Logging + redirects
+    mysqli_query($mysqli,"INSERT INTO history SET history_status = 'Draft', history_description = 'Quote created from Ticket $ticket_prefix$ticket_number!', history_quote_id = $quote_id");
+    logAction("Quote", "Create", "$session_name created quote $config_quote_prefix$quote_number from ticket $ticket_prefix$ticket_number", $client_id, $quote_id);
+
+    customAction('quote_create', $quote_id);
+
+    flash_alert("Quote <strong>$config_quote_prefix$quote_number</strong> created");
+    redirect("quote.php?quote_id=$quote_id");
+
+}
+
 if (isset($_POST['export_tickets_csv'])) {
 
     validateCSRFToken($_POST['csrf_token']);

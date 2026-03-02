@@ -140,6 +140,7 @@
                             }
 
                             $ticket_invoice_id = intval($row['ticket_invoice_id']);
+                            $ticket_quote_id = intval($row['ticket_quote_id']);
 
                             // Get who last updated the ticket - to be shown in the last Response column
 
@@ -236,6 +237,8 @@
                                     <td class="text-center">
                                         <?php if ($ticket_invoice_id) { ?>
                                         <a href="invoice.php?client_id=<?php echo $client_id; ?>&invoice_id=<?php echo $ticket_invoice_id; ?>"><span class='badge badge-pill badge-success p-2'>Invoiced</span></a>
+                                        <?php } else if ($ticket_quote_id) { ?>
+                                            <a href="quote.php?client_id=<?php echo $client_id; ?>&quote_id=<?php echo $ticket_quote_id; ?>"><span class='badge badge-pill badge-primary p-2'>Quoted</span></a>
                                         <?php } else { ?>
                                         <a href="#"
                                             class="ajax-modal"

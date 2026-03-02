@@ -368,7 +368,13 @@ if (isset($_GET['ticket_id'])) {
                     <div class="card-tools d-print-none">
                         <div class="btn-toolbar">
 
-                            <?php if ($config_module_enable_accounting && $ticket_billable == 1 && empty($invoice_id) && lookupUserPermission("module_sales") >= 2) { ?>
+                            <?php if ($config_module_enable_accounting && $ticket_billable == 1 && empty($quote_id) && empty($invoice_id) && lookupUserPermission("module_sales") >= 2) { ?>
+                            <a href="#" class="btn btn-light btn-sm ml-3 ajax-modal" href="#" data-modal-url="modals/ticket/ticket_quote_add.php?ticket_id=<?= $ticket_id ?>" data-modal-size="lg">
+                                <i class="fas fa-fw fa-comment-dollar mr-2"></i>Quote
+                            </a>
+                            <?php }
+
+                            if ($config_module_enable_accounting && $ticket_billable == 1 && empty($invoice_id) && lookupUserPermission("module_sales") >= 2) { ?>
                                 <a href="#" class="btn btn-light btn-sm ml-3 ajax-modal" href="#" data-modal-url="modals/ticket/ticket_invoice_add.php?ticket_id=<?= $ticket_id ?>" data-modal-size="lg">
                                     <i class="fas fa-fw fa-file-invoice mr-2"></i>Invoice
                                 </a>

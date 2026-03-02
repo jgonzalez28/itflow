@@ -183,6 +183,22 @@ if (isset($_POST['add_quote_to_invoice'])) {
 
     logAction("Invoice", "Create", "$session_name created invoice $config_invoice_prefix$invoice_number from quote $config_quote_prefix$quote_number", $client_id, $new_invoice_id);
 
+    // Check & update any quote-ticket association
+    $ticket_id = 0;
+    $sql_ticket = "SELECT ticket_id, ticket_prefix, ticket_number
+        FROM tickets 
+        WHERE ticket_quote_id = $quote_id 
+        LIMIT 1";
+    $result_ticket = mysqli_query($mysqli, $sql_ticket);
+
+    if ($result_ticket && $row = mysqli_fetch_assoc($result_ticket)) {
+        $ticket_id = intval($row['ticket_id']);
+        $ticket_prefix = sanitizeInput($row['ticket_prefix']);
+        $ticket_number = intval($row['ticket_number']);
+
+        mysqli_query($mysqli, "UPDATE tickets SET ticket_invoice_id = $new_invoice_id WHERE ticket_id = $ticket_id AND ticket_invoice_id = '0'"); // Only if ticket doesn't already have an invoice
+    }
+
     customAction('invoice_create', $new_invoice_id);
 
     flash_alert("Invoice created from quote <strong>$quote_prefix$quote_number</strong>");
