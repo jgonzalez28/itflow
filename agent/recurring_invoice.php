@@ -140,15 +140,16 @@ if (isset($_GET['recurring_invoice_id'])) {
 
                 <div class="col-2">
                     <?php if ($recurring_invoice_email_notify) { ?>
-                        <a href="post.php?recurring_invoice_email_notify=0&recurring_invoice_id=<?php echo $recurring_invoice_id; ?>" class="btn btn-primary"><i class="fas fa-fw fa-bell mr-2"></i>Email Notify</a>
+                        <a href="post.php?recurring_invoice_email_notify=0&recurring_invoice_id=<?= $recurring_invoice_id ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>" class="btn btn-primary"><i class="fas fa-fw fa-bell mr-2"></i>Email Notify</a>
                     <?php } else { ?>
-                        <a href="post.php?recurring_invoice_email_notify=1&recurring_invoice_id=<?php echo $recurring_invoice_id; ?>" class="btn btn-outline-danger"><i class="fas fa-fw fa-bell-slash mr-2"></i>Email Notify</a>
+                        <a href="post.php?recurring_invoice_email_notify=1&recurring_invoice_id=<?= $recurring_invoice_id ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>" class="btn btn-outline-danger"><i class="fas fa-fw fa-bell-slash mr-2"></i>Email Notify</a>
                     <?php } ?>
                 </div>
                 <div class="col-3">
                     <?php $sql_saved_payments = mysqli_query($mysqli, "SELECT * FROM client_saved_payment_methods WHERE saved_payment_client_id = $client_id");
                     if (mysqli_num_rows($sql_saved_payments) > 0) { ?>
                         <form class="form" action="post.php" method="post">
+                            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                             <input type="hidden" name="set_recurring_payment" value="1">
                             <input type="hidden" name="recurring_invoice_id" value="<?php echo $recurring_invoice_id; ?>">
                             <div class="input-group">
@@ -182,11 +183,11 @@ if (isset($_GET['recurring_invoice_id'])) {
                                 <i class="fa fa-fw fa-edit text-secondary mr-2"></i>Edit
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="post.php?force_recurring=<?php echo $recurring_invoice_id; ?>">
+                            <a class="dropdown-item" href="post.php?force_recurring=<?= $recurring_invoice_id ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>">
                                 <i class="fa fa-fw fa-paper-plane text-secondary mr-2"></i>Force Send
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item text-danger confirm-link" href="post.php?delete_recurring_invoice=<?php echo $recurring_invoice_id; ?>">
+                            <a class="dropdown-item text-danger confirm-link" href="post.php?delete_recurring_invoice=<?= $recurring_invoice_id ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>">
                                 <i class="fa fa-fw fa-trash mr-2"></i>Delete
                             </a>
                         </div>
@@ -303,7 +304,7 @@ if (isset($_GET['recurring_invoice_id'])) {
                                                             <i class="fa fa-fw fa-edit mr-2"></i>Edit
                                                         </a>
                                                         <div class="dropdown-divider"></div>
-                                                        <a class="dropdown-item text-danger confirm-link" href="post.php?delete_recurring_invoice_item=<?php echo $item_id; ?>"><i class="fa fa-fw fa-trash mr-2"></i>Delete</a>
+                                                        <a class="dropdown-item text-danger confirm-link" href="post.php?delete_recurring_invoice_item=<?= $item_id ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>"><i class="fa fa-fw fa-trash mr-2"></i>Delete</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -324,6 +325,7 @@ if (isset($_GET['recurring_invoice_id'])) {
 
                                     <tr class="d-print-none">
                                         <form action="post.php" method="post">
+                                            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                             <input type="hidden" name="recurring_invoice_id" value="<?php echo $recurring_invoice_id; ?>">
                                             <input type="hidden" name="item_order" value="<?php
                                                 //find largest order number and add 1
