@@ -29,6 +29,7 @@ ob_start();
 </div>
 
 <form action="post.php" method="post" autocomplete="off">
+    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
     <input type="hidden" name="event_id" value="<?php echo $event_id; ?>">
 
     <div class="modal-body">
@@ -184,7 +185,7 @@ ob_start();
 
     </div>
     <div class="modal-footer">
-        <a class="btn btn-default text-danger mr-auto" href="post.php?delete_event=<?php echo $event_id; ?>"><i class="fa fa-calendar-times mr-2"></i>Delete</a>
+        <a class="btn btn-default text-danger mr-auto" href="post.php?delete_event=<?= $event_id ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>"><i class="fa fa-calendar-times mr-2"></i>Delete</a>
         <button type="submit" name="edit_event" class="btn btn-primary text-bold"><i class="fa fa-check mr-2"></i>Save</button>
         <button type="button" class="btn btn-light" data-dismiss="modal"><i class="fa fa-times mr-2"></i>Cancel</button>
     </div>

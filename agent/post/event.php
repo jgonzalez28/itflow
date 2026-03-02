@@ -8,6 +8,8 @@ defined('FROM_POST_HANDLER') || die("Direct file access is not allowed");
 
 if (isset($_POST['add_calendar'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     $name = sanitizeInput($_POST['name']);
     $color = sanitizeInput($_POST['color']);
 
@@ -25,6 +27,8 @@ if (isset($_POST['add_calendar'])) {
 
 if (isset($_POST['edit_calendar'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     $calendar_id = intval($_POST['calendar_id']);
     $name = sanitizeInput($_POST['name']);
     $color = sanitizeInput($_POST['color']);
@@ -40,6 +44,8 @@ if (isset($_POST['edit_calendar'])) {
 }
 
 if (isset($_POST['add_event'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     require_once 'event_model.php';
 
@@ -111,6 +117,8 @@ if (isset($_POST['add_event'])) {
 
 if (isset($_POST['edit_event'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     require_once 'event_model.php';
 
     $event_id = intval($_POST['event_id']);
@@ -177,6 +185,8 @@ if (isset($_POST['edit_event'])) {
 }
 
 if (isset($_GET['delete_event'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
 
     $event_id = intval($_GET['delete_event']);
 
