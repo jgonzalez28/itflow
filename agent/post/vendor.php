@@ -4,9 +4,13 @@
  * ITFlow - GET/POST request handler for vendors
  */
 
+ // Todo: 2026-03-02 JQ - Need Permssions reworked as we have client vendors and Global Vendors basically check the referral url if it has client_id then Perm check client else perm check financial.
+
 defined('FROM_POST_HANDLER') || die("Direct file access is not allowed");
 
 if (isset($_POST['add_vendor_from_template'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     // GET POST Data
     $client_id = intval($_POST['client_id']); //Used if this vendor is under a contact otherwise its 0 for under company and or template
@@ -48,6 +52,8 @@ if (isset($_POST['add_vendor_from_template'])) {
 
 if (isset($_POST['add_vendor'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     require_once 'vendor_model.php';
 
     $client_id = intval($_POST['client_id']); // Used if this vendor is under a contact otherwise its 0 for under company
@@ -65,6 +71,8 @@ if (isset($_POST['add_vendor'])) {
 }
 
 if (isset($_POST['edit_vendor'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     require_once 'vendor_model.php';
 
@@ -86,6 +94,8 @@ if (isset($_POST['edit_vendor'])) {
 
 if (isset($_GET['archive_vendor'])) {
 
+    validateCSRFToken($_GET['csrf_token']);
+
     $vendor_id = intval($_GET['archive_vendor']);
 
     //Get Vendor Name
@@ -104,9 +114,11 @@ if (isset($_GET['archive_vendor'])) {
 
 }
 
-if(isset($_GET['unarchive_vendor'])){
+if(isset($_GET['restore_vendor'])){
 
-    $vendor_id = intval($_GET['unarchive_vendor']);
+    validateCSRFToken($_GET['csrf_token']);
+
+    $vendor_id = intval($_GET['restore_vendor']);
 
     // Get Name and Client ID for logging and alert message
     $sql = mysqli_query($mysqli,"SELECT vendor_name, vendor_client_id FROM vendors WHERE vendor_id = $vendor_id");
@@ -116,7 +128,7 @@ if(isset($_GET['unarchive_vendor'])){
 
     mysqli_query($mysqli,"UPDATE vendors SET vendor_archived_at = NULL WHERE vendor_id = $vendor_id");
 
-    logAction("Vendor", "Unarchive", "$session_name unarchived vendor $vendor_name", $client_id, $vendor_id);
+    logAction("Vendor", "Restore", "$session_name restored vendor $vendor_name", $client_id, $vendor_id);
 
     flash_alert("Vendor <strong>$vendor_name</strong> restored");
 
@@ -125,6 +137,10 @@ if(isset($_GET['unarchive_vendor'])){
 }
 
 if (isset($_GET['delete_vendor'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
+
+    validateAdminRole();
 
     $vendor_id = intval($_GET['delete_vendor']);
 
@@ -153,8 +169,6 @@ if (isset($_GET['delete_vendor'])) {
 if (isset($_POST['bulk_archive_vendors'])) {
 
     validateCSRFToken($_POST['csrf_token']);
-
-    validateAdminRole();
 
     if (isset($_POST['vendor_ids'])) {
 
@@ -187,11 +201,9 @@ if (isset($_POST['bulk_archive_vendors'])) {
 
 }
 
-if (isset($_POST['bulk_unarchive_vendors'])) {
+if (isset($_POST['bulk_restore_vendors'])) {
 
     validateCSRFToken($_POST['csrf_token']);
-
-    validateAdminRole();
 
     if (isset($_POST['vendor_ids'])) {
 
@@ -211,13 +223,13 @@ if (isset($_POST['bulk_unarchive_vendors'])) {
 
             mysqli_query($mysqli,"UPDATE vendors SET vendor_archived_at = NULL WHERE vendor_id = $vendor_id");
 
-            logAction("Vendor", "Unarchive", "$session_name unarchived vendor $vendor_name", $client_id, $vendor_id);
+            logAction("Vendor", "Restore", "$session_name restored vendor $vendor_name", $client_id, $vendor_id);
 
         }
 
-        logAction("Vendor", "Bulk Unarchive", "$session_name unarchived $count vendor(s)");
+        logAction("Vendor", "Bulk Restore", "$session_name restored $count vendor(s)");
 
-        flash_alert("Unarchived <strong>$count</strong> vendor(s)");
+        flash_alert("Restored <strong>$count</strong> vendor(s)");
 
     }
 
@@ -270,6 +282,8 @@ if (isset($_POST['bulk_delete_vendors'])) {
 }
 
 if (isset($_POST['export_vendors_csv'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     if ($_POST['client_id']) {
         $client_id = intval($_POST['client_id']);
