@@ -16,16 +16,13 @@ function secondsToHmsString($seconds) {
 }
 
 /**
- * 15-minute round up, return decimal hours in 0.25 increments
- * NOTE: In this report, billed hours are calculated per TICKET total
- * (sum of reply time within range, then rounded up to nearest 15 minutes).
+ * Convert seconds to true decimal hours (rounded to 2 decimals).
  */
-function secondsToQuarterHourDecimal($seconds) {
+function secondsToDecimalHours($seconds) {
     $seconds = (int) max(0, $seconds);
     if ($seconds === 0) return 0.00;
 
-    $quarters = (int) ceil($seconds / 900); // 900 seconds = 15 minutes
-    return $quarters * 0.25;
+    return round($seconds / 3600, 2);
 }
 
 /**
@@ -162,7 +159,7 @@ $result = $stmt->get_result();
             <?php
             // Helper: print ticket subtotal row
             $printTicketSubtotalRow = function($ticket_label_html, $ticket_seconds) {
-                $ticket_billed = secondsToQuarterHourDecimal($ticket_seconds);
+                $ticket_billed = secondsToDecimalHours($ticket_seconds);
                 ?>
                 <tr class="font-weight-bold">
                     <td class="text-right pr-3">Ticket Total for <?php echo $ticket_label_html; ?></td>
@@ -314,7 +311,7 @@ $result = $stmt->get_result();
                         </div>
                     </td>
                     <td class="text-right"><?php echo formatDuration($reply_hms); ?></td>
-                    <td class="text-right"><?php echo number_format(secondsToQuarterHourDecimal($reply_seconds), 2); ?></td>
+                    <td class="text-right"><?php echo number_format(secondsToDecimalHours($reply_seconds), 2); ?></td>
                 </tr>
                 <?php
 
