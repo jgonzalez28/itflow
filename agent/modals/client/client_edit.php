@@ -39,7 +39,8 @@ ob_start();
 </div>
 
 <form action="post.php" method="post" autocomplete="off">
-    <input type="hidden" name="client_id" value="<?php echo $client_id; ?>">
+    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+    <input type="hidden" name="client_id" value="<?= $client_id ?>">
 
     <ul class="modal-header nav nav-pills nav-justified mb-3">
         <li class="nav-item">

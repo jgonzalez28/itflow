@@ -550,7 +550,7 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                         $asset_model = nullable_htmlentities($row['asset_model']);
                         $asset_serial = nullable_htmlentities($row['asset_serial']);
                         if ($asset_serial) {
-                            $asset_serial_display = $asset_serial;
+                            $asset_serial_display = "<span class='badge badge-light text-monospace'>$asset_serial</span>";
                         } else {
                             $asset_serial_display = "-";
                         }

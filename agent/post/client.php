@@ -252,6 +252,8 @@ if (isset($_POST['add_client'])) {
 
 if (isset($_POST['edit_client'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_client', 2);
 
     require_once 'client_model.php';
@@ -443,6 +445,8 @@ if (isset($_GET['delete_client'])) {
 
 if (isset($_POST['export_clients_csv'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_client', 1);
 
     //get records from database
@@ -492,6 +496,8 @@ if (isset($_POST['export_clients_csv'])) {
 }
 
 if (isset($_POST["import_clients_csv"])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_client', 2);
     $error = false;
@@ -986,6 +992,10 @@ if (isset($_POST['bulk_assign_client_tags'])) {
 
 if (isset($_POST['bulk_send_client_email']) && isset($_POST['client_ids'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
+    enforceUserPermission('module_client', 1);
+
     $client_ids = array_map('intval', $_POST['client_ids']);
     $count = count($client_ids);
 
@@ -1140,6 +1150,8 @@ if (isset($_POST['bulk_unarchive_clients'])) {
 }
 
 if (isset($_POST["export_client_pdf"])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     // Enforce permissions
     enforceUserPermission("module_client", 3);
