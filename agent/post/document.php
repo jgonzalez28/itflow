@@ -771,7 +771,7 @@ if (isset($_GET['delete_document'])) {
     // If there's a "from" parameter, we can use it to decide where to go
     if (isset($_GET['from']) && $_GET['from'] === 'document_details') {
         // User deleted from document_details.php
-        redirect("documents.php?client_id=$client_id");
+        redirect("files.php?client_id=$client_id");
     } else {
         // Default behavior — redirect back to previous page
         redirect();
