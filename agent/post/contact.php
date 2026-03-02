@@ -8,6 +8,8 @@ defined('FROM_POST_HANDLER') || die("Direct file access is not allowed");
 
 if (isset($_POST['add_contact'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_client', 2);
 
     require_once 'contact_model.php';
@@ -77,6 +79,8 @@ if (isset($_POST['add_contact'])) {
 }
 
 if (isset($_POST['edit_contact'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_client', 2);
 
@@ -218,6 +222,8 @@ if (isset($_POST['edit_contact'])) {
 
 if (isset($_POST['add_contact_note'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_client', 2);
 
     $contact_id = intval($_POST['contact_id']);
@@ -245,6 +251,8 @@ if (isset($_POST['add_contact_note'])) {
 
 if (isset($_GET['archive_contact_note'])) {
 
+    validateCSRFToken($_GET['csrf_token']);
+
     enforceUserPermission('module_client', 2);
 
     $contact_note_id = intval($_GET['archive_contact_note']);
@@ -267,7 +275,9 @@ if (isset($_GET['archive_contact_note'])) {
 
 }
 
-if (isset($_GET['unarchive_contact_note'])) {
+if (isset($_GET['restore_contact_note'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
 
     enforceUserPermission('module_client', 2);
 
@@ -293,6 +303,8 @@ if (isset($_GET['unarchive_contact_note'])) {
 
 if (isset($_GET['delete_contact_note'])) {
 
+    validateCSRFToken($_GET['csrf_token']);
+
     enforceUserPermission('module_client', 3);
 
     $contact_note_id = intval($_GET['delete_contact_note']);
@@ -316,6 +328,8 @@ if (isset($_GET['delete_contact_note'])) {
 }
 
 if (isset($_POST['bulk_assign_contact_location'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_client', 2);
 
@@ -358,6 +372,8 @@ if (isset($_POST['bulk_assign_contact_location'])) {
 
 if (isset($_POST['bulk_edit_contact_phone'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_client', 2);
 
     $phone = preg_replace("/[^0-9]/", '', $_POST['bulk_phone']);
@@ -394,6 +410,8 @@ if (isset($_POST['bulk_edit_contact_phone'])) {
 
 if (isset($_POST['bulk_edit_contact_department'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_client', 2);
 
     $department = sanitizeInput($_POST['bulk_department']);
@@ -429,6 +447,8 @@ if (isset($_POST['bulk_edit_contact_department'])) {
 }
 
 if (isset($_POST['bulk_edit_contact_role'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_client', 2);
 
@@ -469,6 +489,8 @@ if (isset($_POST['bulk_edit_contact_role'])) {
 }
 
 if (isset($_POST['bulk_assign_contact_tags'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_client', 2);
 
@@ -519,6 +541,10 @@ if (isset($_POST['bulk_assign_contact_tags'])) {
 
 if (isset($_POST['send_bulk_mail_now'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
+    enforceUserPermission('module_client');
+
     if (isset($_POST['contact_ids'])) {
 
         $count = count($_POST['contact_ids']);
@@ -564,9 +590,9 @@ if (isset($_POST['send_bulk_mail_now'])) {
 
 if (isset($_POST['bulk_archive_contacts'])) {
 
-    enforceUserPermission('module_client', 2);
+    validateCSRFToken($_POST['csrf_token']);
 
-    //validateCSRFToken($_POST['csrf_token']);
+    enforceUserPermission('module_client', 2);
 
     if (isset($_POST['contact_ids'])) {
 
@@ -611,10 +637,11 @@ if (isset($_POST['bulk_archive_contacts'])) {
     redirect();
 }
 
-if (isset($_POST['bulk_unarchive_contacts'])) {
+if (isset($_POST['bulk_restore_contacts'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_client', 2);
-    //validateCSRFToken($_POST['csrf_token']);
 
     if (isset($_POST['contact_ids'])) {
 
@@ -698,6 +725,8 @@ if (isset($_POST['bulk_delete_contacts'])) {
 }
 
 if (isset($_GET['anonymize_contact'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
 
     enforceUserPermission('module_client', 3);
 
@@ -803,6 +832,8 @@ if (isset($_GET['anonymize_contact'])) {
 
 if (isset($_GET['archive_contact'])) {
 
+    validateCSRFToken($_GET['csrf_token']);
+
     enforceUserPermission('module_client', 2);
 
     $contact_id = intval($_GET['archive_contact']);
@@ -829,11 +860,13 @@ if (isset($_GET['archive_contact'])) {
 
 }
 
-if (isset($_GET['unarchive_contact'])) {
+if (isset($_GET['restore_contact'])) {
 
-    validateAdminRole();
+    validateCSRFToken($_GET['csrf_token']);
 
-    $contact_id = intval($_GET['unarchive_contact']);
+    enforceUserPermission('module_client', 2);
+
+    $contact_id = intval($_GET['restore_contact']);
 
     // Get Contact Name and Client ID for logging and alert message
     $sql = mysqli_query($mysqli,"SELECT contact_name, contact_client_id, contact_user_id FROM contacts WHERE contact_id = $contact_id");
@@ -849,15 +882,17 @@ if (isset($_GET['unarchive_contact'])) {
 
     mysqli_query($mysqli,"UPDATE contacts SET contact_archived_at = NULL WHERE contact_id = $contact_id");
 
-    logAction("Contact", "Unarchive", "$session_name unarchived contact $contact_name", $client_id, $contact_id);
+    logAction("Contact", "Restore", "$session_name restored contact $contact_name", $client_id, $contact_id);
 
-    flash_alert("Contact <strong>$contact_name</strong> has been Unarchived");
+    flash_alert("Contact <strong>$contact_name</strong> Restored");
 
     redirect();
 
 }
 
 if (isset($_GET['delete_contact'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
 
     enforceUserPermission('module_client', 3);
 
@@ -887,7 +922,9 @@ if (isset($_GET['delete_contact'])) {
 
 if (isset($_POST['link_contact_to_asset'])) {
 
-    enforceUserPermission('module_support', 2);
+    validateCSRFToken($_POST['csrf_token']);
+
+    enforceUserPermission('module_client', 2);
 
     $asset_id = intval($_POST['asset_id']);
     $contact_id = intval($_POST['contact_id']);
@@ -913,7 +950,9 @@ if (isset($_POST['link_contact_to_asset'])) {
 
 if (isset($_GET['unlink_asset_from_contact'])) {
 
-    enforceUserPermission('module_support', 2);
+    validateCSRFToken($_POST['csrf_token']);
+
+    enforceUserPermission('module_client', 2);
 
     $contact_id = intval($_GET['contact_id']);
     $asset_id = intval($_GET['asset_id']);
@@ -939,7 +978,9 @@ if (isset($_GET['unlink_asset_from_contact'])) {
 
 if (isset($_POST['link_software_to_contact'])) {
 
-    enforceUserPermission('module_support', 2);
+    validateCSRFToken($_POST['csrf_token']);
+
+    enforceUserPermission('module_client', 2);
 
     $software_id = intval($_POST['software_id']);
     $contact_id = intval($_POST['contact_id']);
@@ -965,7 +1006,9 @@ if (isset($_POST['link_software_to_contact'])) {
 
 if (isset($_GET['unlink_software_from_contact'])) {
 
-    enforceUserPermission('module_support', 2);
+    validateCSRFToken($_POST['csrf_token']);
+
+    enforceUserPermission('module_client', 2);
 
     $contact_id = intval($_GET['contact_id']);
     $software_id = intval($_GET['software_id']);
@@ -991,7 +1034,9 @@ if (isset($_GET['unlink_software_from_contact'])) {
 
 if (isset($_POST['link_contact_to_credential'])) {
 
-    enforceUserPermission('module_support', 2);
+    validateCSRFToken($_POST['csrf_token']);
+
+    enforceUserPermission('module_client', 2);
 
     $credential_id = intval($_POST['credential_id']);
     $contact_id = intval($_POST['contact_id']);
@@ -1017,7 +1062,9 @@ if (isset($_POST['link_contact_to_credential'])) {
 
 if (isset($_GET['unlink_credential_from_contact'])) {
 
-    enforceUserPermission('module_support', 2);
+    validateCSRFToken($_GET['csrf_token']);
+
+    enforceUserPermission('module_client', 2);
 
     $contact_id = intval($_GET['contact_id']);
     $credential_id = intval($_GET['credential_id']);
@@ -1043,7 +1090,9 @@ if (isset($_GET['unlink_credential_from_contact'])) {
 
 if (isset($_POST['link_service_to_contact'])) {
 
-    enforceUserPermission('module_support', 2);
+    validateCSRFToken($_POST['csrf_token']);
+
+    enforceUserPermission('module_client', 2);
 
     $service_id = intval($_POST['service_id']);
     $contact_id = intval($_POST['contact_id']);
@@ -1069,7 +1118,9 @@ if (isset($_POST['link_service_to_contact'])) {
 
 if (isset($_GET['unlink_service_from_contact'])) {
 
-    enforceUserPermission('module_support', 2);
+    validateCSRFToken($_GET['csrf_token']);
+
+    enforceUserPermission('module_client', 2);
 
     $contact_id = intval($_GET['contact_id']);
     $service_id = intval($_GET['service_id']);
@@ -1095,7 +1146,9 @@ if (isset($_GET['unlink_service_from_contact'])) {
 
 if (isset($_POST['link_contact_to_file'])) {
 
-    enforceUserPermission('module_support', 2);
+    validateCSRFToken($_POST['csrf_token']);
+
+    enforceUserPermission('module_client', 2);
 
     $file_id = intval($_POST['file_id']);
     $contact_id = intval($_POST['contact_id']);
@@ -1122,7 +1175,9 @@ if (isset($_POST['link_contact_to_file'])) {
 
 if (isset($_GET['unlink_contact_from_file'])) {
 
-    enforceUserPermission('module_support', 2);
+    validateCSRFToken($_GET['csrf_token']);
+
+    enforceUserPermission('module_client', 2);
 
     $contact_id = intval($_GET['contact_id']);
     $file_id = intval($_GET['file_id']);
@@ -1147,6 +1202,8 @@ if (isset($_GET['unlink_contact_from_file'])) {
 }
 
 if (isset($_POST['export_contacts_csv'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_client');
 
@@ -1203,6 +1260,8 @@ if (isset($_POST['export_contacts_csv'])) {
 }
 
 if (isset($_POST["import_contacts_csv"])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_client', 2);
 
