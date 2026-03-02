@@ -8,6 +8,8 @@ defined('FROM_POST_HANDLER') || die("Direct file access is not allowed");
 
 if (isset($_POST['add_payment'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_sales', 2);
     enforceUserPermission('module_financial', 2);
 
@@ -173,6 +175,8 @@ if (isset($_POST['add_payment'])) {
 
 if (isset($_POST['edit_payment'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_sales', 3);
     enforceUserPermission('module_financial', 3);
 
@@ -197,6 +201,8 @@ if (isset($_POST['edit_payment'])) {
 Apply Credit Not ready for use 2025-08-27 - JQ
 
 if (isset($_POST['apply_credit'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_sales', 2);
     enforceUserPermission('module_financial', 2);
@@ -685,6 +691,8 @@ if (isset($_GET['add_payment_stripe'])) {
 
 if (isset($_POST['add_bulk_payment'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_sales', 2);
     enforceUserPermission('module_financial', 2);
 
@@ -817,6 +825,8 @@ if (isset($_POST['add_bulk_payment'])) {
 
 if (isset($_GET['delete_payment'])) {
 
+    validateCSRFToken($_GET['csrf_token']);
+
     enforceUserPermission('module_sales', 2);
     enforceUserPermission('module_financial', 2);
 
@@ -870,6 +880,10 @@ if (isset($_GET['delete_payment'])) {
 }
 
 if (isset($_POST['export_payments_csv'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
+
+    enforceUserPermission('module_financial');
 
     if ($_POST['client_id']) {
         $client_id = intval($_POST['client_id']);
