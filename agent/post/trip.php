@@ -4,9 +4,13 @@
  * ITFlow - GET/POST request handler for trips (accounting related)
  */
 
+ // Todo - JQ 2026-03-02 - Possibly need another Perm for trips
+
 defined('FROM_POST_HANDLER') || die("Direct file access is not allowed");
 
 if (isset($_POST['add_trip'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     require_once 'trip_model.php';
 
@@ -24,6 +28,8 @@ if (isset($_POST['add_trip'])) {
 
 if (isset($_POST['edit_trip'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     require_once 'trip_model.php';
 
     $trip_id = intval($_POST['trip_id']);
@@ -39,6 +45,10 @@ if (isset($_POST['edit_trip'])) {
 }
 
 if (isset($_GET['delete_trip'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
+
+    enforceUserPermission('module_financial', 3);
 
     $trip_id = intval($_GET['delete_trip']);
 
@@ -59,6 +69,10 @@ if (isset($_GET['delete_trip'])) {
 }
 
 if (isset($_POST['export_trips_csv'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
+
+    enforceUserPermission('module_financial');
 
     if ($_POST['client_id']) {
         $client_id = intval($_POST['client_id']);

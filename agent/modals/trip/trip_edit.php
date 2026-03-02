@@ -30,6 +30,7 @@ ob_start();
 </div>
 <form action="post.php" method="post" autocomplete="off">
     <div class="modal-body">
+        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
         <input type="hidden" name="trip_id" value="<?php echo $trip_id; ?>">
 
         <div class="form-row">
