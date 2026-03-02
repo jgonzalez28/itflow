@@ -377,7 +377,7 @@ if (isset($_GET['ticket_id'])) {
                             if (empty($ticket_closed_at)) { ?>
 
                                 <?php if (empty($ticket_closed_at) && !empty($ticket_resolved_at)) { ?>
-                                    <a href="post.php?reopen_ticket=<?php echo $ticket_id; ?>" class="btn btn-light btn-sm ml-3">
+                                    <a href="post.php?reopen_ticket=<?= $ticket_id ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>" class="btn btn-light btn-sm ml-3">
                                         <i class="fas fa-fw fa-redo mr-2"></i>Reopen
                                     </a>
                                 <?php } ?>
@@ -568,6 +568,7 @@ if (isset($_GET['ticket_id'])) {
                 <?php if (lookupUserPermission("module_support") >= 2 && empty($ticket_resolved_at) && empty($ticket_closed_at)) { ?>
 
                         <form action="post.php" method="post" autocomplete="off">
+                            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                             <input type="hidden" name="ticket_id" id="ticket_id" value="<?php echo $ticket_id; ?>">
                             <input type="hidden" name="client_id" id="client_id" value="<?php echo $client_id; ?>">
 
@@ -752,7 +753,7 @@ if (isset($_GET['ticket_id'])) {
                                                         <i class="fas fa-fw fa-edit text-secondary mr-2"></i>Edit
                                                     </a>
                                                     <div class="dropdown-divider"></div>
-                                                    <a class="dropdown-item text-danger confirm-link" href="post.php?archive_ticket_reply=<?php echo $ticket_reply_id; ?>">
+                                                    <a class="dropdown-item text-danger confirm-link" href="post.php?archive_ticket_reply=<?= $ticket_reply_id ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>">
                                                         <i class="fas fa-fw fa-archive mr-2"></i>Archive
                                                     </a>
                                                     <?php } ?>
@@ -1152,7 +1153,7 @@ if (isset($_GET['ticket_id'])) {
                                 <div class='mt-1'>
                                     <i class="fa fa-fw fa-envelope text-secondary mr-2"></i><?php echo $ticket_watcher_email; ?>
                                     <?php if (empty($ticket_closed_at)) { ?>
-                                        <a class="confirm-link float-right" href="post.php?delete_ticket_watcher=<?php echo $watcher_id; ?>">
+                                        <a class="confirm-link float-right" href="post.php?delete_ticket_watcher=<?= $watcher_id ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>">
                                             <i class="fas fa-fw fa-times text-secondary"></i>
                                         </a>
                                     <?php } ?>
@@ -1197,7 +1198,7 @@ if (isset($_GET['ticket_id'])) {
                                         <i class="fa fa-fw fa-<?php echo $additional_asset_icon; ?> text-secondary mr-2"></i><?php echo $additional_asset_name; ?>
                                     </a>
                                     <?php if (empty($ticket_closed_at)) { ?>
-                                        <a class="confirm-link float-right" href="post.php?delete_ticket_additional_asset=<?php echo $additional_asset_id; ?>&ticket_id=<?php echo $ticket_id; ?>" title="Remove asset from ticket">
+                                        <a class="confirm-link float-right" href="post.php?delete_ticket_additional_asset=<?= $additional_asset_id; ?>&ticket_id=<?= $ticket_id ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>" title="Remove asset from ticket">
                                             <i class="fas fa-fw fa-times text-secondary"></i>
                                         </a>
                                     <?php } ?>

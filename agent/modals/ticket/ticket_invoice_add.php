@@ -88,6 +88,7 @@ ob_start();
     </button>
 </div>
 <form action="post.php" method="post" autocomplete="off">
+    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
     <input type="hidden" name="ticket_id" value="<?php echo $ticket_id; ?>">
     <div class="modal-body">
         <?php if (mysqli_num_rows($sql_invoices) > 0) { ?>

@@ -17,6 +17,7 @@ ob_start();
     </button>
 </div>
 <form action="post.php" method="post" autocomplete="off">
+    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
 
     <?php if (isset($_GET['project_id'])) { ?>
     <input type="hidden" name="project" value="<?php echo intval($_GET['project_id']); ?>">

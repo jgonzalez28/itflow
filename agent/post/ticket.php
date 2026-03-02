@@ -8,6 +8,8 @@ defined('FROM_POST_HANDLER') || die("Direct file access is not allowed");
 
 if (isset($_POST['add_ticket'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $client_id = intval($_POST['client']);
@@ -194,6 +196,8 @@ if (isset($_POST['add_ticket'])) {
 
 if (isset($_POST['edit_ticket'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $ticket_id = intval($_POST['ticket_id']);
@@ -303,6 +307,8 @@ if (isset($_POST['edit_ticket'])) {
 
 if (isset($_POST['edit_ticket_priority'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $ticket_id = intval($_POST['ticket_id']);
@@ -339,6 +345,8 @@ if (isset($_POST['edit_ticket_priority'])) {
 }
 
 if (isset($_POST['edit_ticket_contact'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
@@ -424,6 +432,8 @@ if (isset($_POST['edit_ticket_contact'])) {
 
 if (isset($_POST['edit_ticket_project'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $ticket_id = intval($_POST['ticket_id']);
@@ -445,6 +455,8 @@ if (isset($_POST['edit_ticket_project'])) {
 }
 
 if (isset($_POST['add_ticket_watcher'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
@@ -524,6 +536,8 @@ if (isset($_POST['add_ticket_watcher'])) {
 
 if (isset($_GET['delete_ticket_watcher'])) {
 
+    validateCSRFToken($_GET['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $watcher_id = intval($_GET['delete_ticket_watcher']);
@@ -558,6 +572,8 @@ if (isset($_GET['delete_ticket_watcher'])) {
 
 if (isset($_GET['delete_ticket_additional_asset'])) {
 
+    validateCSRFToken($_GET['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $asset_id = intval($_GET['delete_ticket_additional_asset']);
@@ -591,6 +607,8 @@ if (isset($_GET['delete_ticket_additional_asset'])) {
 }
 
 if (isset($_POST['edit_ticket_asset'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
@@ -636,6 +654,8 @@ if (isset($_POST['edit_ticket_asset'])) {
 
 if (isset($_POST['edit_ticket_vendor'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $ticket_id = intval($_POST['ticket_id']);
@@ -666,6 +686,8 @@ if (isset($_POST['edit_ticket_vendor'])) {
 }
 
 if (isset($_POST['assign_ticket'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
@@ -861,6 +883,8 @@ if (isset($_POST['bulk_delete_tickets'])) {
 
 if (isset($_POST['bulk_assign_ticket'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     // POST variables
@@ -961,6 +985,8 @@ if (isset($_POST['bulk_assign_ticket'])) {
 
 if (isset($_POST['bulk_edit_ticket_priority'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     // POST variables
@@ -1004,6 +1030,8 @@ if (isset($_POST['bulk_edit_ticket_priority'])) {
 }
 
 if (isset($_POST['bulk_edit_ticket_category'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
@@ -1049,6 +1077,8 @@ if (isset($_POST['bulk_edit_ticket_category'])) {
 }
 
 if (isset($_POST['bulk_merge_tickets'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
@@ -1116,6 +1146,8 @@ if (isset($_POST['bulk_merge_tickets'])) {
 }
 
 if (isset($_POST['bulk_resolve_tickets'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
@@ -1253,6 +1285,8 @@ if (isset($_POST['bulk_resolve_tickets'])) {
 }
 
 if (isset($_POST['bulk_ticket_reply'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
@@ -1418,6 +1452,8 @@ if (isset($_POST['bulk_ticket_reply'])) {
 // Currently not UI Frontend for this
 if (isset($_POST['bulk_add_ticket_project'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     // POST variables
@@ -1578,6 +1614,8 @@ if (isset($_POST['bulk_add_asset_ticket'])) {
 }
 
 if (isset($_POST['add_ticket_reply'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
@@ -1756,6 +1794,8 @@ if (isset($_POST['add_ticket_reply'])) {
 
 if (isset($_POST['edit_ticket_reply'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $ticket_reply_id = intval($_POST['ticket_reply_id']);
@@ -1777,6 +1817,8 @@ if (isset($_POST['edit_ticket_reply'])) {
 
 if (isset($_POST['redact_ticket_reply'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $ticket_reply_id = intval($_POST['ticket_reply_id']);
@@ -1796,6 +1838,8 @@ if (isset($_POST['redact_ticket_reply'])) {
 
 if (isset($_GET['archive_ticket_reply'])) {
 
+    validateCSRFToken($_GET['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $ticket_reply_id = intval($_GET['archive_ticket_reply']);
@@ -1811,6 +1855,8 @@ if (isset($_GET['archive_ticket_reply'])) {
 }
 
 if (isset($_POST['merge_ticket'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
@@ -1885,6 +1931,8 @@ if (isset($_POST['merge_ticket'])) {
 }
 
 if (isset($_POST['change_client_ticket'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
@@ -2110,6 +2158,8 @@ if (isset($_GET['close_ticket'])) {
 
 if (isset($_GET['reopen_ticket'])) {
 
+    validateCSRFToken($_GET['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $ticket_id = intval($_GET['reopen_ticket']);
@@ -2127,6 +2177,8 @@ if (isset($_GET['reopen_ticket'])) {
 }
 
 if (isset($_POST['add_invoice_from_ticket'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_support', 2);
     enforceUserPermission('module_sales', 2);
@@ -2245,6 +2297,8 @@ if (isset($_POST['add_invoice_from_ticket'])) {
 
 if (isset($_POST['export_tickets_csv'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     if ($_POST['client_id']) {
@@ -2300,6 +2354,8 @@ if (isset($_POST['export_tickets_csv'])) {
 
 if (isset($_POST['edit_ticket_billable_status'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
     enforceUserPermission('module_sales', 2);
 
@@ -2327,6 +2383,8 @@ if (isset($_POST['edit_ticket_billable_status'])) {
 }
 
 if (isset($_POST['edit_ticket_schedule'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
@@ -2499,6 +2557,8 @@ if (isset($_POST['edit_ticket_schedule'])) {
 }
 
 if (isset($_GET['cancel_ticket_schedule'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
