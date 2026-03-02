@@ -8,6 +8,10 @@ defined('FROM_POST_HANDLER') || die("Direct file access is not allowed");
 
 if (isset($_POST['add_expense'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
+    enforceUserPermission('module_financial', 2);
+
     require_once 'expense_model.php';
 
     mysqli_query($mysqli,"INSERT INTO expenses SET expense_date = '$date', expense_amount = $amount, expense_currency_code = '$session_company_currency', expense_account_id = $account, expense_vendor_id = $vendor, expense_client_id = $client, expense_category_id = $category, expense_description = '$description', expense_reference = '$reference'");
@@ -42,6 +46,10 @@ if (isset($_POST['add_expense'])) {
 }
 
 if (isset($_POST['edit_expense'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
+
+    enforceUserPermission('module_financial', 2);
 
     require_once 'expense_model.php';
 
@@ -82,6 +90,10 @@ if (isset($_POST['edit_expense'])) {
 
 if (isset($_GET['delete_expense'])) {
 
+    validateCSRFToken($_GET['csrf_token']);
+
+    enforceUserPermission('module_financial', 3);
+
     $expense_id = intval($_GET['delete_expense']);
 
     $sql = mysqli_query($mysqli,"SELECT * FROM expenses WHERE expense_id = $expense_id");
@@ -103,6 +115,10 @@ if (isset($_GET['delete_expense'])) {
 }
 
 if (isset($_POST['bulk_edit_expense_category'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
+
+    enforceUserPermission('module_financial', 2);
 
     $category_id = intval($_POST['bulk_category_id']);
 
@@ -141,6 +157,10 @@ if (isset($_POST['bulk_edit_expense_category'])) {
 
 if (isset($_POST['bulk_edit_expense_account'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
+    enforceUserPermission('module_financial', 2);
+
     $account_id = intval($_POST['bulk_account_id']);
 
     // Get Account name for logging and Notification
@@ -178,6 +198,10 @@ if (isset($_POST['bulk_edit_expense_account'])) {
 
 if (isset($_POST['bulk_edit_expense_client'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
+    enforceUserPermission('module_financial', 2);
+
     $client_id = intval($_POST['bulk_client_id']);
 
     // Get Client name for logging and Notification
@@ -212,7 +236,7 @@ if (isset($_POST['bulk_delete_expenses'])) {
 
     validateCSRFToken($_POST['csrf_token']);
 
-    validateAdminRole();
+    enforceUserPermission('module_financial', 3);
 
     if (isset($_POST['expense_ids'])) {
 
@@ -249,6 +273,10 @@ if (isset($_POST['bulk_delete_expenses'])) {
 }
 
 if (isset($_POST['export_expenses_csv'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
+
+    enforceUserPermission('module_financial');
 
     $date_from = sanitizeInput($_POST['date_from']);
     $date_to = sanitizeInput($_POST['date_to']);

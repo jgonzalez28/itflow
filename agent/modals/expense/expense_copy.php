@@ -31,6 +31,7 @@ ob_start();
 </div>
 
 <form action="post.php" method="post" enctype="multipart/form-data" autocomplete="off">
+    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
     <div class="modal-body">
         <div class="form-row">
 
