@@ -8,6 +8,10 @@ defined('FROM_POST_HANDLER') || die("Direct file access is not allowed");
 
 if (isset($_POST['add_invoice'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
+    enforceUserPermission('module_sales', 2);
+
     require_once 'invoice_model.php';
 
     $client_id = intval($_POST['client']);
@@ -49,6 +53,10 @@ if (isset($_POST['add_invoice'])) {
 
 if (isset($_POST['edit_invoice'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
+    enforceUserPermission('module_sales', 2);
+
     require_once 'invoice_model.php';
 
     $invoice_id = intval($_POST['invoice_id']);
@@ -82,6 +90,10 @@ if (isset($_POST['edit_invoice'])) {
 }
 
 if (isset($_POST['add_invoice_copy'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
+
+    enforceUserPermission('module_sales', 2);
 
     $invoice_id = intval($_POST['invoice_id']);
     $date = sanitizeInput($_POST['date']);
@@ -148,6 +160,10 @@ if (isset($_POST['add_invoice_copy'])) {
 
 if (isset($_GET['mark_invoice_sent'])) {
 
+    validateCSRFToken($_GET['csrf_token']);
+
+    enforceUserPermission('module_sales', 2);
+
     $invoice_id = intval($_GET['mark_invoice_sent']);
 
     // Get Invoice Number and Prefix and Client ID for Logging
@@ -170,6 +186,10 @@ if (isset($_GET['mark_invoice_sent'])) {
 }
 
 if (isset($_GET['mark_invoice_non-billable'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
+
+    enforceUserPermission('module_sales', 2);
 
     $invoice_id = intval($_GET['mark_invoice_non-billable']);
 
@@ -194,6 +214,10 @@ if (isset($_GET['mark_invoice_non-billable'])) {
 
 if (isset($_GET['cancel_invoice'])) {
 
+    validateCSRFToken($_GET['csrf_token']);
+
+    enforceUserPermission('module_sales', 2);
+
     $invoice_id = intval($_GET['cancel_invoice']);
 
     // Get Invoice Number and Prefix and Client ID for Logging
@@ -216,6 +240,10 @@ if (isset($_GET['cancel_invoice'])) {
 }
 
 if (isset($_GET['delete_invoice'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
+
+    enforceUserPermission('module_sales', 3);
 
     $invoice_id = intval($_GET['delete_invoice']);
 
@@ -261,6 +289,8 @@ if (isset($_GET['delete_invoice'])) {
 }
 
 if (isset($_POST['add_invoice_item'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_sales', 2);
 
@@ -345,6 +375,8 @@ if (isset($_POST['add_invoice_item'])) {
 
 if (isset($_POST['invoice_note'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_sales', 2);
 
     $invoice_id = intval($_POST['invoice_id']);
@@ -368,6 +400,8 @@ if (isset($_POST['invoice_note'])) {
 }
 
 if (isset($_POST['edit_item'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_sales', 2);
 
@@ -469,6 +503,8 @@ if (isset($_POST['edit_item'])) {
 
 if (isset($_GET['delete_invoice_item'])) {
 
+    validateCSRFToken($_GET['csrf_token']);
+
     enforceUserPermission('module_sales', 2);
 
     $item_id = intval($_GET['delete_invoice_item']);
@@ -509,6 +545,10 @@ if (isset($_GET['delete_invoice_item'])) {
 }
 
 if (isset($_GET['email_invoice'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
+
+    enforceUserPermission('module_sales', 2);
 
     $invoice_id = intval($_GET['email_invoice']);
 
@@ -632,6 +672,8 @@ if (isset($_GET['email_invoice'])) {
 
 if (isset($_POST['export_invoices_csv'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_sales');
 
     if ($_POST['client_id']) {
@@ -697,6 +739,10 @@ if (isset($_POST['export_invoices_csv'])) {
 
 if (isset($_POST['link_invoice_to_ticket'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
+    enforceUserPermission('module_sales', 2);
+
     $invoice_id = intval($_POST['invoice_id']);
     $ticket_id = intval($_POST['ticket_id']);
 
@@ -710,6 +756,10 @@ if (isset($_POST['link_invoice_to_ticket'])) {
 
 if (isset($_POST['add_ticket_to_invoice'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
+    enforceUserPermission('module_sales', 2);
+
     $invoice_id = intval($_POST['invoice_id']);
     $ticket_id = intval($_POST['ticket_id']);
 
@@ -722,6 +772,10 @@ if (isset($_POST['add_ticket_to_invoice'])) {
 }
 
 if (isset($_GET['export_invoice_pdf'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
+
+    enforceUserPermission('module_sales');
 
     $invoice_id = intval($_GET['export_invoice_pdf']);
 
@@ -946,6 +1000,10 @@ if (isset($_GET['export_invoice_pdf'])) {
 
 if (isset($_GET['export_invoice_packing_slip'])) {
 
+    validateCSRFToken($_GET['csrf_token']);
+
+    enforceUserPermission('module_sales');
+
     $invoice_id = intval($_GET['export_invoice_packing_slip']);
 
     $sql = mysqli_query(
@@ -1086,6 +1144,10 @@ if (isset($_GET['export_invoice_packing_slip'])) {
 }
 
 if (isset($_POST['bulk_edit_invoice_category'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
+
+    enforceUserPermission('module_sales', 2);
 
     $category_id = intval($_POST['bulk_category_id']);
 

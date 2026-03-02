@@ -421,18 +421,18 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                                         </a>
                                         <div class="dropdown-divider"></div>
                                         <?php if (!empty($config_smtp_host)) { ?>
-                                            <a class="dropdown-item" href="post.php?email_invoice=<?php echo $invoice_id; ?>">
+                                            <a class="dropdown-item" href="post.php?email_invoice=<?= $invoice_id ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>">
                                                 <i class="fas fa-fw fa-paper-plane mr-2"></i>Send Email
                                             </a>
                                             <div class="dropdown-divider"></div>
                                         <?php } ?>
                                         <?php if ($invoice_status == 'Draft') { ?>
-                                        <a class="dropdown-item" href="post.php?mark_invoice_sent=<?php echo $invoice_id; ?>">
+                                        <a class="dropdown-item" href="post.php?mark_invoice_sent=<?= $invoice_id ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>">
                                             <i class="fas fa-fw fa-check mr-2"></i>Mark Sent
                                         </a>
                                         <div class="dropdown-divider"></div>
                                         <?php } ?>
-                                        <a class="dropdown-item text-danger text-bold confirm-link" href="post.php?delete_invoice=<?php echo $invoice_id; ?>">
+                                        <a class="dropdown-item text-danger text-bold confirm-link" href="post.php?delete_invoice=<?= $invoice_id ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>">
                                             <i class="fas fa-fw fa-trash mr-2"></i>Delete
                                         </a>
                                     </div>
