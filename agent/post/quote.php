@@ -8,6 +8,8 @@ defined('FROM_POST_HANDLER') || die("Direct file access is not allowed");
 
 if (isset($_POST['add_quote'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_sales', 2);
 
     require_once 'quote_model.php';
@@ -45,6 +47,8 @@ if (isset($_POST['add_quote'])) {
 }
 
 if (isset($_POST['add_quote_copy'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_sales', 2);
 
@@ -113,6 +117,8 @@ if (isset($_POST['add_quote_copy'])) {
 }
 
 if (isset($_POST['add_quote_to_invoice'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_sales', 2);
 
@@ -187,6 +193,8 @@ if (isset($_POST['add_quote_to_invoice'])) {
 
 if (isset($_POST['add_quote_item'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_sales', 2);
 
     $quote_id = intval($_POST['quote_id']);
@@ -241,6 +249,8 @@ if (isset($_POST['add_quote_item'])) {
 
 if (isset($_POST['quote_note'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_sales', 2);
 
     $quote_id = intval($_POST['quote_id']);
@@ -264,6 +274,8 @@ if (isset($_POST['quote_note'])) {
 }
 
 if (isset($_POST['edit_quote'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_sales', 2);
 
@@ -298,6 +310,8 @@ if (isset($_POST['edit_quote'])) {
 }
 
 if (isset($_GET['delete_quote'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
 
     enforceUserPermission('module_sales', 3);
 
@@ -341,6 +355,8 @@ if (isset($_GET['delete_quote'])) {
 
 if (isset($_GET['delete_quote_item'])) {
 
+    validateCSRFToken($_GET['csrf_token']);
+
     enforceUserPermission('module_sales', 2);
 
     $item_id = intval($_GET['delete_quote_item']);
@@ -375,6 +391,8 @@ if (isset($_GET['delete_quote_item'])) {
 
 if (isset($_GET['mark_quote_sent'])) {
 
+    validateCSRFToken($_GET['csrf_token']);
+
     enforceUserPermission('module_sales', 2);
 
     $quote_id = intval($_GET['mark_quote_sent']);
@@ -398,6 +416,8 @@ if (isset($_GET['mark_quote_sent'])) {
 }
 
 if (isset($_GET['accept_quote'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
 
     enforceUserPermission('module_sales', 2);
 
@@ -425,6 +445,8 @@ if (isset($_GET['accept_quote'])) {
 
 if (isset($_GET['decline_quote'])) {
 
+    validateCSRFToken($_GET['csrf_token']);
+
     enforceUserPermission('module_sales', 2);
 
     $quote_id = intval($_GET['decline_quote']);
@@ -450,6 +472,8 @@ if (isset($_GET['decline_quote'])) {
 }
 
 if (isset($_GET['email_quote'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
 
     enforceUserPermission('module_sales', 2);
 
@@ -529,6 +553,8 @@ if (isset($_GET['email_quote'])) {
 
 if (isset($_GET['mark_quote_invoiced'])) {
 
+    validateCSRFToken($_GET['csrf_token']);
+
     enforceUserPermission('module_sales', 2);
 
     $quote_id = intval($_GET['mark_quote_invoiced']);
@@ -552,6 +578,8 @@ if (isset($_GET['mark_quote_invoiced'])) {
 }
 
 if(isset($_POST['export_quotes_csv'])){
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_sales');
 
@@ -610,6 +638,10 @@ if(isset($_POST['export_quotes_csv'])){
 }
 
 if (isset($_GET['export_quote_pdf'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
+
+    enforceUserPermission('module_sales');
 
     $quote_id = intval($_GET['export_quote_pdf']);
 
