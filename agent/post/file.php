@@ -8,7 +8,8 @@ defined('FROM_POST_HANDLER') || die("Direct file access is not allowed");
 
 if (isset($_POST['upload_files'])) {
 
-    // Enforce required user permission
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     // Sanitize and initialize inputs
@@ -102,6 +103,8 @@ if (isset($_POST['upload_files'])) {
 
 if (isset($_POST['rename_file'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $file_id = intval($_POST['file_id']);
@@ -126,6 +129,8 @@ if (isset($_POST['rename_file'])) {
 }
 
 if (isset($_POST['move_file'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
@@ -153,6 +158,8 @@ if (isset($_POST['move_file'])) {
 
 if (isset($_GET['archive_file'])) {
 
+    validateCSRFToken($_GET['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $file_id = intval($_GET['archive_file']);
@@ -174,6 +181,8 @@ if (isset($_GET['archive_file'])) {
 }
 
 if (isset($_GET['restore_file'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
@@ -234,7 +243,7 @@ if (isset($_POST['bulk_archive_files'])) {
 
     validateCSRFToken($_POST['csrf_token']);
 
-    enforceUserPermission('module_support', 3);
+    enforceUserPermission('module_support', 2);
 
     // Archive file loop
     if (isset($_POST['file_ids'])) {
@@ -429,6 +438,7 @@ if (isset($_POST['bulk_restore_files'])) {
 if (isset($_POST['bulk_move_files'])) {
 
     validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $folder_id = intval($_POST['bulk_folder_id']);
@@ -538,6 +548,8 @@ if (isset($_POST['bulk_move_files'])) {
 
 if (isset($_POST['link_asset_to_file'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $file_id = intval($_POST['file_id']);
@@ -564,6 +576,8 @@ if (isset($_POST['link_asset_to_file'])) {
 }
 
 if (isset($_GET['unlink_asset_from_file'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 

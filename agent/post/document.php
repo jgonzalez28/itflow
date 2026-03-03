@@ -8,6 +8,8 @@ defined('FROM_POST_HANDLER') || die("Direct file access is not allowed");
 
 if (isset($_POST['add_document'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     require_once 'document_model.php';
@@ -50,6 +52,8 @@ if (isset($_POST['add_document'])) {
 }
 
 if (isset($_POST['add_document_from_template'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
@@ -130,6 +134,8 @@ if (isset($_POST['add_document_from_template'])) {
 }
 
 if (isset($_POST['edit_document'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
@@ -230,6 +236,8 @@ if (isset($_POST['edit_document'])) {
 
 if (isset($_POST['move_document'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $document_id = intval($_POST['document_id']);
@@ -259,6 +267,8 @@ if (isset($_POST['move_document'])) {
 
 if (isset($_POST['rename_document'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $document_id = intval($_POST['document_id']);
@@ -283,6 +293,8 @@ if (isset($_POST['rename_document'])) {
 }
 
 if (isset($_POST['bulk_move_document'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
@@ -322,6 +334,8 @@ if (isset($_POST['bulk_move_document'])) {
 
 if (isset($_POST['link_file_to_document'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $document_id = intval($_POST['document_id']);
@@ -349,6 +363,8 @@ if (isset($_POST['link_file_to_document'])) {
 
 if (isset($_GET['unlink_file_from_document'])) {
 
+    validateCSRFToken($_GET['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $file_id = intval($_GET['file_id']);
@@ -374,6 +390,8 @@ if (isset($_GET['unlink_file_from_document'])) {
 }
 
 if (isset($_POST['link_vendor_to_document'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
@@ -402,6 +420,8 @@ if (isset($_POST['link_vendor_to_document'])) {
 
 if (isset($_GET['unlink_vendor_from_document'])) {
 
+    validateCSRFToken($_GET['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $vendor_id = intval($_GET['vendor_id']);
@@ -427,6 +447,8 @@ if (isset($_GET['unlink_vendor_from_document'])) {
 }
 
 if (isset($_POST['link_contact_to_document'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
@@ -456,6 +478,8 @@ if (isset($_POST['link_contact_to_document'])) {
 
 if (isset($_GET['unlink_contact_from_document'])) {
 
+    validateCSRFToken($_GET['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $contact_id = intval($_GET['contact_id']);
@@ -481,6 +505,8 @@ if (isset($_GET['unlink_contact_from_document'])) {
 }
 
 if (isset($_POST['link_asset_to_document'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
@@ -508,6 +534,8 @@ if (isset($_POST['link_asset_to_document'])) {
 
 if (isset($_GET['unlink_asset_from_document'])) {
 
+    validateCSRFToken($_GET['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $asset_id = intval($_GET['asset_id']);
@@ -533,6 +561,8 @@ if (isset($_GET['unlink_asset_from_document'])) {
 }
 
 if (isset($_POST['link_software_to_document'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
@@ -561,6 +591,8 @@ if (isset($_POST['link_software_to_document'])) {
 
 if (isset($_GET['unlink_software_from_document'])) {
 
+    validateCSRFToken($_GET['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $software_id = intval($_GET['software_id']);
@@ -586,6 +618,8 @@ if (isset($_GET['unlink_software_from_document'])) {
 }
 
 if (isset($_POST['toggle_document_visibility'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
@@ -615,6 +649,8 @@ if (isset($_POST['toggle_document_visibility'])) {
 }
 
 if (isset($_GET['export_document'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
@@ -660,6 +696,8 @@ if (isset($_GET['export_document'])) {
 
 if (isset($_GET['archive_document'])) {
 
+    validateCSRFToken($_GET['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $document_id = intval($_GET['archive_document']);
@@ -701,6 +739,8 @@ if (isset($_GET['archive_document'])) {
 
 if (isset($_GET['restore_document'])) {
 
+    validateCSRFToken($_GET['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $document_id = intval($_GET['restore_document']);
@@ -723,6 +763,8 @@ if (isset($_GET['restore_document'])) {
 
 if (isset($_GET['delete_document_version'])) {
 
+    validateCSRFToken($_GET['csrf_token']);
+
     enforceUserPermission('module_support', 3);
 
     $document_version_id = intval($_GET['delete_document_version']);
@@ -744,6 +786,8 @@ if (isset($_GET['delete_document_version'])) {
 }
 
 if (isset($_GET['delete_document'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
 
     enforceUserPermission('module_support', 3);
 

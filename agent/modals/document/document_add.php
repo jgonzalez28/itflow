@@ -17,6 +17,7 @@ ob_start();
     </button>
 </div>
 <form action="post.php" method="post" autocomplete="off">
+    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
     <input type="hidden" name="client_id" value="<?= $client_id ?>">
     <input type="hidden" name="contact" value="<?= $contact_id ?>">
     <input type="hidden" name="asset" value="<?= $asset_id ?>">
