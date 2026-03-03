@@ -945,6 +945,40 @@ if (isset($_POST['bulk_edit_client_hourly_rate'])) {
 
 }
 
+if (isset($_POST['bulk_edit_client_net_terms'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
+
+    enforceUserPermission('module_client', 2);
+
+    $net_terms = intval($_POST['net_terms']);
+
+    if (isset($_POST['client_ids'])) {
+
+        $count = count($_POST['client_ids']);
+
+        foreach($_POST['client_ids'] as $client_id) {
+            $client_id = intval($client_id);
+
+            $sql = mysqli_query($mysqli,"SELECT client_name FROM clients WHERE client_id = $client_id");
+            $row = mysqli_fetch_assoc($sql);
+            $client_name = sanitizeInput($row['client_name']);
+
+            mysqli_query($mysqli,"UPDATE clients SET client_net_terms = $net_terms WHERE client_id = $client_id");
+
+            logAction("Client", "Edit", "$session_name set net terms to $net_terms days for $client_name", $client_id);
+
+        }
+
+        logAction("Client", "Bulk Edit", "$session_name set the net terms to $net_terms days for $count client(s)", $client_id);
+
+        flash_alert("Set Net Term to <strong>$net_terms days</strong> for <strong>$count</strong> client(s)");
+    }
+
+    redirect();
+
+}
+
 if (isset($_POST['bulk_assign_client_tags'])) {
 
     validateCSRFToken($_POST['csrf_token']);

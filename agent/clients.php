@@ -153,6 +153,12 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                                     </a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item ajax-modal" href="#"
+                                        data-modal-url="modals/client/client_bulk_edit_net_terms.php"
+                                        data-bulk="true">
+                                        <i class="fas fa-fw fa-calendar mr-2"></i>Set Net Terms
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item ajax-modal" href="#"
                                         data-modal-url="modals/client/client_bulk_edit_industry.php"
                                         data-bulk="true">
                                         <i class="fas fa-fw fa-briefcase mr-2"></i>Set Industry
