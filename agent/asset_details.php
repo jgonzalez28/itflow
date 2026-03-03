@@ -518,9 +518,9 @@ if (isset($_GET['asset_id'])) {
                                             </td>
                                             <th>Name / Port</th>
                                             <th>Type</th>
-                                            <th>MAC</th>
-                                            <th>IP</th>
                                             <th>Network</th>
+                                            <th>IP</th>
+                                            <th>MAC</th>
                                             <th>Connected To</th>
                                             <th class="text-center">Action</th>
                                         </tr>
@@ -582,12 +582,12 @@ if (isset($_GET['asset_id'])) {
                                                 </a>
                                             </td>
                                             <td><?= $interface_type_display; ?></td>
-                                            <td><?= $interface_mac_display; ?></td>
+                                            <td><?= $network_name_display; ?></td>
                                             <td>
                                                 <?= $interface_ip_display; ?>
                                                 <div><small class="text-secondary"><?= $interface_ipv6 ?></small></div>
                                             </td>
-                                            <td><?= $network_name_display; ?></td>
+                                            <td><?= $interface_mac_display; ?></td>
                                             <td><?= $connected_to_display; ?></td>
                                             <td>
                                                 <div class="dropdown dropleft text-center">
