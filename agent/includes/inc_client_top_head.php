@@ -13,16 +13,16 @@
                     <i class="fas fa-fw fa-ellipsis-v"></i>
                 </button>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item ajax-modal" href="#"
-                        data-modal-url="modals/client/client_edit.php?id=<?= $client_id ?>">
-                        <i class="fas fa-fw fa-edit mr-2"></i>Edit Client
-                    </a>
                     <?php if (lookupUserPermission("module_support") >= 2) { ?>
-                        <div class="dropdown-divider"></div>
                         <a class="dropdown-item ajax-modal" href="#" data-modal-url="modals/ticket/ticket_add_v2.php?client_id=<?= $client_id ?>" data-modal-size="lg">
                             <i class="fas fa-fw fa-life-ring mr-2"></i>New Ticket
                         </a>
                     <?php } ?>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item ajax-modal" href="#"
+                        data-modal-url="modals/client/client_edit.php?id=<?= $client_id ?>">
+                        <i class="fas fa-fw fa-edit mr-2"></i>Edit Client
+                    </a>
                     <?php if (lookupUserPermission("module_billing") >= 2) { ?>
                         <?php if ($show_add_credit) { ?>
                         <div class="dropdown-divider"></div>
