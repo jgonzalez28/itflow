@@ -104,13 +104,13 @@ if (isset($_GET['project_template_id'])) {
                         </a>
                         <?php if ($session_user_role == 3) { ?>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item text-danger text-bold confirm-link" href="post.php?archive_project_template=<?php echo $project_template_id; ?>">
+                            <a class="dropdown-item text-danger text-bold confirm-link" href="post.php?archive_project_template=<?php echo $project_template_id; ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>">
                                 <i class="fas fa-fw fa-archive mr-2"></i>Archive (not yet implemented)
                             </a>
                         <?php } ?>
                         <?php if ($session_user_role == 3) { ?>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item text-danger confirm-link" href="post.php?delete_project_template=<?php echo $project_template_id; ?>">
+                            <a class="dropdown-item text-danger confirm-link" href="post.php?delete_project_template=<?php echo $project_template_id; ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>">
                                 <i class="fas fa-fw fa-trash mr-2"></i>Delete
                             </a>
                         <?php } ?>
@@ -157,6 +157,7 @@ if (isset($_GET['project_template_id'])) {
                             <tr>
                                 <td class="pr-0">
                                     <form action="post.php" method="post" autocomplete="off">
+                                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                         <input type="hidden" name="edit_ticket_template_order">
                                         <input type="hidden" name="project_template_id" value="<?php echo $project_template_id; ?>">
                                         <input type="hidden" name="ticket_template_id" value="<?php echo $ticket_template_id; ?>">
@@ -172,6 +173,7 @@ if (isset($_GET['project_template_id'])) {
                                 <td><?php echo $ticket_template_subject; ?></td>
                                 <td>
                                     <form action="post.php" method="post" autocomplete="off">
+                                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                         <input type="hidden" name="project_template_id" value="<?php echo $project_template_id; ?>">
                                         <input type="hidden" name="ticket_template_id" value="<?php echo $ticket_template_id; ?>">
                                         <button type="submit" class="btn btn-default btn-sm confirm-link"

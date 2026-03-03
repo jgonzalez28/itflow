@@ -86,6 +86,7 @@ $sql_task_templates = mysqli_query($mysqli, "SELECT * FROM task_templates WHERE 
             </div>
             <div class="card-body">
                 <form action="post.php" method="post" autocomplete="off">
+                    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                     <input type="hidden" name="ticket_template_id" value="<?php echo $ticket_template_id; ?>">
                     <div class="form-group">
                         <div class="input-group input-group-sm">
