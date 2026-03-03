@@ -8,6 +8,8 @@ defined('FROM_POST_HANDLER') || die("Direct file access is not allowed");
 
 if (isset($_POST['add_rack'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $client_id = intval($_POST['client_id']);
@@ -51,6 +53,8 @@ if (isset($_POST['add_rack'])) {
 
 if (isset($_POST['edit_rack'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $rack_id = intval($_POST['rack_id']);
@@ -93,6 +97,8 @@ if (isset($_POST['edit_rack'])) {
 
 if (isset($_GET['archive_rack'])) {
 
+    validateCSRFToken($_GET['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $rack_id = intval($_GET['archive_rack']);
@@ -113,11 +119,13 @@ if (isset($_GET['archive_rack'])) {
 
 }
 
-if (isset($_GET['unarchive_rack'])) {
+if (isset($_GET['restore_rack'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
-    $rack_id = intval($_GET['unarchive_rack']);
+    $rack_id = intval($_GET['restore_rack']);
 
     // Get Name and Client ID for logging and alert message
     $sql = mysqli_query($mysqli,"SELECT rack_name, rack_client_id FROM racks WHERE rack_id = $rack_id");
@@ -127,15 +135,17 @@ if (isset($_GET['unarchive_rack'])) {
 
     mysqli_query($mysqli,"UPDATE racks SET rack_archived_at = NULL WHERE rack_id = $rack_id");
 
-    logAction("Rack", "Unarchive", "$session_name unarchived rack $rack_name", $client_id, $rack_id);
+    logAction("Rack", "Restore", "$session_name restored rack $rack_name", $client_id, $rack_id);
 
-    flash_alert("Rack <strong>$rack_name</strong> Unarchived");
+    flash_alert("Rack <strong>$rack_name</strong> Restored");
 
     redirect();
 
 }
 
 if (isset($_GET['delete_rack'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
 
     enforceUserPermission('module_support', 3);
 
@@ -164,6 +174,8 @@ if (isset($_GET['delete_rack'])) {
 }
 
 if (isset($_POST['add_rack_unit'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
@@ -210,6 +222,8 @@ if (isset($_POST['add_rack_unit'])) {
 
 if (isset($_POST['edit_rack_unit'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $unit_id = intval($_POST['unit_id']);
@@ -237,6 +251,8 @@ if (isset($_POST['edit_rack_unit'])) {
 }
 
 if (isset($_GET['remove_rack_unit'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
