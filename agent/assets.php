@@ -550,7 +550,7 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                         $asset_model = nullable_htmlentities($row['asset_model']);
                         $asset_serial = nullable_htmlentities($row['asset_serial']);
                         if ($asset_serial) {
-                            $asset_serial_display = "<span class='badge badge-light text-monospace'>$asset_serial</span>";
+                            $asset_serial_display = "<span class='text-monospace'>$asset_serial</span>";
                         } else {
                             $asset_serial_display = "-";
                         }
@@ -560,12 +560,7 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                         } else {
                             $asset_os_display = "-";
                         }
-                        $asset_ip = nullable_htmlentities($row['interface_ip']);
-                        if ($asset_ip) {
-                            $asset_ip_display = $asset_ip;
-                        } else {
-                            $asset_ip_display = "-";
-                        }
+                        $asset_ip = getFallBack(nullable_htmlentities($row['interface_ip']));
                         $asset_ipv6 = nullable_htmlentities($row['interface_ipv6']);
                         $asset_nat_ip = nullable_htmlentities($row['interface_nat_ip']);
                         $asset_mac = nullable_htmlentities(getFallBack($row['interface_mac']));
@@ -703,7 +698,10 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                                 <td><?php echo $asset_os_display; ?></td>
                             <?php } ?>
                             <?php } ?>
-                                <td><?php echo $asset_ip_display; ?></td>
+                                <td>
+                                    <?php echo $asset_ip; ?>
+                                    <div class="text-secondary"><small><?php echo $asset_ipv6; ?></small></div>
+                                </td>
                             <?php if (isset($_GET['show_column']) && is_array($_GET['show_column']) && in_array('Mac_Address', $_GET['show_column'])) { ?>
                                 <td><?php echo $asset_mac; ?></td>
                             <?php } ?>

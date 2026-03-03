@@ -583,7 +583,10 @@ if (isset($_GET['asset_id'])) {
                                             </td>
                                             <td><?= $interface_type_display; ?></td>
                                             <td><?= $interface_mac_display; ?></td>
-                                            <td><?= $interface_ip_display; ?></td>
+                                            <td>
+                                                <?= $interface_ip_display; ?>
+                                                <div><small class="text-secondary"><?= $interface_ipv6 ?></small></div>
+                                            </td>
                                             <td><?= $network_name_display; ?></td>
                                             <td><?= $connected_to_display; ?></td>
                                             <td>
