@@ -7,8 +7,7 @@
                     <table class="table table-striped table-borderless table-hover">
                         <thead class="text-dark <?php if (!$num_rows[0]) { echo "d-none"; } ?> text-nowrap">
                         <tr>
-
-                            <td>
+                            <td class="checkbox-column">
                                 <?php if ($status !== 'Closed') { ?>
                                 <div class="form-check">
                                     <input class="form-check-input" id="selectAllCheckbox" type="checkbox" onclick="checkAll(this)" onkeydown="checkAll(this)">
@@ -192,7 +191,7 @@
 
                             <tr class="<?php if(empty($ticket_closed_at) && empty($ticket_updated_at)) { echo "text-bold"; }?> <?php if (empty($ticket_closed_at) && $ticket_reply_type == "Client") { echo "table-warning"; } ?>">
 
-                                <td>
+                                <td class="checkbox-column">
                                     <!-- Ticket Bulk Select (for open tickets) -->
                                     <?php if (empty($ticket_closed_at)) { ?>
                                     <div class="form-check">

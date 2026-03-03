@@ -117,7 +117,7 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                 <table class="table table-striped table-borderless table-hover">
                     <thead class="text-dark <?php if ($num_rows[0] == 0) { echo "d-none"; } ?> text-nowrap">
                     <tr>
-                        <td class="pr-0">
+                        <td class="bg-light checkbox-column">
                             <div class="form-check">
                                 <input class="form-check-input" id="selectAllCheckbox" type="checkbox" onclick="checkAll(this)">
                             </div>
@@ -196,24 +196,25 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
 
                         ?>
                         <tr>
-                            <td class="pr-0">
+                            <td class="bg-light checkbox-column">
                                 <div class="form-check">
                                     <input class="form-check-input bulk-select" type="checkbox" name="vendor_ids[]" value="<?php echo $vendor_id ?>">
                                 </div>
                             </td>
                             <td>
-                                <a class="text-dark ajax-modal" href="#" data-modal-url="modals/vendor/vendor_edit.php?id=<?= $vendor_id ?>">
+                                <a class="ajax-modal" href="#" data-modal-url="modals/vendor/vendor_edit.php?id=<?= $vendor_id ?>">
                                     <div class="media">
-                                        <i class="fa fa-fw fa-2x fa-building mr-3"></i>
+                                        <i class="fas fa-fw fa-2x fa-building text-dark mr-2"></i>
                                         <div class="media-body">
                                             <div><?php echo $vendor_name; ?></div>
-                                            <?php echo $vendor_account_number_display; ?>
+                                            <div><?php echo $vendor_account_number_display; ?></div>
                                         </div>
                                     </div>
                                 </a>
                             </td>
                             <td>
                                 <?php echo $vendor_description_display; ?>
+                            </td>
                             <td>
                                 <?php
                                 if (!empty($vendor_contact_name)) { ?>

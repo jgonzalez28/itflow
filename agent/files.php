@@ -681,7 +681,7 @@ $num_root_items = intval($row_root_files['num']) + intval($row_root_docs['num'])
                             <table class="table border">
                                 <thead class="thead-light <?php if ($num_rows[0] == 0) { echo "d-none"; } ?>">
                                 <tr>
-                                    <td class="bg-light pr-0">
+                                    <td class="bg-light checkbox-column">
                                         <div class="form-check">
                                             <input class="form-check-input" id="selectAllCheckbox" type="checkbox" onclick="checkAll(this)">
                                         </div>
@@ -748,7 +748,7 @@ $num_root_items = intval($row_root_files['num']) + intval($row_root_docs['num'])
                                         }
                                         ?>
                                         <tr>
-                                            <td class="bg-light pr-0">
+                                            <td class="bg-light checkbox-column">
                                                 <div class="form-check">
                                                     <input class="form-check-input bulk-select" type="checkbox" name="file_ids[]" value="<?php echo $file_id ?>">
                                                 </div>
