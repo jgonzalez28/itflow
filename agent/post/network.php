@@ -8,6 +8,8 @@ defined('FROM_POST_HANDLER') || die("Direct file access is not allowed");
 
 if (isset($_POST['add_network'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     require_once 'network_model.php';
@@ -26,6 +28,8 @@ if (isset($_POST['add_network'])) {
 
 if (isset($_POST['edit_network'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $network_id = intval($_POST['network_id']);
@@ -42,6 +46,8 @@ if (isset($_POST['edit_network'])) {
 }
 
 if (isset($_GET['archive_network'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
@@ -63,11 +69,13 @@ if (isset($_GET['archive_network'])) {
 
 }
 
-if (isset($_GET['unarchive_network'])) {
+if (isset($_GET['restore_network'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
-    $network_id = intval($_GET['unarchive_network']);
+    $network_id = intval($_GET['restore_network']);
 
     // Get Network Name and Client ID for logging and alert message
     $sql = mysqli_query($mysqli,"SELECT network_name, network_client_id FROM networks WHERE network_id = $network_id");
@@ -77,7 +85,7 @@ if (isset($_GET['unarchive_network'])) {
 
     mysqli_query($mysqli,"UPDATE networks SET network_archived_at = NULL WHERE network_id = $network_id");
 
-    logAction("Network", "Unarchive", "$session_name restored contact $contact_name", $client_id, $network_id);
+    logAction("Network", "Restore", "$session_name restored contact $contact_name", $client_id, $network_id);
 
     flash_alert("Network <strong>$network_name</strong> restored");
 
@@ -86,6 +94,8 @@ if (isset($_GET['unarchive_network'])) {
 }
 
 if (isset($_GET['delete_network'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
 
     enforceUserPermission('module_support', 3);
 
@@ -147,7 +157,7 @@ if (isset($_POST['bulk_delete_networks'])) {
 
 if (isset($_POST['export_networks_csv'])) {
 
-    enforceUserPermission('module_support', 2);
+    enforceUserPermission('module_support');
 
     if ($_POST['client_id']) {
         $client_id = intval($_POST['client_id']);
