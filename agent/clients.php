@@ -307,14 +307,14 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                         </a>
                     </th>
                     <th>
-                        <a class="text-dark" href="?<?php echo $url_query_strings_sort; ?>&sort=location_city&order=<?php echo $disp; ?>">
-                            Primary Location <?php if ($sort == 'location_city') { echo $order_icon; } ?>
-                        </a>
-                    </th>
-                    <th>
                         <a class="text-dark" href="?<?php echo $url_query_strings_sort; ?>&sort=contact_name&order=<?php echo $disp; ?>">
                             Primary Contact
                             <?php if ($sort == 'contact_name') { echo $order_icon; } ?>
+                        </a>
+                    </th>
+                    <th>
+                        <a class="text-dark" href="?<?php echo $url_query_strings_sort; ?>&sort=location_city&order=<?php echo $disp; ?>">
+                            Primary Location <?php if ($sort == 'location_city') { echo $order_icon; } ?>
                         </a>
                     </th>
                     <th></th>
@@ -518,7 +518,6 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                             </div>
 
                         </td>
-                        <td><?php echo $location_address_display; ?></td>
                         <td>
                             <?php
                             if (empty($contact_name) && empty($contact_phone) && empty($contact_mobile) && empty($client_email)) {
@@ -554,7 +553,7 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                                 </div>
                             <?php } ?>
                         </td>
-
+                        <td><?php echo $location_address_display; ?></td>
                         <td class="text-wrap">
                             <?php echo "$contact_count_display$vendor_count_display$asset_count_display$credential_count_display$software_count_display$ticket_count_display"; ?>
                         </td>
