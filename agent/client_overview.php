@@ -355,56 +355,56 @@ $sql_asset_retired = mysqli_query(
             <div class="card-header">
                 <h5 class="card-title"><i class="fas fa-fw fa-star mr-2"></i>Favorite Credentials</h5>
             </div>
-            <div class="card-body p-2">
-                <table class="table table-borderless table-sm">
-                    <?php
 
-                    while ($row = mysqli_fetch_assoc($sql_favorite_credentials)) {
-                        $credential_id = intval($row['credential_id']);
-                        $credential_name = nullable_htmlentities($row['credential_name']);
-                        $credential_description = nullable_htmlentities($row['credential_description']);
-                        $credential_uri = sanitize_url($row['credential_uri']);
-                        if (empty($credential_uri)) {
-                            $credential_uri_display = "-";
-                        } else {
-                            $credential_uri_display = "<a href='$credential_uri'>" . truncate($credential_uri,40) . "</a><button class='btn btn-sm clipboardjs' type='button' title='$credential_uri' data-clipboard-text='$credential_uri'><i class='far fa-copy text-secondary'></i></button>";
-                        }
-                        $credential_uri_2 = sanitize_url($row['credential_uri_2']);
-                        $credential_username = nullable_htmlentities(decryptCredentialEntry($row['credential_username']));
-                        if (empty($credential_username)) {
-                            $credential_username_display = "-";
-                        } else {
-                            $credential_username_display = "$credential_username<button class='btn btn-sm clipboardjs' type='button' data-clipboard-text='$credential_username'><i class='far fa-copy text-secondary'></i></button>";
-                        }
-                        $credential_password = nullable_htmlentities(decryptCredentialEntry($row['credential_password']));
-                        $credential_otp_secret = nullable_htmlentities($row['credential_otp_secret']);
-                        $credential_id_with_secret = '"' . $row['credential_id'] . '","' . $row['credential_otp_secret'] . '"';
-                        if (empty($credential_otp_secret)) {
-                            $otp_display = "-";
-                        } else {
-                            $otp_display = "<span onmouseenter='showOTPViaCredentialID($credential_id)'><i class='far fa-clock'></i> <span id='otp_$credential_id'><i>Hover..</i></span></span>";
-                        }
+            <table class="table table-sm table-hover mb-0">
+                <?php
 
-                        ?>
-                        <tr>
-                            <td>
-                                <a href="#" class="ajax-modal"
-                                    data-modal-url="modals/credential/credential_edit.php?id=<?= $credential_id ?>">
-                                        <i class="fas fa-fw fa-key text-muted mr-2"></i><?= $credential_name ?>
-                                </a>
-                            </td>
-                            <td><?= $credential_username_display ?></td>
-                            <td class="text-nowrap">
-                                <button class="btn p-0" type="button" data-toggle="popover" data-trigger="focus" data-placement="top" data-content="<?php echo $credential_password; ?>"><i class="fas fa-2x fa-ellipsis-h text-secondary"></i><i class="fas fa-2x fa-ellipsis-h text-secondary"></i></button><button class="btn btn-sm clipboardjs" type="button" data-clipboard-text="<?php echo $credential_password; ?>"><i class="far fa-copy text-secondary"></i></button>
-                            </td>
-                            <td><?= $otp_display ?></td>
-                        </tr>
-                        <?php
+                while ($row = mysqli_fetch_assoc($sql_favorite_credentials)) {
+                    $credential_id = intval($row['credential_id']);
+                    $credential_name = nullable_htmlentities($row['credential_name']);
+                    $credential_description = nullable_htmlentities($row['credential_description']);
+                    $credential_uri = sanitize_url($row['credential_uri']);
+                    if (empty($credential_uri)) {
+                        $credential_uri_display = "-";
+                    } else {
+                        $credential_uri_display = "<a href='$credential_uri'>" . truncate($credential_uri,40) . "</a><button class='btn btn-sm clipboardjs' type='button' title='$credential_uri' data-clipboard-text='$credential_uri'><i class='far fa-copy text-secondary'></i></button>";
                     }
-                    ?>
+                    $credential_uri_2 = sanitize_url($row['credential_uri_2']);
+                    $credential_username = nullable_htmlentities(decryptCredentialEntry($row['credential_username']));
+                    if (empty($credential_username)) {
+                        $credential_username_display = "-";
+                    } else {
+                        $credential_username_display = "$credential_username<button class='btn btn-sm clipboardjs' type='button' data-clipboard-text='$credential_username'><i class='far fa-copy text-secondary'></i></button>";
+                    }
+                    $credential_password = nullable_htmlentities(decryptCredentialEntry($row['credential_password']));
+                    $credential_otp_secret = nullable_htmlentities($row['credential_otp_secret']);
+                    $credential_id_with_secret = '"' . $row['credential_id'] . '","' . $row['credential_otp_secret'] . '"';
+                    if (empty($credential_otp_secret)) {
+                        $otp_display = "";
+                    } else {
+                        $otp_display = "<small class='text-secondary'><span onmouseenter='showOTPViaCredentialID($credential_id)'><i class='far fa-clock text-dark'></i> <span id='otp_$credential_id'><i>Hover..</i></span></span><small>";
+                    }
 
-                </table>
-            </div>
+                    ?>
+                    <tr>
+                        <td>
+                            <a href="#" class="ajax-modal"
+                                data-modal-url="modals/credential/credential_edit.php?id=<?= $credential_id ?>">
+                                    <i class="fas fa-fw fa-key text-dark mr-1"></i><?= $credential_name ?>
+                            </a>
+                        </td>
+                        <td><?= $credential_username_display ?></td>
+                        <td class="text-nowrap">
+                            <button class="btn p-0" type="button" data-toggle="popover" data-trigger="focus" data-placement="top" data-content="<?php echo $credential_password; ?>"><i class="fas fa-2x fa-ellipsis-h text-secondary"></i><i class="fas fa-2x fa-ellipsis-h text-secondary"></i></button><button class="btn btn-sm clipboardjs" type="button" data-clipboard-text="<?php echo $credential_password; ?>"><i class="far fa-copy text-secondary"></i></button>
+                            <div><?= $otp_display ?></div>
+                        </td>
+
+                    </tr>
+                    <?php
+                }
+                ?>
+
+            </table>
         </div>
 
     </div>

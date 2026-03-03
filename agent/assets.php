@@ -626,7 +626,7 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                             }
 
                             $asset_tag_id_array[] = $asset_tag_id;
-                            $asset_tag_name_display_array[] = "<a href='assets.php?$client_url tags[]=$asset_tag_id'><span class='badge text-light p-1 mr-1' style='background-color: $asset_tag_color;'><i class='fa fa-fw fa-$asset_tag_icon mr-2'></i>$asset_tag_name</span></a>";
+                            $asset_tag_name_display_array[] = "<a href='assets.php?$client_url tags[]=$asset_tag_id'><span class='badge text-light p-1 mr-1' style='background-color: $asset_tag_color;'><i class='fa fa-fw fa-$asset_tag_icon mr-1'></i>$asset_tag_name</span></a>";
                         }
                         $asset_tags_display = implode('', $asset_tag_name_display_array);
 
@@ -647,12 +647,7 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
 
                                                 <?php if ($asset_favorite) { echo "<i class='fas fa-fw fa-star text-warning' title='Favorite'></i>"; } ?></div>
                                             <div><small class="text-secondary"><?= $asset_description ?></small></div>
-                                            <?php
-                                            if ($asset_tags_display) { ?>
-                                                <div class="mt-1">
-                                                    <?= $asset_tags_display ?>
-                                                </div>
-                                            <?php } ?>
+                                            <?php if ($asset_tags_display) { echo $asset_tags_display; } ?>
                                         </div>
                                     </div>
                                 </a>
