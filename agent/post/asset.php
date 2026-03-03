@@ -166,13 +166,13 @@ if (isset($_GET['archive_asset'])) {
 
 }
 
-if (isset($_GET['unarchive_asset'])) {
+if (isset($_GET['restore_asset'])) {
 
     validateCSRFToken($_GET['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
-    $asset_id = intval($_GET['unarchive_asset']);
+    $asset_id = intval($_GET['restore_asset']);
 
     // Get Asset Name and Client ID for logging and alert message
     $sql = mysqli_query($mysqli,"SELECT asset_name, asset_client_id FROM assets WHERE asset_id = $asset_id");
@@ -183,11 +183,11 @@ if (isset($_GET['unarchive_asset'])) {
     mysqli_query($mysqli,"UPDATE assets SET asset_archived_at = NULL WHERE asset_id = $asset_id");
 
     // Add to History
-    mysqli_query($mysqli,"INSERT INTO asset_history SET asset_history_status = 'UnArchived', asset_history_description = '$session_name unarchived $asset_name', asset_history_asset_id = $asset_id");
+    mysqli_query($mysqli,"INSERT INTO asset_history SET asset_history_status = 'Restored', asset_history_description = '$session_name restored $asset_name', asset_history_asset_id = $asset_id");
 
-    logAction("Asset", "Unarchive", "$session_name unarchived asset $asset_name", $client_id, $asset_id);
+    logAction("Asset", "Restore", "$session_name restored asset $asset_name", $client_id, $asset_id);
 
-    flash_alert("Asset <strong>$asset_name</strong> Unarchived");
+    flash_alert("Asset <strong>$asset_name</strong> Restored");
 
     redirect();
 
@@ -218,6 +218,8 @@ if (isset($_GET['delete_asset'])) {
 }
 
 if (isset($_POST['bulk_assign_asset_tags'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_client', 2);
 
@@ -622,7 +624,7 @@ if (isset($_POST['bulk_archive_assets'])) {
 
 }
 
-if (isset($_POST['bulk_unarchive_assets'])) {
+if (isset($_POST['bulk_restore_assets'])) {
 
     validateCSRFToken($_POST['csrf_token']);
 
@@ -645,16 +647,16 @@ if (isset($_POST['bulk_unarchive_assets'])) {
             mysqli_query($mysqli,"UPDATE assets SET asset_archived_at = NULL WHERE asset_id = $asset_id");
 
             // Individual Asset logging
-            logAction("Asset", "Unarchive", "$session_name unarchived asset $asset_name", $client_id, $asset_id);
+            logAction("Asset", "Restore", "$session_name restored asset $asset_name", $client_id, $asset_id);
 
             // Add to History
-            mysqli_query($mysqli,"INSERT INTO asset_history SET asset_history_status = 'UnArchived', asset_history_description = '$session_name unarchived $asset_name', asset_history_asset_id = $asset_id");
+            mysqli_query($mysqli,"INSERT INTO asset_history SET asset_history_status = 'Restored', asset_history_description = '$session_name restored $asset_name', asset_history_asset_id = $asset_id");
 
         }
 
-        logAction("Asset", "Bulk Unarchive", "$session_name unarchived $count assets");
+        logAction("Asset", "Bulk Restore", "$session_name restored $count assets");
 
-        flash_alert("Unarchived $count asset(s)");
+        flash_alert("Restored $count asset(s)");
 
     }
 
@@ -700,6 +702,8 @@ if (isset($_POST['bulk_delete_assets'])) {
 
 if (isset($_POST['link_software_to_asset'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $software_id = intval($_POST['software_id']);
@@ -725,6 +729,8 @@ if (isset($_POST['link_software_to_asset'])) {
 }
 
 if (isset($_GET['unlink_software_from_asset'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
@@ -753,6 +759,8 @@ if (isset($_GET['unlink_software_from_asset'])) {
 // Right now 1 login and have many assets but not many to many
 if (isset($_POST['link_asset_to_credential'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $credential_id = intval($_POST['credential_id']);
@@ -778,6 +786,8 @@ if (isset($_POST['link_asset_to_credential'])) {
 }
 
 if (isset($_GET['unlink_credential_from_asset'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
@@ -805,6 +815,8 @@ if (isset($_GET['unlink_credential_from_asset'])) {
 
 if (isset($_POST['link_service_to_asset'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $service_id = intval($_POST['service_id']);
@@ -830,6 +842,8 @@ if (isset($_POST['link_service_to_asset'])) {
 }
 
 if (isset($_GET['unlink_service_from_asset'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
@@ -857,6 +871,8 @@ if (isset($_GET['unlink_service_from_asset'])) {
 
 if (isset($_POST['link_asset_to_file'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $file_id = intval($_POST['file_id']);
@@ -883,6 +899,8 @@ if (isset($_POST['link_asset_to_file'])) {
 }
 
 if (isset($_GET['unlink_asset_from_file'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
@@ -1371,8 +1389,9 @@ if (isset($_POST['edit_asset_interface'])) {
 
 if (isset($_GET['delete_asset_interface'])) {
 
-    enforceUserPermission('module_support', 2);
     validateCSRFToken($_GET['csrf_token']);
+
+    enforceUserPermission('module_support', 2);
 
     $interface_id = intval($_GET['delete_asset_interface']);
 

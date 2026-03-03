@@ -402,8 +402,8 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                                 <?php if ($archived) { ?>
                                     <div class="dropdown-divider"></div>
                                     <button class="dropdown-item text-info"
-                                        type="submit" form="bulkActions" name="bulk_unarchive_assets">
-                                        <i class="fas fa-fw fa-redo mr-2"></i>Unarchive
+                                        type="submit" form="bulkActions" name="bulk_restore_assets">
+                                        <i class="fas fa-fw fa-redo mr-2"></i>Restore
                                     </button>
                                     <div class="dropdown-divider"></div>
                                     <button class="dropdown-item text-danger text-bold"
@@ -766,7 +766,7 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                                             </a>
                                             <?php if ($session_user_role > 2) { ?>
                                                 <?php if ($asset_archived_at) { ?>
-                                                <a class="dropdown-item text-info" href="post.php?unarchive_asset=<?php echo $asset_id; ?>&csrf_token=<?php echo $_SESSION['csrf_token'] ?>">
+                                                <a class="dropdown-item text-info" href="post.php?restore_asset=<?php echo $asset_id; ?>&csrf_token=<?php echo $_SESSION['csrf_token'] ?>">
                                                     <i class="fas fa-fw fa-redo mr-2"></i>Unarchive
                                                 </a>
                                                 <a class="dropdown-item text-danger text-bold confirm-link" href="post.php?delete_asset=<?php echo $asset_id; ?>&csrf_token=<?php echo $_SESSION['csrf_token'] ?>">
