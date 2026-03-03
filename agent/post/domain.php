@@ -8,6 +8,8 @@ defined('FROM_POST_HANDLER') || die("Direct file access is not allowed");
 
 if (isset($_POST['add_domain'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     require_once 'domain_model.php';
@@ -61,6 +63,8 @@ if (isset($_POST['add_domain'])) {
 }
 
 if (isset($_POST['edit_domain'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
@@ -147,6 +151,8 @@ if (isset($_POST['edit_domain'])) {
 
 if (isset($_GET['archive_domain'])) {
 
+    validateCSRFToken($_GET['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $domain_id = intval($_GET['archive_domain']);
@@ -167,11 +173,13 @@ if (isset($_GET['archive_domain'])) {
 
 }
 
-if(isset($_GET['unarchive_domain'])){
+if(isset($_GET['restore_domain'])){
+
+    validateCSRFToken($_GET['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
-    $domain_id = intval($_GET['unarchive_domain']);
+    $domain_id = intval($_GET['restore_domain']);
 
     // Get Name and Client ID for logging and alert message
     $sql = mysqli_query($mysqli,"SELECT domain_name, domain_client_id FROM domains WHERE domain_id = $domain_id");
@@ -181,7 +189,7 @@ if(isset($_GET['unarchive_domain'])){
 
     mysqli_query($mysqli,"UPDATE domains SET domain_archived_at = NULL WHERE domain_id = $domain_id");
 
-    logAction("Domain", "Unarchive", "$session_name unarchived domain $domain_name", $client_id, $domain_id);
+    logAction("Domain", "Restore", "$session_name restored domain $domain_name", $client_id, $domain_id);
 
     flash_alert("Domain <strong>$domain_name</strong> restored");
 
@@ -190,6 +198,8 @@ if(isset($_GET['unarchive_domain'])){
 }
 
 if (isset($_GET['delete_domain'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
 
     enforceUserPermission('module_support', 3);
 
@@ -248,18 +258,18 @@ if (isset($_POST['bulk_archive_domains'])) {
 
 }
 
-if (isset($_POST['bulk_unarchive_domains'])) {
+if (isset($_POST['bulk_restore_domains'])) {
 
     validateCSRFToken($_POST['csrf_token']);
 
-    enforceUserPermission('module_support', 3);
+    enforceUserPermission('module_support', 2);
 
     if (isset($_POST['domain_ids'])) {
 
         // Get Selected Count
         $count = count($_POST['domain_ids']);
 
-        // Cycle through array and unarchive
+        // Cycle through array and restore
         foreach ($_POST['domain_ids'] as $domain_id) {
 
             $domain_id = intval($domain_id);
@@ -272,13 +282,13 @@ if (isset($_POST['bulk_unarchive_domains'])) {
 
             mysqli_query($mysqli,"UPDATE domains SET domain_archived_at = NULL WHERE domain_id = $domain_id");
 
-            logAction("Domain", "Unarchive", "$session_name unarchived domain $domain_name", $client_id, $domain_id);
+            logAction("Domain", "Restore", "$session_name restored domain $domain_name", $client_id, $domain_id);
 
         }
 
-        logAction("Domain", "Bulk Unarchive", "$session_name unarchived $count domain(s)", $client_id);
+        logAction("Domain", "Bulk Restore", "$session_name restored $count domain(s)", $client_id);
 
-        flash_alert("Unarchived <strong>$count</strong> domain(s)");
+        flash_alert("Restored <strong>$count</strong> domain(s)");
 
     }
 
@@ -324,6 +334,8 @@ if (isset($_POST['bulk_delete_domains'])) {
 }
 
 if (isset($_POST['export_domains_csv'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_support');
 
