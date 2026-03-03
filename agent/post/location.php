@@ -8,6 +8,8 @@ defined('FROM_POST_HANDLER') || die("Direct file access is not allowed");
 
 if(isset($_POST['add_location'])){
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_client', 2);
 
     require_once 'location_model.php';
@@ -59,6 +61,8 @@ if(isset($_POST['add_location'])){
 }
 
 if(isset($_POST['edit_location'])){
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_client', 2);
 
@@ -122,6 +126,8 @@ if(isset($_POST['edit_location'])){
 
 if(isset($_GET['archive_location'])){
 
+    validateCSRFToken($_GET['csrf_token']);
+
     enforceUserPermission('module_client', 2);
 
     $location_id = intval($_GET['archive_location']);
@@ -142,11 +148,13 @@ if(isset($_GET['archive_location'])){
 
 }
 
-if(isset($_GET['unarchive_location'])){
+if(isset($_GET['restore_location'])){
+
+    validateCSRFToken($_GET['csrf_token']);
 
     enforceUserPermission('module_client', 2);
 
-    $location_id = intval($_GET['unarchive_location']);
+    $location_id = intval($_GET['restore_location']);
 
     // Get Location Name and Client ID for logging and alert message
     $sql = mysqli_query($mysqli,"SELECT location_name, location_client_id FROM locations WHERE location_id = $location_id");
@@ -156,7 +164,7 @@ if(isset($_GET['unarchive_location'])){
 
     mysqli_query($mysqli,"UPDATE locations SET location_archived_at = NULL WHERE location_id = $location_id");
 
-    logAction("Location", "Unarchive", "$session_name unarchived location $location_name", $client_id, $location_id);
+    logAction("Location", "Restore", "$session_name restored location $location_name", $client_id, $location_id);
 
     flash_alert("Location <strong>$location_name</strong> restored");
 
@@ -165,6 +173,8 @@ if(isset($_GET['unarchive_location'])){
 }
 
 if(isset($_GET['delete_location'])){
+
+    validateCSRFToken($_GET['csrf_token']);
 
     enforceUserPermission('module_client', 3);
 
@@ -187,6 +197,8 @@ if(isset($_GET['delete_location'])){
 }
 
 if (isset($_POST['bulk_assign_location_tags'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_client', 2);
 
@@ -238,8 +250,9 @@ if (isset($_POST['bulk_assign_location_tags'])) {
 
 if (isset($_POST['bulk_archive_locations'])) {
 
-    enforceUserPermission('module_client', 2);
     validateCSRFToken($_POST['csrf_token']);
+
+    enforceUserPermission('module_client', 2);
 
     if (isset($_POST['location_ids'])) {
 
@@ -278,7 +291,7 @@ if (isset($_POST['bulk_archive_locations'])) {
 
 }
 
-if (isset($_POST['bulk_unarchive_locations'])) {
+if (isset($_POST['bulk_restore_locations'])) {
 
     validateCSRFToken($_POST['csrf_token']);
 
@@ -289,7 +302,7 @@ if (isset($_POST['bulk_unarchive_locations'])) {
         // Get Selected Count
         $count = count($_POST['location_ids']);
 
-        // Cycle through array and unarchive
+        // Cycle through array and restore
         foreach ($_POST['location_ids'] as $location_id) {
 
             $location_id = intval($location_id);
@@ -302,13 +315,13 @@ if (isset($_POST['bulk_unarchive_locations'])) {
 
             mysqli_query($mysqli,"UPDATE locations SET location_archived_at = NULL WHERE location_id = $location_id");
 
-            logAction("Location", "Unarchive", "$session_name unarchived location $location_name", $client_id, $location_id);
+            logAction("Location", "Restore", "$session_name restored location $location_name", $client_id, $location_id);
 
         }
 
-        logAction("Location", "Bulk Unarchive", "$session_name unarchived $count location(s)", $client_id);
+        logAction("Location", "Bulk Restore", "$session_name restored $count location(s)", $client_id);
 
-        flash_alert("Unarchived <strong>$count</strong> location(s)");
+        flash_alert("Restored <strong>$count</strong> location(s)");
 
     }
 
@@ -355,6 +368,10 @@ if (isset($_POST['bulk_delete_locations'])) {
 }
 
 if(isset($_POST['export_locations_csv'])){
+
+    validateCSRFToken($_POST['csrf_token']);
+
+    enforceUserPermission('module_client');
 
     if ($_POST['client_id']) {
         $client_id = intval($_POST['client_id']);
@@ -409,6 +426,8 @@ if(isset($_POST['export_locations_csv'])){
 }
 
 if (isset($_POST["import_locations_csv"])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_client', 2);
 
