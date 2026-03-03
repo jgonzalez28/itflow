@@ -8,6 +8,8 @@ defined('FROM_POST_HANDLER') || die("Direct file access is not allowed");
 
 if (isset($_POST['add_credential'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_credential', 2);
 
     require_once 'credential_model.php';
@@ -33,6 +35,8 @@ if (isset($_POST['add_credential'])) {
 }
 
 if (isset($_POST['edit_credential'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_credential', 2);
 
@@ -73,6 +77,8 @@ if (isset($_POST['edit_credential'])) {
 
 if(isset($_GET['archive_credential'])){
 
+    validateCSRFToken($_GET['csrf_token']);
+
     enforceUserPermission('module_credential', 2);
 
     $credential_id = intval($_GET['archive_credential']);
@@ -93,11 +99,13 @@ if(isset($_GET['archive_credential'])){
 
 }
 
-if(isset($_GET['unarchive_credential'])){
+if(isset($_GET['restore_credential'])){
+
+    validateCSRFToken($_GET['csrf_token']);
 
     enforceUserPermission('module_credential', 2);
 
-    $credential_id = intval($_GET['unarchive_credential']);
+    $credential_id = intval($_GET['restore_credential']);
 
     // Get Name and Client ID for logging and alert message
     $sql = mysqli_query($mysqli,"SELECT credential_name, credential_client_id FROM credentials WHERE credential_id = $credential_id");
@@ -107,7 +115,7 @@ if(isset($_GET['unarchive_credential'])){
 
     mysqli_query($mysqli,"UPDATE credentials SET credential_archived_at = NULL WHERE credential_id = $credential_id");
 
-    logAction("Credential", "Unarchive", "$session_name unarchived credential $credential_name", $client_id, $credential_id);
+    logAction("Credential", "Restore", "$session_name restored credential $credential_name", $client_id, $credential_id);
 
     flash_alert("Credential <strong>$credential_name</strong> restored");
 
@@ -116,6 +124,8 @@ if(isset($_GET['unarchive_credential'])){
 }
 
 if (isset($_GET['delete_credential'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
 
     enforceUserPermission('module_credential', 3);
 
@@ -138,6 +148,8 @@ if (isset($_GET['delete_credential'])) {
 }
 
 if (isset($_POST['bulk_assign_credential_tags'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_credential', 2);
 
@@ -296,7 +308,7 @@ if (isset($_POST['bulk_archive_credentials'])) {
 
 }
 
-if (isset($_POST['bulk_unarchive_credentials'])) {
+if (isset($_POST['bulk_restore_credentials'])) {
 
     validateCSRFToken($_POST['csrf_token']);
 
@@ -307,7 +319,7 @@ if (isset($_POST['bulk_unarchive_credentials'])) {
         // Get Selected Credential Count
         $count = count($_POST['credential_ids']);
 
-        // Cycle through array and unarchive
+        // Cycle through array and restore
         foreach ($_POST['credential_ids'] as $credential_id) {
 
             $credential_id = intval($credential_id);
@@ -320,13 +332,13 @@ if (isset($_POST['bulk_unarchive_credentials'])) {
 
             mysqli_query($mysqli,"UPDATE credentials SET credential_archived_at = NULL WHERE credential_id = $credential_id");
 
-            logAction("Credential", "Unarchive", "$session_name unarchived credential $credential_name", $client_id, $credential_id);
+            logAction("Credential", "Restore", "$session_name restored credential $credential_name", $client_id, $credential_id);
 
         }
 
-        logAction("Credential", "Bulk Unarchive", "$session_name unarchived $count credential(s)", $client_id);
+        logAction("Credential", "Bulk Restore", "$session_name restored $count credential(s)", $client_id);
 
-        flash_alert("Unarchived <strong>$count</strong> credential(s)");
+        flash_alert("Restored <strong>$count</strong> credential(s)");
 
     }
 
@@ -373,6 +385,8 @@ if (isset($_POST['bulk_delete_credentials'])) {
 }
 
 if (isset($_POST['export_credentials_csv'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_credential');
 
@@ -430,6 +444,8 @@ if (isset($_POST['export_credentials_csv'])) {
 }
 
 if (isset($_POST["import_credentials_csv"])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_credential', 2);
 

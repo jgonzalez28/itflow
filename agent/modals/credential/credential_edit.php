@@ -44,6 +44,7 @@ ob_start();
 </div>
 
 <form action="post.php" method="post" autocomplete="off">
+    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
     <input type="hidden" name="credential_id" value="<?php echo $credential_id; ?>">
     <input type="hidden" name="client_id" value="<?php echo $client_id; ?>">
     <div class="modal-body">
