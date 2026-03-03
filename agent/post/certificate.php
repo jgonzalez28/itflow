@@ -8,6 +8,8 @@ defined('FROM_POST_HANDLER') || die("Direct file access is not allowed");
 
 if (isset($_POST['add_certificate'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     require_once 'certificate_model.php';
@@ -41,6 +43,8 @@ if (isset($_POST['add_certificate'])) {
 }
 
 if (isset($_POST['edit_certificate'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
@@ -108,6 +112,8 @@ if (isset($_POST['edit_certificate'])) {
 
 if (isset($_GET['archive_certificate'])) {
 
+    validateCSRFToken($_GET['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $certificate_id = intval($_GET['archive_certificate']);
@@ -128,11 +134,13 @@ if (isset($_GET['archive_certificate'])) {
 
 }
 
-if (isset($_GET['unarchive_certificate'])) {
+if (isset($_GET['restore_certificate'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
-    $certificate_id = intval($_GET['unarchive_certificate']);
+    $certificate_id = intval($_GET['restore_certificate']);
 
     // Get Certificate Name and Client ID for logging and alert message
     $sql = mysqli_query($mysqli,"SELECT certificate_name, certificate_client_id FROM certificates WHERE certificate_id = $certificate_id");
@@ -142,7 +150,7 @@ if (isset($_GET['unarchive_certificate'])) {
 
     mysqli_query($mysqli,"UPDATE certificates SET certificate_archived_at = NULL WHERE certificate_id = $certificate_id");
 
-    logAction("Certificate", "Unarchive", "$session_name restored certificate $certificate_name", $client_id, $certificate_id);
+    logAction("Certificate", "Restore", "$session_name restored certificate $certificate_name", $client_id, $certificate_id);
 
     flash_alert("Certificate <strong>$certificate_name</strong> restored");
 
@@ -151,6 +159,8 @@ if (isset($_GET['unarchive_certificate'])) {
 }
 
 if (isset($_GET['delete_certificate'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
 
     enforceUserPermission('module_support', 3);
 
@@ -211,6 +221,8 @@ if (isset($_POST['bulk_delete_certificates'])) {
 }
 
 if (isset($_POST['export_certificates_csv'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_support');
 
