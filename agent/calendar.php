@@ -137,6 +137,10 @@ while ($row = mysqli_fetch_assoc($sql)) {
         height: '90vh',
 
         selectMirror: true,
+        eventDidMount: function(info) {
+            // Always show full title when hovering
+            info.el.setAttribute('title', info.event.title);
+        },
         eventClick: function(editEvent) {
             var eventId = editEvent.event.id;
             var $link = $('<a>', {
