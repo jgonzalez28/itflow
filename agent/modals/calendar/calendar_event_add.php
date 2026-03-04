@@ -30,16 +30,6 @@
                         <div class="tab-pane fade show active" id="pills-event">
 
                             <div class="form-group">
-                                <label>Title <strong class="text-danger">*</strong></label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="fa fa-fw fa-calendar-day"></i></span>
-                                    </div>
-                                    <input type="text" class="form-control" name="title" placeholder="Title of the event" maxlength="200" required autofocus>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
                                 <label>Calendar <strong class="text-danger">*</strong></label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
@@ -59,6 +49,16 @@
                                         <?php } ?>
 
                                     </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Title <strong class="text-danger">*</strong></label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa fa-fw fa-calendar-day"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control" name="title" placeholder="Title of the event" maxlength="200" required autofocus>
                                 </div>
                             </div>
 

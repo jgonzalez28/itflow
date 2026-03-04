@@ -43,6 +43,31 @@ if (isset($_POST['edit_calendar'])) {
 
 }
 
+if (isset($_GET['delete_calendar'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
+
+    $calendar_id = intval($_GET['delete_calendar']);
+
+    // Get Calendar Name
+    $sql = mysqli_query($mysqli,"SELECT * FROM calendars WHERE calendar_id = $calendar_id");
+    $row = mysqli_fetch_assoc($sql);
+    $calendar_name = sanitizeInput($row['calendar_name']);
+
+    // Delete Calendar
+    mysqli_query($mysqli,"DELETE FROM calendars WHERE calendar_id = $calendar_id");
+
+    // Delete Events
+    mysqli_query($mysqli,"DELETE FROM calendar_events WHERE event_calendar_id = $calendar_id");
+
+    logAction("Calendar", "Delete", "$session_name deleted calendar $calendar_name and associated events");
+
+    flash_alert("Calendar <strong>$calendar_name</strong> deleted", 'error');
+
+    redirect();
+
+}
+
 if (isset($_POST['add_event'])) {
 
     validateCSRFToken($_POST['csrf_token']);
