@@ -33,7 +33,7 @@ if (isset($_GET['calendar_id'])) {
             <div class="card-header bg-dark">
                 <h3 class="card-title">Custom Calendars</h3>
                 <div class="card-tools">
-                    <button type="button" class="btn btn-tool ajax-modal" data-modal-url="modals/calendar/calendar_add.php"><i class="fas fa-plus"></i></button>
+                    <button type="button" class="btn btn-tool ajax-modal" data-modal-url="modals/calendar/calendar_add.php"><i class="fas fa-plus" title="New Calendar"></i></button>
                 </div>
             </div>
             <div class="card-body">
