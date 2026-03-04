@@ -31,7 +31,7 @@ if (isset($_GET['calendar_id'])) {
     <div class="col-md-3">
         <div class="card">
             <div class="card-header bg-dark">
-                <h3 class="card-title">Custom Calendars</h3>
+                <h3 class="card-title">Calendars</h3>
                 <div class="card-tools">
                     <button type="button" class="btn btn-tool ajax-modal" data-modal-url="modals/calendar/calendar_add.php"><i class="fas fa-plus" title="New Calendar"></i></button>
                 </div>
@@ -73,7 +73,7 @@ if (isset($_GET['calendar_id'])) {
         </div>
         <div class="card">
             <div class="card-header bg-dark">
-                <h3 class="card-title">Built-in Calendars</h3>
+                <h3 class="card-title">Built-in</h3>
             </div>
             <div class="card-body">
                 <div class="form-group">
