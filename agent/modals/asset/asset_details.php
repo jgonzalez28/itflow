@@ -408,6 +408,7 @@ ob_start();
                     "ajax.php",
                     {
                         asset_set_notes: 'TRUE',
+                        csrf_token: '<?= $_SESSION['csrf_token'] ?>',
                         asset_id: asset_id,
                         notes: notes
                     }

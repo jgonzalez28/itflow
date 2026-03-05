@@ -41,6 +41,9 @@ if (isset($_GET['certificate_fetch_parse_json_details'])) {
 }
 
 if (isset($_POST['client_set_notes'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_client', 2);
 
     $client_id = intval($_POST['client_id']);
@@ -55,6 +58,9 @@ if (isset($_POST['client_set_notes'])) {
 }
 
 if (isset($_POST['contact_set_notes'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_client', 2);
 
     $contact_id = intval($_POST['contact_id']);
@@ -77,6 +83,9 @@ if (isset($_POST['contact_set_notes'])) {
 }
 
 if (isset($_POST['asset_set_notes'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $asset_id = intval($_POST['asset_id']);
@@ -143,6 +152,9 @@ if (isset($_GET['ticket_query_views'])) {
  * Generates public/guest links for sharing credentials/docs
  */
 if (isset($_GET['share_generate_link'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $item_encrypted_username = '';  // Default empty
@@ -558,6 +570,9 @@ if (isset($_POST['update_kanban_ticket'])) {
 
 if (isset($_POST['update_ticket_tasks_order'])) {
     // Update multiple ticket tasks order
+
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $positions = $_POST['positions'];
@@ -577,6 +592,9 @@ if (isset($_POST['update_ticket_tasks_order'])) {
 
 if (isset($_POST['update_task_templates_order'])) {
     // Update multiple task templates order
+
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $positions = $_POST['positions'];
@@ -596,6 +614,9 @@ if (isset($_POST['update_task_templates_order'])) {
 
 if (isset($_POST['update_quote_items_order'])) {
     // Update multiple quote items order
+
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_sales', 2);
 
     $positions = $_POST['positions'];
@@ -615,6 +636,9 @@ if (isset($_POST['update_quote_items_order'])) {
 
 if (isset($_POST['update_invoice_items_order'])) {
     // Update multiple invoice items order
+
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_sales', 2);
 
     $positions = $_POST['positions'];
@@ -634,6 +658,9 @@ if (isset($_POST['update_invoice_items_order'])) {
 
 if (isset($_POST['update_recurring_invoice_items_order'])) {
     // Update multiple recurring invoice items order
+
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_sales', 2);
 
     $positions = $_POST['positions'];

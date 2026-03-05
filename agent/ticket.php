@@ -1346,6 +1346,7 @@ new Sortable(document.querySelector('table#tasks tbody'), {
 
         $.post('ajax.php', {
             update_ticket_tasks_order: true,
+            csrf_token: '<?= $_SESSION['csrf_token'] ?>',
             ticket_id: <?php echo $ticket_id; ?>,
             positions: positions
         });

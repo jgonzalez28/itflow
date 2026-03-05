@@ -817,6 +817,7 @@ new Sortable(document.querySelector('table#items tbody'), {
 
         $.post('ajax.php', {
             update_invoice_items_order: true,
+            csrf_token: '<?= $_SESSION['csrf_token'] ?>',
             invoice_id: <?php echo $invoice_id; ?>,
             positions: positions
         });

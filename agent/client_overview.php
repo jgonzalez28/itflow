@@ -812,6 +812,7 @@ $sql_asset_retired = mysqli_query(
             "ajax.php",
             {
                 client_set_notes: 'TRUE',
+                csrf_token: '<?= $_SESSION['csrf_token'] ?>',
                 client_id: client_id,
                 notes: notes
             }

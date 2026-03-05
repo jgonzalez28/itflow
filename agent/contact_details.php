@@ -1171,6 +1171,7 @@ if (isset($_GET['contact_id'])) {
                 "ajax.php",
                 {
                     contact_set_notes: 'TRUE',
+                    csrf_token: '<?= $_SESSION['csrf_token'] ?>',
                     contact_id: contact_id,
                     notes: notes
                 }

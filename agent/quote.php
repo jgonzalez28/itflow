@@ -616,7 +616,8 @@ new Sortable(document.querySelector('table#items tbody'), {
 
         $.post('ajax.php', {
             update_quote_items_order: true,
-            quote_id: <?php echo $quote_id; ?>,
+            csrf_token: '<?= $_SESSION['csrf_token'] ?>',
+            quote_id: <?= $quote_id ?>,
             positions: positions
         });
     }

@@ -516,6 +516,7 @@ new Sortable(document.querySelector('table#items tbody'), {
 
         $.post('ajax.php', {
             update_recurring_invoice_items_order: true,
+            csrf_token: '<?= $_SESSION['csrf_token'] ?>',
             recurring_invoice_id: <?php echo $recurring_invoice_id; ?>,
             positions: positions
         });
