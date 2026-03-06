@@ -17,6 +17,8 @@ if (isset($_POST['create_folder'])) {
     $folder_name = sanitizeInput($_POST['folder_name']);
     $parent_folder = intval($_POST['parent_folder']);
 
+    enforceClientAccess();
+
     // Document folder add query
     $add_folder = mysqli_query($mysqli,"INSERT INTO folders SET folder_name = '$folder_name', parent_folder = $parent_folder, folder_location = $folder_location, folder_client_id = $client_id");
     $folder_id = mysqli_insert_id($mysqli);
@@ -44,6 +46,8 @@ if (isset($_POST['rename_folder'])) {
     $old_folder_name = sanitizeInput($row['folder_name']);
     $client_id = intval($row['folder_client_id']);
 
+    enforceClientAccess();
+
     // Folder edit query
     mysqli_query($mysqli,"UPDATE folders SET folder_name = '$folder_name' WHERE folder_id = $folder_id");
 
@@ -68,6 +72,8 @@ if (isset($_GET['delete_folder'])) {
     $row = mysqli_fetch_assoc($sql);
     $folder_name = sanitizeInput($row['folder_name']);
     $client_id = intval($row['folder_client_id']);
+
+    enforceClientAccess();
 
     mysqli_query($mysqli,"DELETE FROM folders WHERE folder_id = $folder_id");
 
