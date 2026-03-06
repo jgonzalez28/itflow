@@ -143,7 +143,7 @@ ob_start();
             <div class="tab-pane fade" id="pills-attendees<?php echo $event_id; ?>">
 
                 <?php if (isset($_GET['client_id'])) { ?>
-                    <input type="hidden" name="client" value="<?php echo $client_id; ?>">
+                    <input type="hidden" name="client_id" value="<?php echo $client_id; ?>">
                 <?php } else { ?>
 
                     <div class="form-group">
