@@ -14,7 +14,9 @@ if (isset($_POST['add_invoice'])) {
 
     require_once 'invoice_model.php';
 
-    $client_id = intval($_POST['client']);
+    $client_id = intval($_POST['client_id']);
+
+    enforceClientAccess();
 
     $invoice_amount = 0 - $invoice_discount;     // Calc amount if discount is applied, otherwise wrongly shows 0
 
@@ -69,6 +71,8 @@ if (isset($_POST['edit_invoice'])) {
     $invoice_number = intval($row['invoice_number']);
     $client_id = intval($row['invoice_client_id']);
 
+    enforceClientAccess();
+
     // Calculate new total
     $sql = mysqli_query($mysqli,"SELECT * FROM invoice_items WHERE item_invoice_id = $invoice_id");
     $invoice_amount = 0;
@@ -111,6 +115,8 @@ if (isset($_POST['add_invoice_copy'])) {
     $category_id = intval($row['invoice_category_id']);
     $old_invoice_prefix = sanitizeInput($row['invoice_prefix']);
     $old_invoice_number = intval($row['invoice_number']);
+
+    enforceClientAccess();
 
     // Atomically increment and get the new invoice number
     mysqli_query($mysqli, "
@@ -173,6 +179,8 @@ if (isset($_GET['mark_invoice_sent'])) {
     $invoice_number = intval($row['invoice_number']);
     $client_id = intval($row['invoice_client_id']);
 
+    enforceClientAccess();
+
     mysqli_query($mysqli,"UPDATE invoices SET invoice_status = 'Sent' WHERE invoice_id = $invoice_id");
 
     mysqli_query($mysqli,"INSERT INTO history SET history_status = 'Sent', history_description = 'Invoice marked sent by $session_name', history_invoice_id = $invoice_id");
@@ -199,6 +207,8 @@ if (isset($_GET['mark_invoice_non-billable'])) {
     $invoice_prefix = sanitizeInput($row['invoice_prefix']);
     $invoice_number = intval($row['invoice_number']);
     $client_id = intval($row['invoice_client_id']);
+
+    enforceClientAccess();
 
     mysqli_query($mysqli,"UPDATE invoices SET invoice_status = 'Non-Billable' WHERE invoice_id = $invoice_id");
 
@@ -227,6 +237,8 @@ if (isset($_GET['cancel_invoice'])) {
     $invoice_number = intval($row['invoice_number']);
     $client_id = intval($row['invoice_client_id']);
 
+    enforceClientAccess();
+
     mysqli_query($mysqli,"UPDATE invoices SET invoice_status = 'Cancelled' WHERE invoice_id = $invoice_id");
 
     mysqli_query($mysqli,"INSERT INTO history SET history_status = 'Cancelled', history_description = 'Invoice cancelled by $session_name', history_invoice_id = $invoice_id");
@@ -253,6 +265,8 @@ if (isset($_GET['delete_invoice'])) {
     $invoice_prefix = sanitizeInput($row['invoice_prefix']);
     $invoice_number = intval($row['invoice_number']);
     $client_id = intval($row['invoice_client_id']);
+
+    enforceClientAccess();
 
     mysqli_query($mysqli,"DELETE FROM invoices WHERE invoice_id = $invoice_id");
 
@@ -303,6 +317,10 @@ if (isset($_POST['add_invoice_item'])) {
     $item_order = intval($_POST['item_order']);
     $product_id = intval($_POST['product_id']);
 
+    $client_id = intval(getFieldById('invoices', $invoice_id, 'invoice_client_id'));
+
+    enforceClientAccess();
+
     $subtotal = $price * $qty;
 
     // Update Product Inventory
@@ -351,7 +369,6 @@ if (isset($_POST['add_invoice_item'])) {
     $row = mysqli_fetch_assoc($sql);
     $invoice_prefix = sanitizeInput($row['invoice_prefix']);
     $invoice_number = intval($row['invoice_number']);
-    $client_id = intval($row['invoice_client_id']);
     $invoice_discount = floatval($row['invoice_discount_amount']);
 
     //add up all line items
@@ -388,6 +405,8 @@ if (isset($_POST['invoice_note'])) {
     $invoice_prefix = sanitizeInput($row['invoice_prefix']);
     $invoice_number = intval($row['invoice_number']);
     $client_id = intval($row['invoice_client_id']);
+
+    enforceClientAccess();
 
     mysqli_query($mysqli,"UPDATE invoices SET invoice_note = '$note' WHERE invoice_id = $invoice_id");
 
@@ -426,8 +445,6 @@ if (isset($_POST['edit_item'])) {
 
     $total = $subtotal + $tax_amount;
 
-    mysqli_query($mysqli,"UPDATE invoice_items SET item_name = '$name', item_description = '$description', item_quantity = $qty, item_price = $price, item_subtotal = $subtotal, item_tax = $tax_amount, item_total = $total, item_tax_id = $tax_id WHERE item_id = $item_id");
-
     // Determine what type of line item
     $sql = mysqli_query($mysqli,"SELECT item_invoice_id, item_quote_id, item_recurring_invoice_id FROM invoice_items WHERE item_id = $item_id");
     $row = mysqli_fetch_assoc($sql);
@@ -435,7 +452,7 @@ if (isset($_POST['edit_item'])) {
     $quote_id = intval($row['item_quote_id']);
     $recurring_invoice_id = intval($row['item_recurring_invoice_id']);
 
-    if ($invoice_id > 0) {
+    if ($invoice_id) {
         //Get Discount Amount
         $sql = mysqli_query($mysqli,"SELECT * FROM invoices WHERE invoice_id = $invoice_id");
         $row = mysqli_fetch_assoc($sql);
@@ -443,20 +460,8 @@ if (isset($_POST['edit_item'])) {
         $invoice_number = intval($row['invoice_number']);
         $client_id = intval($row['invoice_client_id']);
         $invoice_discount = floatval($row['invoice_discount_amount']);
-
-        //Update Invoice Balances by tallying up invoice items
-        $sql_invoice_total = mysqli_query($mysqli,"SELECT SUM(item_total) AS invoice_total FROM invoice_items WHERE item_invoice_id = $invoice_id");
-        $row = mysqli_fetch_assoc($sql_invoice_total);
-        $new_invoice_amount = floatval($row['invoice_total']) - $invoice_discount;
-
-
-
-
-        mysqli_query($mysqli,"UPDATE invoices SET invoice_amount = $new_invoice_amount WHERE invoice_id = $invoice_id");
-
-        logAction("Invoice", "Edit", "$session_name edited item $name on invoice $invoice_prefix$invoice_number", $client_id, $invoice_id);
-
-    } elseif ($quote_id > 0) {
+        enforceClientAccess();
+    } elseif ($quote_id) {
         //Get Discount Amount
         $sql = mysqli_query($mysqli,"SELECT * FROM quotes WHERE quote_id = $quote_id");
         $row = mysqli_fetch_assoc($sql);
@@ -464,7 +469,31 @@ if (isset($_POST['edit_item'])) {
         $quote_number = intval($row['quote_number']);
         $client_id = intval($row['quote_client_id']);
         $quote_discount = floatval($row['quote_discount_amount']);
+        enforceClientAccess();
+    } else {
+        //Get Discount Amount
+        $sql = mysqli_query($mysqli,"SELECT * FROM recurring_invoices WHERE recurring_invoice_id = $recurring_invoice_id");
+        $row = mysqli_fetch_assoc($sql);
+        $recurring_invoice_prefix = sanitizeInput($row['recurring_invoice_prefix']);
+        $recurring_invoice_number = intval($row['recurring_invoice_number']);
+        $client_id = intval($row['recurring_invoice_client_id']);
+        $recurring_invoice_discount = floatval($row['recurring_invoice_discount_amount']);
+        enforceClientAccess();
+    }
 
+    mysqli_query($mysqli,"UPDATE invoice_items SET item_name = '$name', item_description = '$description', item_quantity = $qty, item_price = $price, item_subtotal = $subtotal, item_tax = $tax_amount, item_total = $total, item_tax_id = $tax_id WHERE item_id = $item_id");
+
+    if ($invoice_id) {
+        //Update Invoice Balances by tallying up invoice items
+        $sql_invoice_total = mysqli_query($mysqli,"SELECT SUM(item_total) AS invoice_total FROM invoice_items WHERE item_invoice_id = $invoice_id");
+        $row = mysqli_fetch_assoc($sql_invoice_total);
+        $new_invoice_amount = floatval($row['invoice_total']) - $invoice_discount;
+
+        mysqli_query($mysqli,"UPDATE invoices SET invoice_amount = $new_invoice_amount WHERE invoice_id = $invoice_id");
+
+        logAction("Invoice", "Edit", "$session_name edited item $name on invoice $invoice_prefix$invoice_number", $client_id, $invoice_id);
+
+    } elseif ($quote_id) {
         //Update Quote Balances by tallying up items
         $sql_quote_total = mysqli_query($mysqli,"SELECT SUM(item_total) AS quote_total FROM invoice_items WHERE item_quote_id = $quote_id");
         $row = mysqli_fetch_assoc($sql_quote_total);
@@ -475,14 +504,6 @@ if (isset($_POST['edit_item'])) {
         logAction("Quote", "Edit", "$session_name edited item $name on quote $quote_prefix$quote_number", $client_id, $quote_id);
 
     } else {
-        //Get Discount Amount
-        $sql = mysqli_query($mysqli,"SELECT * FROM recurring_invoices WHERE recurring_invoice_id = $recurring_invoice_id");
-        $row = mysqli_fetch_assoc($sql);
-        $recurring_invoice_prefix = sanitizeInput($row['recurring_invoice_prefix']);
-        $recurring_invoice_number = intval($row['recurring_invoice_number']);
-        $client_id = intval($row['recurring_invoice_client_id']);
-        $recurring_invoice_discount = floatval($row['recurring_invoice_discount_amount']);
-
         //Update Invoice Balances by tallying up invoice items
         $sql_recurring_invoice_total = mysqli_query($mysqli,"SELECT SUM(item_total) AS recurring_invoice_total FROM invoice_items WHERE item_recurring_invoice_id = $recurring_invoice_id");
         $row = mysqli_fetch_assoc($sql_recurring_invoice_total);
@@ -524,6 +545,8 @@ if (isset($_GET['delete_invoice_item'])) {
     $invoice_prefix = sanitizeInput($row['invoice_prefix']);
     $invoice_number = intval($row['invoice_number']);
     $client_id = intval($row['invoice_client_id']);
+
+    enforceClientAccess();
 
     $new_invoice_amount = floatval($row['invoice_amount']) - $item_total;
 
@@ -573,6 +596,8 @@ if (isset($_GET['email_invoice'])) {
     $client_name = sanitizeInput($row['client_name']);
     $contact_name = sanitizeInput($row['contact_name']);
     $contact_email = sanitizeInput($row['contact_email']);
+
+    enforceClientAccess();
 
     $sql = mysqli_query($mysqli,"SELECT * FROM companies WHERE company_id = 1");
     $row = mysqli_fetch_assoc($sql);
@@ -681,6 +706,7 @@ if (isset($_POST['export_invoices_csv'])) {
         $client_query = "1=1 AND invoice_client_id = $client_id";
         $client_name = getFieldById('clients', $client_id, 'client_name');
         $file_name_prepend = "$client_name-";
+        enforceClientAccess();
     } else {
         $client_query = '1=1 ';
         $client_name = '';
@@ -697,7 +723,7 @@ if (isset($_POST['export_invoices_csv'])) {
         $file_name_date = date('Y-m-d_H-i-s');
     }
 
-    $sql = mysqli_query($mysqli,"SELECT * FROM invoices LEFT JOIN clients ON invoice_client_id = client_id WHERE $date_query AND $client_query ORDER BY invoice_number ASC");
+    $sql = mysqli_query($mysqli,"SELECT * FROM invoices LEFT JOIN clients ON invoice_client_id = client_id WHERE $date_query AND $client_query $access_permission_query ORDER BY invoice_number ASC");
 
     $num_rows = mysqli_num_rows($sql);
 
@@ -746,6 +772,10 @@ if (isset($_POST['link_invoice_to_ticket'])) {
     $invoice_id = intval($_POST['invoice_id']);
     $ticket_id = intval($_POST['ticket_id']);
 
+    $client_id = intval(getFieldById('invoices', $invoice_id, 'invoice_client_id'));
+
+    enforceClientAccess();
+
     mysqli_query($mysqli,"UPDATE invoices SET invoice_ticket_id = $ticket_id WHERE invoice_id = $invoice_id");
 
     flash_alert("Invoice linked to ticket");
@@ -762,6 +792,10 @@ if (isset($_POST['add_ticket_to_invoice'])) {
 
     $invoice_id = intval($_POST['invoice_id']);
     $ticket_id = intval($_POST['ticket_id']);
+
+    $client_id = intval(getFieldById('tickets', $ticket_id, 'ticket_client_id'));
+
+    enforceClientAccess();
 
     mysqli_query($mysqli,"UPDATE tickets SET ticket_invoice_id = $invoice_id WHERE ticket_id = $ticket_id");
 
@@ -824,6 +858,8 @@ if (isset($_GET['export_invoice_pdf'])) {
     if ($client_net_terms == 0) {
         $client_net_terms = $config_default_net_terms;
     }
+
+    enforceClientAccess();
 
     $sql = mysqli_query($mysqli, "SELECT * FROM companies WHERE company_id = 1");
     $row = mysqli_fetch_assoc($sql);
@@ -1034,6 +1070,8 @@ if (isset($_GET['export_invoice_packing_slip'])) {
     $contact_phone = nullable_htmlentities(formatPhoneNumber($row['contact_phone'], $contact_phone_country_code));
     $contact_extension = nullable_htmlentities($row['contact_extension']);
 
+    enforceClientAccess();
+
     $sql = mysqli_query($mysqli, "SELECT * FROM companies WHERE company_id = 1");
     $row = mysqli_fetch_assoc($sql);
     $company_id = intval($row['company_id']);
@@ -1170,6 +1208,8 @@ if (isset($_POST['bulk_edit_invoice_category'])) {
             $invoice_number = intval($row['invoice_number']);
             $invoice_scope = sanitizeInput($row['invoice_scope']);
             $client_id = intval($row['invoice_client_id']);
+
+            enforceClientAccess();
 
             mysqli_query($mysqli,"UPDATE invoices SET invoice_category_id = $category_id WHERE invoice_id = $invoice_id");
 

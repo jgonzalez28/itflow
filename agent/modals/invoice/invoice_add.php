@@ -29,7 +29,7 @@ ob_start();
         </div>
 
         <?php if ($client_id) { ?>
-            <input type="hidden" name="client" value="<?php echo $client_id; ?>">
+            <input type="hidden" name="client_id" value="<?php echo $client_id; ?>">
         <?php }else{ ?>
 
             <div class="form-group">
