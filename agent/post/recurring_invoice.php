@@ -27,6 +27,8 @@ if (isset($_POST['add_invoice_recurring'])) {
     $client_id = intval($row['invoice_client_id']);
     $category_id = intval($row['invoice_category_id']);
 
+    enforceClientAccess();
+
     // Atomically increment and get the new recurring_invoice number
     mysqli_query($mysqli, "
         UPDATE settings
@@ -80,6 +82,8 @@ if (isset($_POST['add_recurring_invoice'])) {
     $category = intval($_POST['category']);
     $scope = sanitizeInput($_POST['scope']);
 
+    enforceClientAccess();
+
     // Atomically increment and get the new recurring_invoice number
     mysqli_query($mysqli, "
         UPDATE settings
@@ -126,6 +130,8 @@ if (isset($_POST['edit_recurring_invoice'])) {
     $recurring_invoice_number = intval($row['recurring_invoice_number']);
     $client_id = intval($row['recurring_invoice_client_id']);
 
+    enforceClientAccess();
+
     //Calculate new total
     $sql = mysqli_query($mysqli,"SELECT * FROM invoice_items WHERE item_recurring_invoice_id = $recurring_invoice_id");
     $recurring_invoice_amount = 0;
@@ -162,6 +168,8 @@ if (isset($_GET['delete_recurring_invoice'])) {
     $recurring_invoice_number = intval($row['recurring_invoice_number']);
     $recurring_invoice_scope = sanitizeInput($row['recurring_invoice_scope']);
     $client_id = intval($row['recurring_invoice_client_id']);
+
+    enforceClientAccess();
 
     mysqli_query($mysqli,"DELETE FROM recurring_invoices WHERE recurring_invoice_id = $recurring_invoice_id");
 
@@ -200,6 +208,10 @@ if (isset($_POST['add_recurring_invoice_item'])) {
     $price = floatval($_POST['price']);
     $tax_id = intval($_POST['tax_id']);
     $item_order = intval($_POST['item_order']);
+
+    $client_id = intval(getFieldById('recurring_invoices', $recurring_invoice_id, 'recurring_invoice_client_id'));
+
+    enforceClientAccess();
 
     $subtotal = $price * $qty;
 
@@ -259,6 +271,8 @@ if (isset($_POST['recurring_invoice_note'])) {
     $recurring_invoice_number = intval($row['recurring_invoice_number']);
     $client_id = intval($row['recurring_invoice_client_id']);
 
+    enforceClientAccess();
+
     mysqli_query($mysqli,"UPDATE recurring_invoices SET recurring_invoice_note = '$note' WHERE recurring_invoice_id = $recurring_invoice_id");
 
     logAction("Recurring Invoice", "Edit", "$session_name added note to recurring invoice $recurring_invoice_prefix$recurring_invoice_number", $client_id, $recurring_invoice_id);
@@ -290,6 +304,8 @@ if (isset($_GET['delete_recurring_invoice_item'])) {
     $recurring_invoice_prefix = sanitizeInput($row['recurring_invoice_prefix']);
     $recurring_invoice_number = intval($row['recurring_invoice_number']);
     $client_id = intval($row['recurring_invoice_client_id']);
+
+    enforceClientAccess();
 
     $new_recurring_invoice_amount = floatval($row['recurring_invoice_amount']) - $item_total;
 
@@ -329,6 +345,8 @@ if (isset($_GET['force_recurring'])) {
     $category_id = intval($row['recurring_invoice_category_id']);
     $client_id = intval($row['recurring_invoice_client_id']);
     $client_net_terms = intval($row['client_net_terms']);
+
+    enforceClientAccess();
 
     // Atomically increment and get the new invoice number
     mysqli_query($mysqli, "
@@ -488,6 +506,8 @@ if (isset($_POST['set_recurring_payment'])) {
     $recurring_invoice_currency_code = sanitizeInput($row['recurring_invoice_currency_code']);
     $recurring_invoice_amount = floatval($row['recurring_invoice_amount']);
 
+    enforceClientAccess();
+
     if ($saved_payment_id) {
 
         // Get Payment provider and method
@@ -532,6 +552,8 @@ if (isset($_POST['export_client_recurring_invoice_csv'])) {
     enforceUserPermission('module_sales');
 
     $client_id = intval($_POST['client_id']);
+
+    enforceClientAccess();
 
     //get records from database
     $sql = mysqli_query($mysqli,"SELECT client_name FROM clients WHERE client_id = $client_id");
@@ -591,6 +613,8 @@ if (isset($_GET['recurring_invoice_email_notify'])) {
     $recurring_invoice_prefix = sanitizeInput($row['recurring_invoice_prefix']);
     $recurring_invoice_number = intval($row['recurring_invoice_number']);
     $client_id = intval($row['recurring_invoice_client_id']);
+
+    enforceClientAccess();
 
     mysqli_query($mysqli,"UPDATE recurring_invoices SET recurring_invoice_email_notify = $recurring_invoice_email_notify WHERE recurring_invoice_id = $recurring_invoice_id");
 
