@@ -23,6 +23,8 @@ if (isset($_POST['add_rack'])) {
     $location = intval($_POST['location']);
     $notes = sanitizeInput($_POST['notes']);
 
+    enforceClientAccess();
+
     mysqli_query($mysqli,"INSERT INTO racks SET rack_name = '$name', rack_description = '$description', rack_type = '$type', rack_model = '$model', rack_depth = '$depth', rack_units = $units, rack_location_id = $location, rack_physical_location = '$physical_location', rack_notes = '$notes', rack_client_id = $client_id");
 
     $rack_id = mysqli_insert_id($mysqli);
@@ -58,7 +60,6 @@ if (isset($_POST['edit_rack'])) {
     enforceUserPermission('module_support', 2);
 
     $rack_id = intval($_POST['rack_id']);
-    $client_id = intval($_POST['client_id']);
     $name = sanitizeInput($_POST['name']);
     $description = sanitizeInput($_POST['description']);
     $type = sanitizeInput($_POST['type']);
@@ -68,6 +69,10 @@ if (isset($_POST['edit_rack'])) {
     $physical_location = sanitizeInput($_POST['physical_location']);
     $location = intval($_POST['location']);
     $notes = sanitizeInput($_POST['notes']);
+
+    $client_id = intval(getFieldById('racks', $rack_id, 'rack_client_id'));
+
+    enforceClientAccess();
 
     mysqli_query($mysqli,"UPDATE racks SET rack_name = '$name', rack_description = '$description', rack_type = '$type', rack_model = '$model', rack_depth = '$depth', rack_units = $units, rack_location_id = $location, rack_physical_location = '$physical_location', rack_notes = '$notes' WHERE rack_id = $rack_id");
 
@@ -103,6 +108,8 @@ if (isset($_GET['archive_rack'])) {
 
     $rack_id = intval($_GET['archive_rack']);
 
+    enforceClientAccess();
+
     // Get Name and Client ID for logging and alert message
     $sql = mysqli_query($mysqli,"SELECT rack_name, rack_client_id FROM racks WHERE rack_id = $rack_id");
     $row = mysqli_fetch_assoc($sql);
@@ -133,6 +140,8 @@ if (isset($_GET['restore_rack'])) {
     $rack_name = sanitizeInput($row['rack_name']);
     $client_id = intval($row['rack_client_id']);
 
+    enforceClientAccess();
+
     mysqli_query($mysqli,"UPDATE racks SET rack_archived_at = NULL WHERE rack_id = $rack_id");
 
     logAction("Rack", "Restore", "$session_name restored rack $rack_name", $client_id, $rack_id);
@@ -158,6 +167,8 @@ if (isset($_GET['delete_rack'])) {
     $rack_photo = sanitizeInput($row['rack_photo']);
     $client_id = intval($row['rack_client_id']);
 
+    enforceClientAccess();
+
     mysqli_query($mysqli,"DELETE FROM racks WHERE rack_id = $rack_id");
 
     // Delete Photo if exists
@@ -179,7 +190,6 @@ if (isset($_POST['add_rack_unit'])) {
 
     enforceUserPermission('module_support', 2);
 
-    $client_id = intval($_POST['client_id']);
     $rack_id = intval($_POST['rack_id']);
     $name = sanitizeInput($_POST['name']);
     $unit_start = intval($_POST['unit_start']);
@@ -191,6 +201,8 @@ if (isset($_POST['add_rack_unit'])) {
     $row = mysqli_fetch_assoc($sql);
     $rack_name = sanitizeInput($row['rack_name']);
     $client_id = intval($row['rack_client_id']);
+
+    enforceClientAccess();
 
     // **New Validation Check**
     if ($unit_start > $unit_end) {
@@ -227,7 +239,6 @@ if (isset($_POST['edit_rack_unit'])) {
     enforceUserPermission('module_support', 2);
 
     $unit_id = intval($_POST['unit_id']);
-    $client_id = intval($_POST['client_id']);
     $rack_id = intval($_POST['rack_id']);
     $name = sanitizeInput($_POST['name']);
     $unit_start = intval($_POST['unit_start']);
@@ -239,6 +250,8 @@ if (isset($_POST['edit_rack_unit'])) {
     $row = mysqli_fetch_assoc($sql);
     $rack_name = sanitizeInput($row['rack_name']);
     $client_id = intval($row['rack_client_id']);
+
+    enforceClientAccess();
 
     mysqli_query($mysqli,"UPDATE rack_units SET unit_device = '$name', unit_asset_id = $asset, unit_start_number = $unit_start, unit_end_number = $unit_end WHERE unit_id = $unit_id");
 
@@ -265,6 +278,8 @@ if (isset($_GET['remove_rack_unit'])) {
     $unit_device = sanitizeInput($row['unit_device']);
     $client_id = intval($row['rack_client_id']);
     $rack_id = intval($row['rack_id']);
+
+    enforceClientAccess();
 
     mysqli_query($mysqli,"DELETE FROM rack_units WHERE unit_id = $unit_id");
 

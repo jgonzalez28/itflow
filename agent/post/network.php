@@ -14,6 +14,10 @@ if (isset($_POST['add_network'])) {
 
     require_once 'network_model.php';
 
+    $client_id = intval($_POST['client_id']);
+
+    enforceClientAccess();
+
     mysqli_query($mysqli,"INSERT INTO networks SET network_name = '$name', network_description = '$description', network_vlan = $vlan, network = '$network', network_subnet = '$subnet', network_gateway = '$gateway', network_primary_dns = '$primary_dns', network_secondary_dns = '$secondary_dns', network_notes = '$notes', network_location_id = $location_id, network_client_id = $client_id");
 
     $network_id = mysqli_insert_id($mysqli);
@@ -32,8 +36,13 @@ if (isset($_POST['edit_network'])) {
 
     enforceUserPermission('module_support', 2);
 
-    $network_id = intval($_POST['network_id']);
     require_once 'network_model.php';
+
+    $network_id = intval($_POST['network_id']);
+
+    $client_id = intval(getFieldById('networks', $network_id, 'network_client_id'));
+
+    enforceClientAccess();
 
     mysqli_query($mysqli,"UPDATE networks SET network_name = '$name', network_description = '$description', network_vlan = $vlan, network = '$network', network_gateway = '$gateway', network_primary_dns = '$primary_dns', network_secondary_dns = '$secondary_dns', network_dhcp_range = '$dhcp_range', network_notes = '$notes', network_location_id = $location_id WHERE network_id = $network_id");
 
@@ -59,6 +68,8 @@ if (isset($_GET['archive_network'])) {
     $network_name = sanitizeInput($row['network_name']);
     $client_id = intval($row['network_client_id']);
 
+    enforceClientAccess();
+
     mysqli_query($mysqli,"UPDATE networks SET network_archived_at = NOW() WHERE network_id = $network_id");
 
     logAction("Network", "Archive", "$session_name archived network $network_name", $client_id, $network_id);
@@ -83,6 +94,8 @@ if (isset($_GET['restore_network'])) {
     $network_name = sanitizeInput($row['network_name']);
     $client_id = intval($row['network_client_id']);
 
+    enforceClientAccess();
+
     mysqli_query($mysqli,"UPDATE networks SET network_archived_at = NULL WHERE network_id = $network_id");
 
     logAction("Network", "Restore", "$session_name restored contact $contact_name", $client_id, $network_id);
@@ -106,6 +119,8 @@ if (isset($_GET['delete_network'])) {
     $row = mysqli_fetch_assoc($sql);
     $network_name = sanitizeInput($row['network_name']);
     $client_id = intval($row['network_client_id']);
+
+    enforceClientAccess();
 
     mysqli_query($mysqli,"DELETE FROM networks WHERE network_id = $network_id");
 
@@ -139,6 +154,8 @@ if (isset($_POST['bulk_delete_networks'])) {
             $network_name = sanitizeInput($row['network_name']);
             $client_id = intval($row['network_client_id']);
 
+            enforceClientAccess();
+
             mysqli_query($mysqli, "DELETE FROM networks WHERE network_id = $network_id AND network_client_id = $client_id");
 
             logAction("Network", "Delete", "$session_name deleted network $network_name", $client_id);
@@ -164,13 +181,14 @@ if (isset($_POST['export_networks_csv'])) {
         $client_query = "AND network_client_id = $client_id";
         $client_name = getFieldById('clients', $client_id, 'client_name');
         $file_name_prepend = "$client_name-";
+        enforceClientAccess();
     } else {
         $client_query = '';
         $client_id = 0;
         $file_name_prepend = "$session_company_name-";
     }
 
-    $sql = mysqli_query($mysqli,"SELECT * FROM networks WHERE network_archived_at IS NULL $client_query ORDER BY network_name ASC");
+    $sql = mysqli_query($mysqli,"SELECT * FROM networks LEFT JOIN client ON client_id = network_client_id WHERE network_archived_at IS NULL $client_query $access_permission_query ORDER BY network_name ASC");
 
     $num_rows = mysqli_num_rows($sql);
 
