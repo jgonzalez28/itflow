@@ -1277,7 +1277,7 @@ if (isset($_POST['export_contacts_csv'])) {
     }
 
     //Contacts
-    $sql = mysqli_query($mysqli,"SELECT * FROM contacts LEFT JOIN locations ON location_id = contact_location_id LEFT JOIN clients ON client_id = contact_client_id WHERE contact_archived_at IS NULL $client_query $access_permission_query ORDER BY contact_name ASC");
+    $sql = mysqli_query($mysqli,"SELECT * FROM contacts LEFT JOIN locations ON location_id = contact_location_id LEFT JOIN clients ON client_id = contact_client_id WHERE contact_archived_at IS NULL AND client_archived_at IS NULL $client_query $access_permission_query ORDER BY contact_name ASC");
     $num_rows = mysqli_num_rows($sql);
 
     if ($num_rows > 0) {
