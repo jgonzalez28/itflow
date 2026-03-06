@@ -18,6 +18,7 @@ if (isset($_POST['add_vendor_from_template'])) {
     // Permission check
     if ($client_id) {
         enforceUserPermission('module_client', 2);
+        enforceClientAccess();
     } else {
         enforceUserPermission('module_financial', 2);
     }
@@ -69,6 +70,7 @@ if (isset($_POST['add_vendor'])) {
     // Permission check
     if ($client_id) {
         enforceUserPermission('module_client', 2);
+        enforceClientAccess();
     } else {
         enforceUserPermission('module_financial', 2);
     }
@@ -100,6 +102,7 @@ if (isset($_POST['edit_vendor'])) {
     // Permission check
     if ($client_id) {
         enforceUserPermission('module_client', 2);
+        enforceClientAccess();
     } else {
         enforceUserPermission('module_financial', 2);
     }
@@ -129,6 +132,7 @@ if (isset($_GET['archive_vendor'])) {
     // Permission check
     if ($client_id) {
         enforceUserPermission('module_client', 2);
+        enforceClientAccess();
     } else {
         enforceUserPermission('module_financial', 2);
     }
@@ -158,6 +162,7 @@ if(isset($_GET['restore_vendor'])){
     // Permission check
     if ($client_id) {
         enforceUserPermission('module_client', 2);
+        enforceClientAccess();
     } else {
         enforceUserPermission('module_financial', 2);
     }
@@ -188,6 +193,7 @@ if (isset($_GET['delete_vendor'])) {
     // Permission check
     if ($client_id) {
         enforceUserPermission('module_client', 3);
+        enforceClientAccess();
     } else {
         enforceUserPermission('module_financial', 3);
     }
@@ -230,6 +236,7 @@ if (isset($_POST['bulk_archive_vendors'])) {
             // Permission check
             if ($client_id) {
                 enforceUserPermission('module_client', 2);
+                enforceClientAccess();
             } else {
                 enforceUserPermission('module_financial', 2);
             }
@@ -272,6 +279,7 @@ if (isset($_POST['bulk_restore_vendors'])) {
             // Permission check
             if ($client_id) {
                 enforceUserPermission('module_client', 2);
+                enforceClientAccess();
             } else {
                 enforceUserPermission('module_financial', 2);
             }
@@ -296,8 +304,6 @@ if (isset($_POST['bulk_delete_vendors'])) {
 
     validateCSRFToken($_POST['csrf_token']);
 
-    validateAdminRole();
-
     if (isset($_POST['vendor_ids'])) {
 
         // Get Selected Count
@@ -318,6 +324,7 @@ if (isset($_POST['bulk_delete_vendors'])) {
             // Permission check
             if ($client_id) {
                 enforceUserPermission('module_client', 3);
+                enforceClientAccess();
             } else {
                 enforceUserPermission('module_financial', 3);
             }
@@ -352,20 +359,16 @@ if (isset($_POST['export_vendors_csv'])) {
         $client_query = "WHERE vendor_client_id = $client_id";
         $client_name = getFieldById('clients', $client_id, 'client_name');
         $file_name_prepend = "$client_name-";
+        enforceUserPermission('module_client');
+        enforceClientAccess();
     } else {
         $client_query = "WHERE vendor_client_id = 0";
         $client_name = '';
         $file_name_prepend = "$session_company_name-";
-    }
-
-    // Permission check
-    if ($client_id) {
-        enforceUserPermission('module_client');
-    } else {
         enforceUserPermission('module_financial');
     }
 
-    $sql = mysqli_query($mysqli,"SELECT * FROM vendors $client_query ORDER BY vendor_name ASC");
+    $sql = mysqli_query($mysqli,"SELECT * FROM vendors LEFT JOIN clients ON client_id = vendor_client_id $client_query ORDER BY vendor_name ASC");
 
     $count = mysqli_num_rows($sql);
 
