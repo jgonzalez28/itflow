@@ -71,7 +71,6 @@ ob_start();
 <form action="post.php" method="post" enctype="multipart/form-data" autocomplete="off">
     <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
     <input type="hidden" name="asset_id" value="<?= $asset_id ?>">
-    <input type="hidden" name="client_id" value="<?= $client_id ?>">
 
     <div class="modal-body">
 
