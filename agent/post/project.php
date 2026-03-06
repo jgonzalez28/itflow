@@ -19,6 +19,11 @@ if (isset($_POST['add_project'])) {
     $client_id = intval($_POST['client_id']);
     $project_template_id = intval($_POST['project_template_id']);
 
+    // Don't Enforce Client Access if Project doesn't have an assigned client
+    if ($client_id) {
+        enforceClientAccess();
+    }
+
     // Sanitize Project Prefix
     $config_project_prefix = sanitizeInput($config_project_prefix);
 
@@ -102,6 +107,11 @@ if (isset($_POST['edit_project'])) {
     $project_manager = intval($_POST['project_manager']);
     $client_id = intval($_POST['client_id']);
 
+    // Don't Enforce Client Access if Project doesn't have an assigned client
+    if ($client_id) {
+        enforceClientAccess();
+    }
+
     mysqli_query($mysqli, "UPDATE projects SET project_name = '$project_name', project_description = '$project_description', project_due = '$due_date', project_manager = $project_manager, project_client_id = $client_id WHERE project_id = $project_id");
 
     logAction("Project", "Edit", "$session_name edited project $project_name", $client_id, $project_id);
@@ -125,6 +135,11 @@ if (isset($_GET['close_project'])) {
     $row = mysqli_fetch_assoc($sql);
     $project_name = sanitizeInput($row['project_name']);
     $client_id = intval($row['project_client_id']);
+
+    // Don't Enforce Client Access if Project doesn't have an assigned client
+    if ($client_id) {
+        enforceClientAccess();
+    }
 
     mysqli_query($mysqli, "UPDATE projects SET project_completed_at = NOW() WHERE project_id = $project_id");
 
@@ -150,6 +165,11 @@ if (isset($_GET['archive_project'])) {
     $project_name = sanitizeInput($row['project_name']);
     $client_id = intval($row['project_client_id']);
 
+    // Don't Enforce Client Access if Project doesn't have an assigned client
+    if ($client_id) {
+        enforceClientAccess();
+    }
+
     mysqli_query($mysqli, "UPDATE projects SET project_archived_at = NOW() WHERE project_id = $project_id");
 
     logAction("Project", "Archive", "$session_name archived project $project_name", $client_id, $project_id);
@@ -173,6 +193,11 @@ if (isset($_GET['restore_project'])) {
     $row = mysqli_fetch_assoc($sql);
     $project_name = sanitizeInput($row['project_name']);
     $client_id = sanitizeInput($row['project_client_id']);
+
+    // Don't Enforce Client Access if Project doesn't have an assigned client
+    if ($client_id) {
+        enforceClientAccess();
+    }
 
     mysqli_query($mysqli, "UPDATE projects SET project_archived_at = NULL WHERE project_id = $project_id");
 
@@ -198,6 +223,11 @@ if (isset($_GET['delete_project'])) {
     $project_name = sanitizeInput($row['project_name']);
     $client_id = intval($row['project_client_id']);
 
+    // Don't Enforce Client Access if Project doesn't have an assigned client
+    if ($client_id) {
+        enforceClientAccess();
+    }
+
     mysqli_query($mysqli, "DELETE FROM projects WHERE project_id = $project_id");
 
     logAction("Project", "Delete", "$session_name deleted project $project_name", $client_id, $project_id);
@@ -221,6 +251,11 @@ if (isset($_POST['link_ticket_to_project'])) {
     $row = mysqli_fetch_assoc($sql);
     $client_id = intval($row['project_client_id']);
     $project_name = sanitizeInput($row['project_name']);
+
+    // Don't Enforce Client Access if Project doesn't have an assigned client
+    if ($client_id) {
+        enforceClientAccess();
+    }
 
     // Add Tickets
     if (isset($_POST['tickets'])) {
@@ -267,6 +302,11 @@ if (isset($_POST['link_closed_ticket_to_project'])) {
     $row = mysqli_fetch_assoc($sql);
     $client_id = intval($row['project_client_id']);
     $project_name = sanitizeInput($row['project_name']);
+
+    // Don't Enforce Client Access if Project doesn't have an assigned client
+    if ($client_id) {
+        enforceClientAccess();
+    }
 
     // Get ticket details
     $sql = mysqli_query($mysqli, "SELECT ticket_id, ticket_prefix, ticket_number, ticket_subject, ticket_updated_at FROM tickets WHERE ticket_number = $ticket_number");
