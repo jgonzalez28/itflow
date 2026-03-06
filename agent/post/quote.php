@@ -16,6 +16,8 @@ if (isset($_POST['add_quote'])) {
 
     $client_id = intval($_POST['client']);
 
+    enforceClientAccess();
+
     // Atomically increment and get the new quote number
     mysqli_query($mysqli, "
         UPDATE settings
@@ -56,6 +58,8 @@ if (isset($_POST['add_quote_copy'])) {
     $client_id = intval($_POST['client']);
     $date = sanitizeInput($_POST['date']);
     $expire = sanitizeInput($_POST['expire']);
+
+    enforceClientAccess();
 
     $config_quote_prefix = sanitizeInput($config_quote_prefix);
 
@@ -139,6 +143,8 @@ if (isset($_POST['add_quote_to_invoice'])) {
     $client_id = intval($row['quote_client_id']);
     $category_id = intval($row['quote_category_id']);
 
+    enforceClientAccess();
+
     $config_invoice_prefix = sanitizeInput($config_invoice_prefix);
 
     // Atomically increment and get the new invoice number
@@ -186,8 +192,8 @@ if (isset($_POST['add_quote_to_invoice'])) {
     // Check & update any quote-ticket association
     $ticket_id = 0;
     $sql_ticket = "SELECT ticket_id, ticket_prefix, ticket_number
-        FROM tickets 
-        WHERE ticket_quote_id = $quote_id 
+        FROM tickets
+        WHERE ticket_quote_id = $quote_id
         LIMIT 1";
     $result_ticket = mysqli_query($mysqli, $sql_ticket);
 
@@ -220,6 +226,10 @@ if (isset($_POST['add_quote_item'])) {
     $price = floatval($_POST['price']);
     $tax_id = intval($_POST['tax_id']);
     $item_order = intval($_POST['item_order']);
+
+    $client_id = intval(getFieldById('quotes', $quote_id, 'quote_client_id'));
+
+    enforceClientAccess();
 
     $subtotal = $price * $qty;
 
@@ -279,6 +289,8 @@ if (isset($_POST['quote_note'])) {
     $quote_number = sanitizeInput($row['quote_number']);
     $client_id = intval($row['quote_client_id']);
 
+    enforceClientAccess();
+
     mysqli_query($mysqli,"UPDATE quotes SET quote_note = '$note' WHERE quote_id = $quote_id");
 
     logAction("Quote", "Edit", "$session_name added notes to quote $quote_prefix$quote_number", $client_id, $quote_id);
@@ -305,6 +317,8 @@ if (isset($_POST['edit_quote'])) {
     $quote_prefix = sanitizeInput($row['quote_prefix']);
     $quote_number = sanitizeInput($row['quote_number']);
     $client_id = intval($row['quote_client_id']);
+
+    enforceClientAccess();
 
     //Calculate the new quote amount
     $sql = mysqli_query($mysqli,"SELECT * FROM invoice_items WHERE item_quote_id = $quote_id");
@@ -339,6 +353,8 @@ if (isset($_GET['delete_quote'])) {
     $quote_prefix = sanitizeInput($row['quote_prefix']);
     $quote_number = sanitizeInput($row['quote_number']);
     $client_id = intval($row['quote_client_id']);
+
+    enforceClientAccess();
 
     mysqli_query($mysqli,"DELETE FROM quotes WHERE quote_id = $quote_id");
 
@@ -391,6 +407,8 @@ if (isset($_GET['delete_quote_item'])) {
     $quote_number = sanitizeInput($row['quote_number']);
     $client_id = intval($row['quote_client_id']);
 
+    enforceClientAccess();
+
     $new_quote_amount = floatval($row['quote_amount']) - $item_total;
 
     mysqli_query($mysqli,"UPDATE quotes SET quote_amount = $new_quote_amount WHERE quote_id = $quote_id");
@@ -419,6 +437,8 @@ if (isset($_GET['mark_quote_sent'])) {
     $quote_number = sanitizeInput($row['quote_number']);
     $client_id = intval($row['quote_client_id']);
 
+    enforceClientAccess();
+
     mysqli_query($mysqli,"UPDATE quotes SET quote_status = 'Sent' WHERE quote_id = $quote_id");
 
     mysqli_query($mysqli,"INSERT INTO history SET history_status = 'Sent', history_description = 'Quote marked sent', history_quote_id = $quote_id");
@@ -444,6 +464,8 @@ if (isset($_GET['accept_quote'])) {
     $quote_prefix = sanitizeInput($row['quote_prefix']);
     $quote_number = sanitizeInput($row['quote_number']);
     $client_id = intval($row['quote_client_id']);
+
+    enforceClientAccess();
 
     mysqli_query($mysqli,"UPDATE quotes SET quote_status = 'Accepted' WHERE quote_id = $quote_id");
 
@@ -472,6 +494,8 @@ if (isset($_GET['decline_quote'])) {
     $quote_prefix = sanitizeInput($row['quote_prefix']);
     $quote_number = sanitizeInput($row['quote_number']);
     $client_id = intval($row['quote_client_id']);
+
+    enforceClientAccess();
 
     mysqli_query($mysqli,"UPDATE quotes SET quote_status = 'Declined' WHERE quote_id = $quote_id");
 
@@ -515,6 +539,8 @@ if (isset($_GET['email_quote'])) {
     $client_name = sanitizeInput($row['client_name']);
     $contact_name = sanitizeInput($row['contact_name']);
     $contact_email = sanitizeInput($row['contact_email']);
+
+    enforceClientAccess();
 
     $sql = mysqli_query($mysqli,"SELECT * FROM companies WHERE company_id = 1");
     $row = mysqli_fetch_assoc($sql);
@@ -581,6 +607,8 @@ if (isset($_GET['mark_quote_invoiced'])) {
     $quote_number = sanitizeInput($row['quote_number']);
     $client_id = intval($row['quote_client_id']);
 
+    enforceClientAccess();
+
     mysqli_query($mysqli,"UPDATE quotes SET quote_status = 'Invoiced' WHERE quote_id = $quote_id");
 
     mysqli_query($mysqli,"INSERT INTO history SET history_status = 'Invoiced', history_description = 'Quote marked as invoiced', history_quote_id = $quote_id");
@@ -605,13 +633,14 @@ if(isset($_POST['export_quotes_csv'])){
         // Get Client Name for logging
         $client_name = getFieldById('clients', $client_id, 'client_name');
         $file_name_prepend = "$client_name-";
+        enforceClientAccess();
     } else {
-        $client_query = '';
+        $client_query = 'WHERE 1=1';
         $client_name = '';
         $file_name_prepend = "$session_company_name";
     }
 
-    $sql = mysqli_query($mysqli,"SELECT * FROM quotes $client_query ORDER BY quote_number ASC");
+    $sql = mysqli_query($mysqli,"SELECT * FROM quotes LEFT JOIN clients ON client_id = quote_client_id $client_query $access_permission_query ORDER BY quote_number ASC");
 
     $num_rows = mysqli_num_rows($sql);
 
@@ -706,6 +735,8 @@ if (isset($_GET['export_quote_pdf'])) {
     if ($client_net_terms == 0) {
         $client_net_terms = $config_default_net_terms;
     }
+
+    enforceClientAccess();
 
     $sql = mysqli_query($mysqli, "SELECT * FROM companies, settings WHERE companies.company_id = settings.company_id AND companies.company_id = 1");
     $row = mysqli_fetch_assoc($sql);
