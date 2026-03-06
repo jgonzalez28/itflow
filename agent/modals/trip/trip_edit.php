@@ -131,42 +131,6 @@ ob_start();
             </div>
         </div>
 
-        <?php if (isset($_GET['client_id'])) { ?>
-            <input type="hidden" name="client" value="<?php echo $client_id; ?>">
-        <?php } else { ?>
-
-            <div class="form-group">
-                <label>Client</label>
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fa fa-fw fa-user"></i></span>
-                    </div>
-                    <select class="form-control select2" name="client">
-                        <option value="">- Client (Optional) -</option>
-                        <?php
-
-                        $sql_clients = mysqli_query($mysqli, "SELECT * FROM clients WHERE client_archived_at > '$trip_created_at' OR client_archived_at IS NULL ORDER BY client_archived_at ASC, client_name ASC");
-                        while ($row = mysqli_fetch_assoc($sql_clients)) {
-                            $client_id_select = intval($row['client_id']);
-                            $client_name_select = nullable_htmlentities($row['client_name']);
-                            $client_archived_at = nullable_htmlentities($row['client_archived_at']);
-                            if (empty($client_archived_at)) {
-                                $client_archived_display = "";
-                            } else {
-                                $client_archived_display = "Archived - ";
-                            }
-                            ?>
-                            <option <?php if ($client_id == $client_id_select) { echo "selected"; } ?> value="<?php echo $client_id_select; ?>"><?php echo "$client_archived_display$client_name_select"; ?></option>
-
-                            <?php
-                        }
-                        ?>
-                    </select>
-                </div>
-            </div>
-
-        <?php } ?>
-
     </div>
 
     <div class="modal-footer">

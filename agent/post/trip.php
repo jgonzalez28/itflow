@@ -14,7 +14,7 @@ if (isset($_POST['add_trip'])) {
 
     require_once 'trip_model.php';
 
-    $client_id = intval($_POST['client']);
+    $client_id = intval($_POST['client_id']);
 
     if ($client_id) {
         enforceClientAccess();
