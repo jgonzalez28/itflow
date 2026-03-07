@@ -52,26 +52,6 @@ ob_start();
             <div class="tab-pane fade show active" id="pills-rack-details<?php echo $rack_id; ?>">
 
                 <div class="form-group">
-                    <label>Name <strong class="text-danger">*</strong></label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fa fa-fw fa-server"></i></span>
-                        </div>
-                        <input type="text" class="form-control" name="name" placeholder="Rack name" maxlength="200" value="<?php echo $rack_name; ?>" required autofocus>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Description</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fa fa-fw fa-align-left"></i></span>
-                        </div>
-                        <input type="text" class="form-control" name="description" placeholder="Description of the rack" value="<?php echo $rack_description; ?>">
-                    </div>
-                </div>
-
-                <div class="form-group">
                     <label>Type <strong class="text-danger">*</strong></label>
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -83,6 +63,26 @@ ob_start();
                                 <option <?php if ($rack_type == $rack_type_select) { echo "selected"; } ?>><?php echo $rack_type_select; ?></option>
                             <?php } ?>
                         </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Name <strong class="text-danger">*</strong></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-fw fa-server"></i></span>
+                        </div>
+                        <input type="text" class="form-control" name="name" placeholder="Rack name" maxlength="200" value="<?php echo $rack_name; ?>" required autofocus>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Number of Units <strong class="text-danger">*</strong></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-fw fa-sort-numeric-up-alt"></i></span>
+                        </div>
+                        <input type="number" class="form-control" name="units" placeholder="Number of Units" min="1" max="70" value="<?php echo $rack_units; ?>" required>
                     </div>
                 </div>
 
@@ -107,26 +107,6 @@ ob_start();
                 </div>
 
                 <div class="form-group">
-                    <label>Number of Units <strong class="text-danger">*</strong></label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fa fa-fw fa-sort-numeric-up-alt"></i></span>
-                        </div>
-                        <input type="number" class="form-control" name="units" placeholder="Number of Units" min="1" max="70" value="<?php echo $rack_units; ?>" required>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Physical Location</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fa fa-fw fa-map-marker-alt"></i></span>
-                        </div>
-                        <input type="text" class="form-control" name="physical_location" placeholder="Physical location eg. Floor 2, Closet B" maxlength="200" value="<?php echo $rack_physical_location; ?>">
-                    </div>
-                </div>
-
-                <div class="form-group">
                     <label>Location</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -145,6 +125,26 @@ ob_start();
                             <?php } ?>
 
                         </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Physical Location</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-fw fa-map-marker-alt"></i></span>
+                        </div>
+                        <input type="text" class="form-control" name="physical_location" placeholder="Physical location eg. Floor 2, Closet B" maxlength="200" value="<?php echo $rack_physical_location; ?>">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Description</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-fw fa-align-left"></i></span>
+                        </div>
+                        <input type="text" class="form-control" name="description" placeholder="Description of the rack" value="<?php echo $rack_description; ?>">
                     </div>
                 </div>
 
