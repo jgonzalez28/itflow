@@ -109,7 +109,7 @@ ob_start();
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fa fa-fw fa-layer-group"></i></span>
                         </div>
-                        <input type="number" min="1" max="4094" name="vlan" placeholder="ex. 20" value="<?= $network_vlan ?>">
+                        <input type="text" class="form-control" inputmode="numeric" name="vlan" placeholder="e.g. 20" value="<?= $network_vlan ?>">
                     </div>
                 </div>
 
@@ -134,12 +134,12 @@ ob_start();
                 </div>
 
                 <div class="form-group">
-                    <label>Gateway <strong class="text-danger">*</strong></label>
+                    <label>Gateway</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fa fa-fw fa-route"></i></span>
                         </div>
-                        <input type="text" class="form-control" name="gateway" placeholder="192.168.1.1 or 2001:db8::1" maxlength="200" value="<?= $network_gateway ?>" required>
+                        <input type="text" class="form-control" name="gateway" placeholder="192.168.1.1 or 2001:db8::1" maxlength="200" value="<?= $network_gateway ?>">
                     </div>
                 </div>
 

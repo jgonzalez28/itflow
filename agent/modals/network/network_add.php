@@ -121,7 +121,7 @@ ob_start();
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fa fa-fw fa-layer-group"></i></span>
                         </div>
-                        <input type="number" min="1" max="4094" class="form-control" name="vlan" placeholder="ex. 20">
+                        <input type="text" class="form-control" inputmode="numeric" name="vlan" placeholder="e.g. 20">
                     </div>
                 </div>
 
