@@ -14,6 +14,8 @@ if (isset($_POST['add_contact'])) {
 
     require_once 'contact_model.php';
 
+    $client_id = intval($_POST['client_id']);
+
     enforceClientAccess($client_id);
 
     // Create User Account
@@ -88,16 +90,17 @@ if (isset($_POST['edit_contact'])) {
 
     require_once 'contact_model.php';
 
-    enforceClientAccess();
-
     $contact_id = intval($_POST['contact_id']);
     $send_email = intval($_POST['send_email'] ?? 0);
 
-    // Get Exisiting Contact Photo and contact_user_id
-    $sql = mysqli_query($mysqli,"SELECT contact_photo, contact_user_id FROM contacts WHERE contact_id = $contact_id");
+    // Get Contact Info
+    $sql = mysqli_query($mysqli,"SELECT contact_photo, contact_user_id, contact_client_id FROM contacts WHERE contact_id = $contact_id");
     $row = mysqli_fetch_assoc($sql);
     $existing_file_name = sanitizeInput($row['contact_photo']);
     $contact_user_id = intval($row['contact_user_id']);
+    $client_id = intval($row['contact_client_id']);
+
+    enforceClientAccess();
 
     if (!file_exists("../uploads/clients/$client_id")) {
         mkdir("../uploads/clients/$client_id");

@@ -14,6 +14,8 @@ if(isset($_POST['add_location'])){
 
     require_once 'location_model.php';
 
+    $client_id = intval($_POST['client_id']);
+
     enforceClientAccess();
 
     if(!file_exists("../uploads/clients/$client_id")) {

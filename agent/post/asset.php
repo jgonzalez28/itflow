@@ -14,6 +14,8 @@ if (isset($_POST['add_asset'])) {
 
     require_once 'asset_model.php';
 
+    $client_id = intval($_POST['client_id']);
+
     enforceClientAccess();
 
     $alert_extended = "";

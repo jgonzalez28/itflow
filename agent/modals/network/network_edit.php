@@ -31,7 +31,7 @@ ob_start();
 <form action="post.php" method="post" autocomplete="off">
     <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
     <input type="hidden" name="network_id" value="<?= $network_id ?>">
-    <input type="hidden" name="client_id" value="<?= $client_id ?>">
+
     <div class="modal-body">
 
         <ul class="nav nav-pills nav-justified mb-3">
