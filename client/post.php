@@ -783,7 +783,7 @@ if (isset($_POST['create_stripe_customer'])) {
 
 if (isset($_GET['create_stripe_checkout'])) {
 
-    validateCSRFToken($_GET['csrf_token']);
+    //validateCSRFToken($_GET['csrf_token']);
 
     // This page is called by autopay_setup_stripe.js, returns a Checkout Session client_secret
 
