@@ -612,6 +612,27 @@ if (isset($_POST['update_task_templates_order'])) {
     exit;
 }
 
+if (isset($_POST['update_project_template_ticket_order'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
+
+    enforceUserPermission('module_support', 2);
+
+    $positions = $_POST['positions'];
+    $project_template_id = intval($_POST['project_template_id']);
+
+    foreach ($positions as $position) {
+        $id = intval($position['id']);
+        $order = intval($position['order']);
+
+        mysqli_query($mysqli, "UPDATE project_template_ticket_templates SET ticket_template_order = $order WHERE project_template_id = $project_template_id AND ticket_template_id = $id");
+    }
+
+    // return a response
+    echo json_encode(['status' => 'success']);
+    exit;
+}
+
 if (isset($_POST['update_quote_items_order'])) {
     // Update multiple quote items order
 

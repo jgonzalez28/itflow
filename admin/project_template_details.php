@@ -130,10 +130,9 @@ if (isset($_GET['project_template_id'])) {
 
                 <h5 class="text-secondary"><i class="fa fa-fw fa-life-ring mr-2"></i>Project Ticket Templates</h5>
                 <div class="table-responsive-sm">
-                    <table class="table table-striped table-borderless table-hover">
+                    <table class="table table-striped table-borderless table-hover" id="ticket_templates">
                         <thead class="text-dark">
                         <tr>
-                            <th>Order</th>
                             <th>Template Name</th>
                             <th>Description</th>
                             <th>Ticket Subject</th>
@@ -154,17 +153,9 @@ if (isset($_GET['project_template_id'])) {
 
                             ?>
 
-                            <tr>
-                                <td class="pr-0">
-                                    <form action="post.php" method="post" autocomplete="off">
-                                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
-                                        <input type="hidden" name="edit_ticket_template_order">
-                                        <input type="hidden" name="project_template_id" value="<?php echo $project_template_id; ?>">
-                                        <input type="hidden" name="ticket_template_id" value="<?php echo $ticket_template_id; ?>">
-                                        <input type="text" class="form-control pr-0" onchange="this.form.submit()" name="order" value="<?php echo $ticket_template_order; ?>">
-                                    </form>
-                                </td>
+                            <tr data-task-id="<?php echo $ticket_template_id; ?>">
                                 <td>
+                                    <a href="#" class="drag-handle"><i class="fas fa-bars text-muted mr-2"></i></a>
                                     <a href="ticket_template_details.php?ticket_template_id=<?php echo $ticket_template_id; ?>">
                                         <?php echo $ticket_template_name; ?>
                                     </a>
@@ -220,6 +211,28 @@ if (isset($_GET['project_template_id'])) {
     </div> <!-- End col-3 -->
 
 </div> <!-- End row -->
+
+<script src="../plugins/SortableJS/Sortable.min.js"></script>
+<script>
+new Sortable(document.querySelector('table#ticket_templates tbody'), {
+    handle: '.drag-handle',
+    animation: 150,
+    onEnd: function (evt) {
+        const rows = document.querySelectorAll('table#ticket_templates tbody tr');
+        const positions = Array.from(rows).map((row, index) => ({
+            id: row.dataset.taskId,
+            order: index
+        }));
+
+        $.post('/agent/ajax.php', {
+            update_project_template_ticket_order: true,
+            csrf_token: '<?= $_SESSION['csrf_token'] ?>',
+            project_template_id: <?php echo $project_template_id; ?>,
+            positions: positions
+        });
+    }
+});
+</script>
 
 <?php
 
