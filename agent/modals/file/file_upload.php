@@ -18,8 +18,9 @@ ob_start();
 </div>
 <form action="post.php" method="post" enctype="multipart/form-data" autocomplete="off">
     <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
-    <input type="hidden" name="contact" value="<?php echo $contact_id; ?>">
-    <input type="hidden" name="asset" value="<?php echo $asset_id; ?>">
+    <input type="hidden" name="client_id" value="<?php echo $client_id; ?>">
+    <input type="hidden" name="contact_id" value="<?php echo $contact_id; ?>">
+    <input type="hidden" name="asset_id" value="<?php echo $asset_id; ?>">
     <div class="modal-body">
 
         <div class="form-group">

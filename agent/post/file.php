@@ -16,8 +16,8 @@ if (isset($_POST['upload_files'])) {
     $client_id   = intval($_POST['client_id']);
     $folder_id   = intval($_POST['folder_id']);
     $description = sanitizeInput($_POST['description']);
-    $contact_id = intval($_POST['contact'] ?? 0);
-    $asset_id = intval($_POST['asset'] ?? 0);
+    $contact_id = intval($_POST['contact_id'] ?? 0);
+    $asset_id = intval($_POST['asset_id'] ?? 0);
     $client_dir  = "../uploads/clients/$client_id";
 
     enforceClientAccess();
