@@ -72,6 +72,21 @@ ob_start();
                 <?php } ?>
 
                 <div class="form-group">
+                    <label>Type <strong class="text-danger">*</strong></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-fw fa-tag"></i></span>
+                        </div>
+                        <select class="form-control select2" name="type" required>
+                            <option value="">- Select Type -</option>
+                            <?php foreach ($software_types_array as $software_type) { ?>
+                                <option><?php echo $software_type; ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label>Software Name <strong class="text-danger">*</strong></label>
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -88,16 +103,6 @@ ob_start();
                             <span class="input-group-text"><i class="fa fa-fw fa-cube"></i></span>
                         </div>
                         <input type="text" class="form-control" name="version" placeholder="Software version" maxlength="200">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Description</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fa fa-fw fa-align-left"></i></span>
-                        </div>
-                        <input type="text" class="form-control" name="description" placeholder="Short description">
                     </div>
                 </div>
 
@@ -125,17 +130,12 @@ ob_start();
                 <?php } ?>
 
                 <div class="form-group">
-                    <label>Type <strong class="text-danger">*</strong></label>
+                    <label>Description</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fa fa-fw fa-tag"></i></span>
+                            <span class="input-group-text"><i class="fa fa-fw fa-align-left"></i></span>
                         </div>
-                        <select class="form-control select2" name="type" required>
-                            <option value="">- Select Type -</option>
-                            <?php foreach ($software_types_array as $software_type) { ?>
-                                <option><?php echo $software_type; ?></option>
-                            <?php } ?>
-                        </select>
+                        <input type="text" class="form-control" name="description" placeholder="Short description">
                     </div>
                 </div>
 
