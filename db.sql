@@ -1784,6 +1784,33 @@ CREATE TABLE `quote_files` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `quote_items`
+--
+
+DROP TABLE IF EXISTS `quote_items`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `quote_items` (
+  `item_id` int(11) NOT NULL AUTO_INCREMENT,
+  `item_name` varchar(200) NOT NULL,
+  `item_description` text DEFAULT NULL,
+  `item_quantity` decimal(15,2) NOT NULL DEFAULT 0.00,
+  `item_price` decimal(15,2) NOT NULL DEFAULT 0.00,
+  `item_subtotal` decimal(15,2) NOT NULL DEFAULT 0.00,
+  `item_tax` decimal(15,2) NOT NULL DEFAULT 0.00,
+  `item_total` decimal(15,2) NOT NULL DEFAULT 0.00,
+  `item_order` int(11) NOT NULL DEFAULT 0,
+  `item_created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `item_updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
+  `item_archived_at` datetime DEFAULT NULL,
+  `item_tax_id` int(11) NOT NULL DEFAULT 0,
+  `item_product_id` int(11) NOT NULL DEFAULT 0,
+  `item_quote_id` int(11) NOT NULL,
+  PRIMARY KEY (`item_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `quotes`
 --
 
@@ -1912,6 +1939,33 @@ CREATE TABLE `recurring_expenses` (
   `recurring_expense_category_id` int(11) NOT NULL,
   `recurring_expense_account_id` int(11) NOT NULL,
   PRIMARY KEY (`recurring_expense_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `recurring_invoice_items`
+--
+
+DROP TABLE IF EXISTS `recurring_invoice_items`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `recurring_invoice_items` (
+  `item_id` int(11) NOT NULL AUTO_INCREMENT,
+  `item_name` varchar(200) NOT NULL,
+  `item_description` text DEFAULT NULL,
+  `item_quantity` decimal(15,2) NOT NULL DEFAULT 0.00,
+  `item_price` decimal(15,2) NOT NULL DEFAULT 0.00,
+  `item_subtotal` decimal(15,2) NOT NULL DEFAULT 0.00,
+  `item_tax` decimal(15,2) NOT NULL DEFAULT 0.00,
+  `item_total` decimal(15,2) NOT NULL DEFAULT 0.00,
+  `item_order` int(11) NOT NULL DEFAULT 0,
+  `item_created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `item_updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
+  `item_archived_at` datetime DEFAULT NULL,
+  `item_tax_id` int(11) NOT NULL DEFAULT 0,
+  `item_product_id` int(11) NOT NULL DEFAULT 0,
+  `item_recurring_invoice_id` int(11) NOT NULL,
+  PRIMARY KEY (`item_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -3069,4 +3123,4 @@ CREATE TABLE `vendors` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-02-03 22:22:07
+-- Dump completed on 2026-03-07 18:20:44
