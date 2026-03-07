@@ -418,7 +418,7 @@ if (isset($_POST['invoice_note'])) {
 
 }
 
-if (isset($_POST['edit_item'])) {
+if (isset($_POST['edit_invoice_item'])) {
 
     validateCSRFToken($_POST['csrf_token']);
 
@@ -446,75 +446,30 @@ if (isset($_POST['edit_item'])) {
     $total = $subtotal + $tax_amount;
 
     // Determine what type of line item
-    $sql = mysqli_query($mysqli,"SELECT item_invoice_id, item_quote_id, item_recurring_invoice_id FROM invoice_items WHERE item_id = $item_id");
+    $sql = mysqli_query($mysqli,"SELECT item_invoice_id FROM invoice_items WHERE item_id = $item_id");
     $row = mysqli_fetch_assoc($sql);
     $invoice_id = intval($row['item_invoice_id']);
-    $quote_id = intval($row['item_quote_id']);
-    $recurring_invoice_id = intval($row['item_recurring_invoice_id']);
 
-    if ($invoice_id) {
-        //Get Discount Amount
-        $sql = mysqli_query($mysqli,"SELECT * FROM invoices WHERE invoice_id = $invoice_id");
-        $row = mysqli_fetch_assoc($sql);
-        $invoice_prefix = sanitizeInput($row['invoice_prefix']);
-        $invoice_number = intval($row['invoice_number']);
-        $client_id = intval($row['invoice_client_id']);
-        $invoice_discount = floatval($row['invoice_discount_amount']);
-        enforceClientAccess();
-    } elseif ($quote_id) {
-        //Get Discount Amount
-        $sql = mysqli_query($mysqli,"SELECT * FROM quotes WHERE quote_id = $quote_id");
-        $row = mysqli_fetch_assoc($sql);
-        $quote_prefix = sanitizeInput($row['quote_prefix']);
-        $quote_number = intval($row['quote_number']);
-        $client_id = intval($row['quote_client_id']);
-        $quote_discount = floatval($row['quote_discount_amount']);
-        enforceClientAccess();
-    } else {
-        //Get Discount Amount
-        $sql = mysqli_query($mysqli,"SELECT * FROM recurring_invoices WHERE recurring_invoice_id = $recurring_invoice_id");
-        $row = mysqli_fetch_assoc($sql);
-        $recurring_invoice_prefix = sanitizeInput($row['recurring_invoice_prefix']);
-        $recurring_invoice_number = intval($row['recurring_invoice_number']);
-        $client_id = intval($row['recurring_invoice_client_id']);
-        $recurring_invoice_discount = floatval($row['recurring_invoice_discount_amount']);
-        enforceClientAccess();
-    }
+    //Get Discount Amount
+    $sql = mysqli_query($mysqli,"SELECT * FROM invoices WHERE invoice_id = $invoice_id");
+    $row = mysqli_fetch_assoc($sql);
+    $invoice_prefix = sanitizeInput($row['invoice_prefix']);
+    $invoice_number = intval($row['invoice_number']);
+    $client_id = intval($row['invoice_client_id']);
+    $invoice_discount = floatval($row['invoice_discount_amount']);
+
+    enforceClientAccess();
 
     mysqli_query($mysqli,"UPDATE invoice_items SET item_name = '$name', item_description = '$description', item_quantity = $qty, item_price = $price, item_subtotal = $subtotal, item_tax = $tax_amount, item_total = $total, item_tax_id = $tax_id WHERE item_id = $item_id");
 
-    if ($invoice_id) {
-        //Update Invoice Balances by tallying up invoice items
-        $sql_invoice_total = mysqli_query($mysqli,"SELECT SUM(item_total) AS invoice_total FROM invoice_items WHERE item_invoice_id = $invoice_id");
-        $row = mysqli_fetch_assoc($sql_invoice_total);
-        $new_invoice_amount = floatval($row['invoice_total']) - $invoice_discount;
+    //Update Invoice Balances by tallying up invoice items
+    $sql_invoice_total = mysqli_query($mysqli,"SELECT SUM(item_total) AS invoice_total FROM invoice_items WHERE item_invoice_id = $invoice_id");
+    $row = mysqli_fetch_assoc($sql_invoice_total);
+    $new_invoice_amount = floatval($row['invoice_total']) - $invoice_discount;
 
-        mysqli_query($mysqli,"UPDATE invoices SET invoice_amount = $new_invoice_amount WHERE invoice_id = $invoice_id");
+    mysqli_query($mysqli,"UPDATE invoices SET invoice_amount = $new_invoice_amount WHERE invoice_id = $invoice_id");
 
-        logAction("Invoice", "Edit", "$session_name edited item $name on invoice $invoice_prefix$invoice_number", $client_id, $invoice_id);
-
-    } elseif ($quote_id) {
-        //Update Quote Balances by tallying up items
-        $sql_quote_total = mysqli_query($mysqli,"SELECT SUM(item_total) AS quote_total FROM invoice_items WHERE item_quote_id = $quote_id");
-        $row = mysqli_fetch_assoc($sql_quote_total);
-        $new_quote_amount = floatval($row['quote_total']) - $quote_discount;
-
-        mysqli_query($mysqli,"UPDATE quotes SET quote_amount = $new_quote_amount WHERE quote_id = $quote_id");
-
-        logAction("Quote", "Edit", "$session_name edited item $name on quote $quote_prefix$quote_number", $client_id, $quote_id);
-
-    } else {
-        //Update Invoice Balances by tallying up invoice items
-        $sql_recurring_invoice_total = mysqli_query($mysqli,"SELECT SUM(item_total) AS recurring_invoice_total FROM invoice_items WHERE item_recurring_invoice_id = $recurring_invoice_id");
-        $row = mysqli_fetch_assoc($sql_recurring_invoice_total);
-        $new_recurring_invoice_amount = floatval($row['recurring_invoice_total']) - $recurring_invoice_discount;
-
-        mysqli_query($mysqli,"UPDATE recurring_invoices SET recurring_invoice_amount = $new_recurring_invoice_amount WHERE recurring_invoice_id = $recurring_invoice_id");
-
-        // Logging
-        logAction("Recurring Invoice", "Edit", "$session_name edited item $name on recurring invoice $recurring_invoice_prefix$recurring_invoice_number", $client_id, $recurring_invoice_id);
-
-    }
+    logAction("Invoice", "Edit", "$session_name edited item $name on invoice $invoice_prefix$invoice_number", $client_id, $invoice_id);
 
     flash_alert("Item <strong>$name</strong> updated");
 

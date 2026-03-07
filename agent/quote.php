@@ -337,7 +337,7 @@ if (isset($_GET['quote_id'])) {
                                                             </button>
                                                             <div class="dropdown-menu">
                                                                 <a class="dropdown-item ajax-modal" href="#"
-                                                                    data-modal-url="modals/invoice/item_edit.php?id=<?= $item_id ?>">
+                                                                    data-modal-url="modals/quote/quote_item_edit.php?id=<?= $item_id ?>">
                                                                     <i class="fa fa-fw fa-edit mr-2"></i>Edit
                                                                 </a>
                                                                 <div class="dropdown-divider"></div>

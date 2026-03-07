@@ -273,6 +273,65 @@ if (isset($_POST['add_quote_item'])) {
 
 }
 
+if (isset($_POST['edit_quote_item'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
+
+    enforceUserPermission('module_sales', 2);
+
+    $item_id = intval($_POST['item_id']);
+    $name = sanitizeInput($_POST['name']);
+    $description = sanitizeInput($_POST['description']);
+    $qty = floatval($_POST['qty']);
+    $price = floatval($_POST['price']);
+    $tax_id = intval($_POST['tax_id']);
+    $product_id = intval($_POST['product_id']);
+
+    $subtotal = $price * $qty;
+
+    if ($tax_id > 0) {
+        $sql = mysqli_query($mysqli,"SELECT * FROM taxes WHERE tax_id = $tax_id");
+        $row = mysqli_fetch_assoc($sql);
+        $tax_percent = floatval($row['tax_percent']);
+        $tax_amount = $subtotal * $tax_percent / 100;
+    } else {
+        $tax_amount = 0;
+    }
+
+    $total = $subtotal + $tax_amount;
+
+    // Get Quote ID from Item ID
+    $sql = mysqli_query($mysqli,"SELECT item_quote_id FROM invoice_items WHERE item_id = $item_id");
+    $row = mysqli_fetch_assoc($sql);
+    $quote_id = intval($row['item_quote_id']);
+
+    //Get Discount Amount
+    $sql = mysqli_query($mysqli,"SELECT * FROM quotes WHERE quote_id = $quote_id");
+    $row = mysqli_fetch_assoc($sql);
+    $quote_prefix = sanitizeInput($row['quote_prefix']);
+    $quote_number = intval($row['quote_number']);
+    $client_id = intval($row['quote_client_id']);
+    $quote_discount = floatval($row['quote_discount_amount']);
+
+    enforceClientAccess();
+
+    mysqli_query($mysqli,"UPDATE invoice_items SET item_name = '$name', item_description = '$description', item_quantity = $qty, item_price = $price, item_subtotal = $subtotal, item_tax = $tax_amount, item_total = $total, item_tax_id = $tax_id WHERE item_id = $item_id");
+
+    //Update Quote Balances by tallying up items
+    $sql_quote_total = mysqli_query($mysqli,"SELECT SUM(item_total) AS quote_total FROM invoice_items WHERE item_quote_id = $quote_id");
+    $row = mysqli_fetch_assoc($sql_quote_total);
+    $new_quote_amount = floatval($row['quote_total']) - $quote_discount;
+
+    mysqli_query($mysqli,"UPDATE quotes SET quote_amount = $new_quote_amount WHERE quote_id = $quote_id");
+
+    logAction("Quote", "Edit", "$session_name edited item $name on quote $quote_prefix$quote_number", $client_id, $quote_id);
+
+    flash_alert("Item <strong>$name</strong> updated");
+
+    redirect();
+
+}
+
 if (isset($_POST['quote_note'])) {
 
     validateCSRFToken($_POST['csrf_token']);
