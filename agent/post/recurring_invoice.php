@@ -76,7 +76,7 @@ if (isset($_POST['add_recurring_invoice'])) {
 
     enforceUserPermission('module_sales', 2);
 
-    $client_id = intval($_POST['client']);
+    $client_id = intval($_POST['client_id']);
     $frequency = sanitizeInput($_POST['frequency']);
     $start_date = sanitizeInput($_POST['start_date']);
     $category = intval($_POST['category']);

@@ -12,23 +12,23 @@ if (isset($_POST['add_ticket'])) {
 
     enforceUserPermission('module_support', 2);
 
-    $client_id = intval($_POST['client']);
+    $client_id = intval($_POST['client_id']);
     $assigned_to = intval($_POST['assigned_to']);
     if ($assigned_to == 0) {
         $ticket_status = 1;
     } else {
         $ticket_status = 2;
     }
-    $contact = intval($_POST['contact']);
-    $category_id = intval($_POST['category']);
+    $contact_id = intval($_POST['contact_id']);
+    $category_id = intval($_POST['category_id']);
     $subject = sanitizeInput($_POST['subject']);
     $priority = sanitizeInput($_POST['priority']);
     $details = mysqli_real_escape_string($mysqli, $_POST['details']);
     $vendor_ticket_number = sanitizeInput($_POST['vendor_ticket_number']);
-    $vendor_id = intval($_POST['vendor']);
-    $asset_id = intval($_POST['asset']);
-    $location_id = intval($_POST['location']);
-    $project_id = intval($_POST['project']);
+    $vendor_id = intval($_POST['vendor_id']);
+    $asset_id = intval($_POST['asset_id']);
+    $location_id = intval($_POST['location_id']);
+    $project_id = intval($_POST['project_id']);
     $use_primary_contact = intval($_POST['use_primary_contact'] ?? 0);
     $ticket_template_id = intval($_POST['ticket_template_id']);
     $billable = intval($_POST['billable'] ?? 0);
@@ -51,7 +51,7 @@ if (isset($_POST['add_ticket'])) {
     if ($use_primary_contact == 1) {
         $sql = mysqli_query($mysqli, "SELECT contact_id FROM contacts WHERE contact_client_id = $client_id AND contact_primary = 1");
         $row = mysqli_fetch_assoc($sql);
-        $contact = intval($row['contact_id']);
+        $contact_id = intval($row['contact_id']);
     }
 
     // Atomically increment and get the new ticket number
@@ -74,7 +74,7 @@ if (isset($_POST['add_ticket'])) {
     //Generate a unique URL key for clients to access
     $url_key = randomString(32);
 
-    mysqli_query($mysqli, "INSERT INTO tickets SET ticket_prefix = '$config_ticket_prefix', ticket_number = $ticket_number, ticket_source = 'Agent', ticket_category = $category_id, ticket_subject = '$subject', ticket_details = '$details', ticket_priority = '$priority', ticket_billable = '$billable', ticket_status = '$ticket_status', ticket_vendor_ticket_number = '$vendor_ticket_number', ticket_vendor_id = $vendor_id, ticket_location_id = $location_id, ticket_asset_id = $asset_id, ticket_created_by = $session_user_id, ticket_assigned_to = $assigned_to, ticket_contact_id = $contact, ticket_url_key = '$url_key', ticket_due_at = $due, ticket_client_id = $client_id, ticket_invoice_id = 0, ticket_project_id = $project_id");
+    mysqli_query($mysqli, "INSERT INTO tickets SET ticket_prefix = '$config_ticket_prefix', ticket_number = $ticket_number, ticket_source = 'Agent', ticket_category = $category_id, ticket_subject = '$subject', ticket_details = '$details', ticket_priority = '$priority', ticket_billable = '$billable', ticket_status = '$ticket_status', ticket_vendor_ticket_number = '$vendor_ticket_number', ticket_vendor_id = $vendor_id, ticket_location_id = $location_id, ticket_asset_id = $asset_id, ticket_created_by = $session_user_id, ticket_assigned_to = $assigned_to, ticket_contact_id = $contact_id, ticket_url_key = '$url_key', ticket_due_at = $due, ticket_client_id = $client_id, ticket_invoice_id = 0, ticket_project_id = $project_id");
 
     $ticket_id = mysqli_insert_id($mysqli);
 
@@ -203,19 +203,19 @@ if (isset($_POST['edit_ticket'])) {
     enforceUserPermission('module_support', 2);
 
     $ticket_id = intval($_POST['ticket_id']);
-    $contact_id = intval($_POST['contact']);
+    $contact_id = intval($_POST['contact_id']);
     $assigned_to = intval($_POST['assigned_to']);
     $notify = intval($_POST['contact_notify'] ?? 0);
-    $category_id = intval($_POST['category']);
+    $category_id = intval($_POST['category_id']);
     $ticket_subject = sanitizeInput($_POST['subject']);
     $billable = intval($_POST['billable'] ?? 0);
     $ticket_priority = sanitizeInput($_POST['priority']);
     $details = mysqli_real_escape_string($mysqli, $_POST['details']);
     $vendor_ticket_number = sanitizeInput($_POST['vendor_ticket_number']);
-    $vendor_id = intval($_POST['vendor']);
-    $asset_id = intval($_POST['asset']);
-    $location_id = intval($_POST['location']);
-    $project_id = intval($_POST['project']);
+    $vendor_id = intval($_POST['vendor_id']);
+    $asset_id = intval($_POST['asset_id']);
+    $location_id = intval($_POST['location_id']);
+    $project_id = intval($_POST['project_id']);
     // Validate/clean due field
     $dueInput = $_POST['due'] ?? null;
     if ($dueInput === null || trim($dueInput) === '') {

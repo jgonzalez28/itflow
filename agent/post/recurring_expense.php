@@ -18,7 +18,7 @@ if (isset($_POST['create_recurring_expense'])) {
     $amount =  floatval(str_replace(',', '', $_POST['amount']));
     $account = intval($_POST['account']);
     $vendor = intval($_POST['vendor']);
-    $client_id = intval($_POST['client']);
+    $client_id = intval($_POST['client_id']);
     $category = intval($_POST['category']);
     $description = sanitizeInput($_POST['description']);
     $reference = sanitizeInput($_POST['reference']);
@@ -54,7 +54,7 @@ if (isset($_POST['edit_recurring_expense'])) {
     $amount =  floatval(str_replace(',', '', $_POST['amount']));
     $account = intval($_POST['account']);
     $vendor = intval($_POST['vendor']);
-    $client_id = intval($_POST['client']);
+    $client_id = intval($_POST['client_id']);
     $category = intval($_POST['category']);
     $description = sanitizeInput($_POST['description']);
     $reference = sanitizeInput($_POST['reference']);
