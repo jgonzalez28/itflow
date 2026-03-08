@@ -4,7 +4,7 @@ require_once '../../../includes/modal_header.php';
 
 $item_id = intval($_GET['id']);
 
-$sql = mysqli_query($mysqli, "SELECT * FROM invoice_items WHERE item_id = $item_id LIMIT 1");
+$sql = mysqli_query($mysqli, "SELECT * FROM quote_items WHERE item_id = $item_id LIMIT 1");
 $row = mysqli_fetch_assoc($sql);
 $item_name = nullable_htmlentities($row['item_name']);
 $item_description = nullable_htmlentities($row['item_description']);

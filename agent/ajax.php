@@ -647,7 +647,7 @@ if (isset($_POST['update_quote_items_order'])) {
         $id = intval($position['id']);
         $order = intval($position['order']);
 
-        mysqli_query($mysqli, "UPDATE invoice_items SET item_order = $order WHERE item_quote_id = $quote_id AND item_id = $id");
+        mysqli_query($mysqli, "UPDATE quote_items SET item_order = $order WHERE item_quote_id = $quote_id AND item_id = $id");
     }
 
     // return a response
@@ -691,7 +691,7 @@ if (isset($_POST['update_recurring_invoice_items_order'])) {
         $id = intval($position['id']);
         $order = intval($position['order']);
 
-        mysqli_query($mysqli, "UPDATE invoice_items SET item_order = $order WHERE item_recurring_invoice_id = $recurring_invoice_id AND item_id = $id");
+        mysqli_query($mysqli, "UPDATE recurring_invoice_items SET item_order = $order WHERE item_recurring_invoice_id = $recurring_invoice_id AND item_id = $id");
     }
 
     // return a response

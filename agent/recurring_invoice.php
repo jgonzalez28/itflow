@@ -250,7 +250,7 @@ if (isset($_GET['recurring_invoice_id'])) {
                 </div>
             </div>
 
-            <?php $sql_items = mysqli_query($mysqli, "SELECT * FROM invoice_items WHERE item_recurring_invoice_id = $recurring_invoice_id ORDER BY item_order ASC"); ?>
+            <?php $sql_items = mysqli_query($mysqli, "SELECT * FROM recurring_invoice_items WHERE item_recurring_invoice_id = $recurring_invoice_id ORDER BY item_order ASC"); ?>
 
             <div class="row mb-3">
                 <div class="col-md-12">
@@ -329,7 +329,7 @@ if (isset($_GET['recurring_invoice_id'])) {
                                             <input type="hidden" name="recurring_invoice_id" value="<?php echo $recurring_invoice_id; ?>">
                                             <input type="hidden" name="item_order" value="<?php
                                                 //find largest order number and add 1
-                                                $sql = mysqli_query($mysqli, "SELECT MAX(item_order) AS item_order FROM invoice_items WHERE item_recurring_invoice_id = $recurring_invoice_id");
+                                                $sql = mysqli_query($mysqli, "SELECT MAX(item_order) AS item_order FROM recurring_invoice_items WHERE item_recurring_invoice_id = $recurring_invoice_id");
                                                 $row = mysqli_fetch_assoc($sql);
                                                 $item_order = intval($row['item_order']) + 1;
                                                 echo $item_order;

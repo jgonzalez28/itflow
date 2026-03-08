@@ -394,7 +394,7 @@ if (isset($_GET['delete_client'])) {
     while($row = mysqli_fetch_assoc($sql)) {
         $quote_id = $row['quote_id'];
 
-        mysqli_query($mysqli, "DELETE FROM invoice_items WHERE item_quote_id = $quote_id");
+        mysqli_query($mysqli, "DELETE FROM quote_items WHERE item_quote_id = $quote_id");
     }
     mysqli_query($mysqli, "DELETE FROM quotes WHERE quote_client_id = $client_id");
 
@@ -402,7 +402,7 @@ if (isset($_GET['delete_client'])) {
     $sql = mysqli_query($mysqli, "SELECT recurring_invoice_id FROM recurring_invoices WHERE recurring_invoice_client_id = $client_id");
     while($row = mysqli_fetch_assoc($sql)) {
         $recurring_invoice_id = $row['recurring_invoice_id'];
-        mysqli_query($mysqli, "DELETE FROM invoice_items WHERE item_recurring_invoice_id = $recurring_invoice_id");
+        mysqli_query($mysqli, "DELETE FROM recurring_invoice_items WHERE item_recurring_invoice_id = $recurring_invoice_id");
     }
     mysqli_query($mysqli, "DELETE FROM recurring_invoices WHERE recurring_invoice_client_id = $client_id");
 

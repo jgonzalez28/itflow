@@ -285,7 +285,7 @@ if (isset($_GET['quote_id'])) {
                 </div>
             </div>
 
-            <?php $sql_items = mysqli_query($mysqli, "SELECT * FROM invoice_items WHERE item_quote_id = $quote_id ORDER BY item_order ASC"); ?>
+            <?php $sql_items = mysqli_query($mysqli, "SELECT * FROM quote_items WHERE item_quote_id = $quote_id ORDER BY item_order ASC"); ?>
 
             <div class="row mb-3">
                 <div class="col-md-12">
@@ -371,7 +371,7 @@ if (isset($_GET['quote_id'])) {
                                             <input type="hidden" name="quote_id" value="<?php echo $quote_id; ?>">
                                             <input type="hidden" name="item_order" value="<?php
                                             //find largest order number and add 1
-                                            $sql = mysqli_query($mysqli, "SELECT MAX(item_order) AS item_order FROM invoice_items WHERE item_quote_id = $quote_id");
+                                            $sql = mysqli_query($mysqli, "SELECT MAX(item_order) AS item_order FROM quote_items WHERE item_quote_id = $quote_id");
                                             $row = mysqli_fetch_assoc($sql);
                                             $item_order = intval($row['item_order']) + 1;
                                             echo $item_order;
