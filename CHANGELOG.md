@@ -24,13 +24,18 @@ This file documents all notable changes made to ITFlow.
 - Client Overview: UI Sprucing.
 - Global: Introduced new checkbox class to all Checkbox select columns to keep consistency and reduce space and enhance ui.
 - Calendar: Event thats are cut off can now be viewed as a tooltip on hover.
-- Calendar: Ranamed System Calendars to built-in calendars and added the names and color dot for reference.
+- Calendar: Renamed System Calendars to built-in calendars and added the names and color dot for reference.
 - Calendar: You can now delete a custom calendar.
 - Report: Client Ticket Time Detail Audit: Selectable Billing Time Increment, will later be avauilable globally.
 - Roles/Permissions: Now complete and is out of beta all permission roles are strictly enforced, except for in Trips and Calendar, new enforce modules will be added for these at a later date.
 - Invoices/Quotes/Recurring Invoices: Split Items tables into their own POST logic and Modal UIs and tables (quote_items, invoice_items, recurring_items).
 - Project Template: Ticket Template order can now be dragged and dropped.
 - Global: CSRF Checks everywhere instead of just deletion calls.
+- Global: Renamed the rest of the unarchive post and label calls to restore.
+- Bumped Libraries:
+  - stripe-php from 19.0.0 to 19.4.1.
+  - fullcalendar from 6.1.19 to 6.1.20
+  - TCPDF from 6.10.1 to 6.11.2
 
 ## [26.02.1] Maint Release
 ### Bug Fixes
