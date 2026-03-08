@@ -28,7 +28,7 @@ This file documents all notable changes made to ITFlow.
 - Calendar: You can now delete a custom calendar.
 - Report: Client Ticket Time Detail Audit: Selectable Billing Time Increment, will later be avauilable globally.
 - Roles/Permissions: Now complete and is out of beta all permission roles are strictly enforced, except for in Trips and Calendar, new enforce modules will be added for these at a later date.
-- Invoices/Quotes/Recurring: Split into their own POST logic and Modal UIs and item tables.
+- Invoices/Quotes/Recurring Invoices: Split Items tables into their own POST logic and Modal UIs and tables (quote_items, invoice_items, recurring_items).
 - Project Template: Ticket Template order can now be dragged and dropped.
 - Global: CSRF Checks everywhere instead of just deletion calls.
 
