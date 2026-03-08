@@ -14,7 +14,7 @@ if (isset($_POST['add_expense'])) {
 
     require_once 'expense_model.php';
 
-    mysqli_query($mysqli,"INSERT INTO expenses SET expense_date = '$date', expense_amount = $amount, expense_currency_code = '$session_company_currency', expense_account_id = $account, expense_vendor_id = $vendor, expense_client_id = $client, expense_category_id = $category, expense_description = '$description', expense_reference = '$reference'");
+    mysqli_query($mysqli,"INSERT INTO expenses SET expense_date = '$date', expense_amount = $amount, expense_currency_code = '$session_company_currency', expense_account_id = $account, expense_vendor_id = $vendor, expense_client_id = $client_id, expense_category_id = $category, expense_description = '$description', expense_reference = '$reference'");
 
     $expense_id = mysqli_insert_id($mysqli);
 
@@ -37,7 +37,7 @@ if (isset($_POST['add_expense'])) {
         }
     }
 
-    logAction("Expense", "Create", "$session_name created expense $description", $client, $expense_id);
+    logAction("Expense", "Create", "$session_name created expense $description", $client_id, $expense_id);
 
     flash_alert("Expense added" . $extended_alert_description);
 
@@ -78,9 +78,9 @@ if (isset($_POST['edit_expense'])) {
         }
     }
 
-    mysqli_query($mysqli,"UPDATE expenses SET expense_date = '$date', expense_amount = $amount, expense_account_id = $account, expense_vendor_id = $vendor, expense_client_id = $client, expense_category_id = $category, expense_description = '$description', expense_reference = '$reference' WHERE expense_id = $expense_id");
+    mysqli_query($mysqli,"UPDATE expenses SET expense_date = '$date', expense_amount = $amount, expense_account_id = $account, expense_vendor_id = $vendor, expense_client_id = $client_id, expense_category_id = $category, expense_description = '$description', expense_reference = '$reference' WHERE expense_id = $expense_id");
 
-    logAction("Expense", "Edit", "$session_name edited expense $description", $client, $expense_id);
+    logAction("Expense", "Edit", "$session_name edited expense $description", $client_id, $expense_id);
 
     flash_alert("Expense modified" . $extended_alert_description);
 
