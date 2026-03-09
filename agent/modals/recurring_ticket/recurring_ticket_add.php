@@ -200,6 +200,7 @@ ob_start();
                             <span class="input-group-text"><i class="fa fa-fw fa-recycle"></i></span>
                         </div>
                         <select class="form-control select2" name="frequency" required>
+                            <option value="">- Select Frequency -</option>
                             <optgroup label="Days">
                                 <option>Three Days</option>
                                 <option>Weekly</option>

@@ -12,7 +12,7 @@ if (isset($_POST['add_recurring_ticket'])) {
 
     enforceUserPermission('module_support', 2);
 
-    require_once 'ticket_recurring_model.php';
+    require_once 'recurring_ticket_model.php';
 
     $client_id = intval($_POST['client_id']);
 
@@ -46,7 +46,7 @@ if (isset($_POST['edit_recurring_ticket'])) {
 
     enforceUserPermission('module_support', 2);
 
-    require_once 'ticket_recurring_model.php';
+    require_once 'recurring_ticket_model.php';
 
     $recurring_ticket_id = intval($_POST['recurring_ticket_id']);
     $next_run_date = sanitizeInput($_POST['next_date']);
@@ -55,7 +55,7 @@ if (isset($_POST['edit_recurring_ticket'])) {
 
     enforceClientAccess();
 
-    mysqli_query($mysqli, "UPDATE recurring_tickets SET recurring_ticket_subject = '$subject', recurring_ticket_details = '$details', recurring_ticket_priority = '$priority', recurring_ticket_frequency = '$frequency', recurring_ticket_billable = $billable, recurring_ticket_next_run = '$next_run_date', recurring_ticket_assigned_to = $assigned_to, recurring_ticket_asset_id = $asset_id, recurring_ticket_contact_id = $contact_id, recurring_ticket_category = $category WHERE recurring_ticket_id = $recurring_ticket_id");
+    mysqli_query($mysqli, "UPDATE recurring_tickets SET recurring_ticket_subject = '$subject', recurring_ticket_details = '$details', recurring_ticket_priority = '$priority', recurring_ticket_frequency = '$frequency', recurring_ticket_billable = $billable, recurring_ticket_next_run = '$next_run_date', recurring_ticket_assigned_to = $assigned_to, recurring_ticket_asset_id = $asset_id, recurring_ticket_contact_id = $contact_id, recurring_ticket_category = $category_id WHERE recurring_ticket_id = $recurring_ticket_id");
 
     // Add Additional Assets
     if (isset($_POST['additional_assets'])) {
