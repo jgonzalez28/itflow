@@ -60,7 +60,13 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
             <h3 class="card-title mt-2"><i class="fas fa-fw <?= $type_icon ?> mr-2"></i><?= $type_display ?></h3>
             <div class="card-tools">
                 <div class="btn-group">
-                    <button type="button" class="btn btn-primary ajax-modal" data-modal-url="modals/product/product_add.php?type=<?= $type_filter ?>"><i class="fas fa-plus mr-2"></i>New <strong><?= ucwords($type_filter); ?></strong></button>
+                    <?php if (lookupUserPermission("module_sales") >= 2) { ?>
+                    <button type="button"
+                        class="btn btn-primary ajax-modal"
+                        data-modal-url="modals/product/product_add.php?type=<?= $type_filter ?>">
+                        <i class="fas fa-plus mr-2"></i>New <strong><?= ucwords($type_filter); ?></strong>
+                    </button>
+                    <?php } ?>
                     <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown"></button>
                     <div class="dropdown-menu">
                         <a class="dropdown-item text-dark ajax-modal"

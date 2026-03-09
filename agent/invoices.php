@@ -162,10 +162,12 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
         <h3 class="card-title mt-2"><i class="fa fa-fw fa-file-invoice mr-2"></i>Invoices</h3>
         <div class="card-tools">
             <div class="btn-group">
+                <?php if (lookupUserPermission("module_sales") >= 2) { ?>
                 <button type="button" class="btn btn-primary ajax-modal"
                     data-modal-url="modals/invoice/invoice_add.php?<?= $client_url ?>">
                     <i class="fas fa-plus mr-2"></i>New Invoice
                 </button>
+                <?php } ?>
                 <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown"></button>
                 <div class="dropdown-menu">
                     <a class="dropdown-item text-dark ajax-modal" href="#"
