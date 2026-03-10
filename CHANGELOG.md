@@ -9,6 +9,7 @@ This file documents all notable changes made to ITFlow.
 - Documents/Files: Fix redirect after File Upload to redirect to files instead of the non existent documents.
 - Recurring Ticket: add empty value placeholder for Ticket Frequency.
 - Setup: Fix base url tacking on /setup when not installing via script.
+- Ticket: Fix Task Approval.
 
 ### New Features & Updates 
 - Invoice: Send reminder 1 day after due date.
