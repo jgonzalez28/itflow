@@ -959,7 +959,6 @@ if (isset($_GET['ticket_id'])) {
                                 while ($row = mysqli_fetch_assoc($sql_tasks)) {
                                     $task_id = intval($row['task_id']);
                                     $task_name = nullable_htmlentities($row['task_name']);
-                                    //$task_description = nullable_htmlentities($row['task_description']); // not in db yet
                                     $task_completion_estimate = intval($row['task_completion_estimate']);
                                     $task_completed_at = nullable_htmlentities($row['task_completed_at']);
 
@@ -1018,7 +1017,7 @@ if (isset($_GET['ticket_id'])) {
 
                                                     <?php if ($user_can_approve) { ?>
                                                         <a class="confirm-link" href="post.php?approve_ticket_task=<?= $task_id ?>&approval_id=<?= $approval_id ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>">
-                                                            <i class="fas fa-thumbs-up text-green"></i>
+                                                            <i class="fas fa-thumbs-up text-green" title="Approve task"></i>
                                                         </a>
                                                     <?php } ?>
 
