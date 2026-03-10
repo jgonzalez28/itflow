@@ -35,7 +35,6 @@ This file documents all notable changes made to ITFlow.
 - Global: CSRF Checks everywhere instead of just deletion calls.
 - Global: Renamed the rest of the unarchive post and label calls to restore.
 - Files: Allow upload of .unifi extension.
-- 
 - Bumped Libraries:
   - stripe-php from 19.0.0 to 19.4.1.
   - fullcalendar from 6.1.19 to 6.1.20
