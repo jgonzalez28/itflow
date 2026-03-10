@@ -6,37 +6,38 @@ This file documents all notable changes made to ITFlow.
 ### Bug Fixes
 - Ticket Templates: Fix Task Sorting.
 - Ticket: Lower autoclose setting minimum value from 48 to 24 Hours.
-- Documents/Files: Fix redirect after File Upload to redirect to files instead of the non existent documents.
-- Recurring Ticket: add empty value placeholder for Ticket Frequency.
-- Setup: Fix base url tacking on /setup when not installing via script.
 - Ticket: Fix Task Approval.
+- Recurring Ticket: add empty value placeholder for Ticket Frequency.
+- Documents/Files: Fix redirect after File Upload to redirect to files instead of the non existent documents.
+- Setup: Fix base url tacking on /setup when not installing via script.
+
 
 ### New Features & Updates 
+- Clients: Net Terms: Added common 45 and 15 Days, removed 14 Days not as common.
+- Clients: Bulk Action Set Net Terms Added.
+- Clients: Swapped location and contact column, add PopOver with Details such as created, abbreviation, DB ID instead of taking up space underneath client, rounded tag pills and increased padding, removed info badges and added one info badge that displays a popover with details.
+- Clients: Added New Ticket to Client Top Header Menu.
+- Clients: Client Overview: UI Sprucing.
 - Invoice: Send reminder 1 day after due date.
-- Net Terms: Added common 45 and 15 Days, removed 14 Days not as common.
+- Invoices/Quotes/Recurring Invoices: Split Items tables into their own POST logic and Modal UIs and tables (quote_items, invoice_items, recurring_items).
 - Tickets: New Ticket Parsing - Anyone CC'ed onto the original email that created the ticket is added as a ticket watcher.
+- Ticket/Quotes: Quotes can now be associated with a ticket.
 - Networks: Removed Subnet Mask Field, Use CIDR instead.
 - Networks: Rearranged fields, Updated placeholders, Add/Edit/list for better flow.
 - Networks: Renamed DHCP to IP Range to allow for you use of both DHCP and or Usable IPs.
-- Ticket/Quotes: Quotes can now be associated with a ticket.
-- Clients: Bulk Action Set Net Terms Added.
 - Assets: Rearranged fields, Updated placeholders, Add/Edit/list for better flow.
 - Assets: Added IPv6 if available under IP, Make and Model are now one line with Serial Underneath. Added OS under Type. use pill for status.
-- Clients: Swapped location and contact column, add PopOver with Details such as created, abbreviation, DB ID instead of taking up space underneath client, rounded tag pills and increased padding, removed info badges and added one info badge that displays a popover with details.
-- Client: Added New Ticket to Client Top Header Menu.
-- Client Overview: UI Sprucing.
-- Global: Introduced new checkbox class to all Checkbox select columns to keep consistency and reduce space and enhance ui.
 - Calendar: Event thats are cut off can now be viewed as a tooltip on hover.
 - Calendar: Renamed System Calendars to built-in calendars and added the names and color dot for reference.
 - Calendar: You can now delete a custom calendar.
 - Report: Client Ticket Time Detail Audit: Selectable Billing Time Increment, will later be avauilable globally.
 - Roles/Permissions: Now complete and is out of beta all permission roles are strictly enforced, except for in Trips and Calendar, new enforce modules will be added for these at a later date.
-- Invoices/Quotes/Recurring Invoices: Split Items tables into their own POST logic and Modal UIs and tables (quote_items, invoice_items, recurring_items).
-- Project Template: Ticket Template order can now be dragged and dropped.
+- Project Templates: Ticket Template order can now be dragged and dropped.
+- Global: Introduced new checkbox class to all Checkbox select columns to keep consistency and reduce space and enhance ui.
 - Global: CSRF Checks everywhere instead of just deletion calls.
 - Global: Renamed the rest of the unarchive post and label calls to restore.
 - Files: Allow upload of .unifi extension.
-- Bumped Libraries:
+- Bump Libraries:
   - stripe-php from 19.0.0 to 19.4.1.
   - fullcalendar from 6.1.19 to 6.1.20
   - TCPDF from 6.10.1 to 6.11.2
