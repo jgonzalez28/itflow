@@ -345,7 +345,7 @@ if (isset($_GET['approve_ticket_task'])) {
 
     enforceUserPermission('module_support', 2);
 
-    $task_id = intval($_GET['approve_task']);
+    $task_id = intval($_GET['approve_ticket_task']);
     $approval_id = intval($_GET['approval_id']);
 
     $approval_row = mysqli_fetch_assoc(mysqli_query($mysqli, "SELECT * FROM task_approvals LEFT JOIN tasks on task_id = approval_task_id WHERE approval_id = $approval_id AND approval_task_id = $task_id AND approval_scope = 'internal'"));
