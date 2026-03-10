@@ -7,6 +7,8 @@ This file documents all notable changes made to ITFlow.
 - Ticket Templates: Fix Task Sorting.
 - Ticket: Lower autoclose setting minimum value from 48 to 24 Hours.
 - Documents/Files: Fix redirect after File Upload to redirect to files instead of the non existent documents.
+- Recurring Ticket: add empty value placeholder for Ticket Frequency.
+- Setup: Fix base url tacking on /setup when not installing via script.
 
 ### New Features & Updates 
 - Invoice: Send reminder 1 day after due date.
@@ -32,6 +34,8 @@ This file documents all notable changes made to ITFlow.
 - Project Template: Ticket Template order can now be dragged and dropped.
 - Global: CSRF Checks everywhere instead of just deletion calls.
 - Global: Renamed the rest of the unarchive post and label calls to restore.
+- Files: Allow upload of .unifi extension.
+- 
 - Bumped Libraries:
   - stripe-php from 19.0.0 to 19.4.1.
   - fullcalendar from 6.1.19 to 6.1.20
