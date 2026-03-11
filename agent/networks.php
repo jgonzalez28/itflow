@@ -200,13 +200,6 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                                 <input class="form-check-input" id="selectAllCheckbox" type="checkbox" onclick="checkAll(this)">
                             </div>
                         </td>
-                        <?php if (!$client_url) { ?>
-                        <th>
-                            <a class="text-secondary" href="?<?= $url_query_strings_sort ?>&sort=client_name&order=<?= $disp ?>">
-                                Client <?php if ($sort == 'client_name') { echo $order_icon; } ?>
-                            </a>
-                        </th>
-                        <?php } ?>
                         <th>
                             <a class="text-secondary" href="?<?= $url_query_strings_sort ?>&sort=network_name&order=<?= $disp ?>">
                                 Name <?php if ($sort == 'network_name') { echo $order_icon; } ?>
@@ -242,6 +235,13 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                                 DNS <?php if ($sort == 'network_primary_dns') { echo $order_icon; } ?>
                             </a>
                         </th>
+                        <?php if (!$client_url) { ?>
+                        <th>
+                            <a class="text-secondary" href="?<?= $url_query_strings_sort ?>&sort=client_name&order=<?= $disp ?>">
+                                Client <?php if ($sort == 'client_name') { echo $order_icon; } ?>
+                            </a>
+                        </th>
+                        <?php } ?>
                         <th class="text-center">Action</th>
                     </tr>
                     </thead>
@@ -291,9 +291,6 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                                     <input class="form-check-input bulk-select" type="checkbox" name="network_ids[]" value="<?php echo $network_id ?>">
                                 </div>
                             </td>
-                            <?php if (!$client_url) { ?>
-                            <td><a href="networks.php?client_id=<?= $client_id ?>"><?= $client_name ?></a></td>
-                            <?php } ?>
                             <td>
                                 <a class="text-dark ajax-modal" href="#" data-modal-url="modals/network/network_edit.php?id=<?= $network_id ?>">
                                     <div class="media">
@@ -311,6 +308,9 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                             <td><?= $network_gateway ?></td>
                             <td><?= $network_dhcp_range_display ?></td>
                             <td><?= $network_dns_display ?></td>
+                            <?php if (!$client_url) { ?>
+                            <td><a href="networks.php?client_id=<?= $client_id ?>"><?= $client_name ?></a></td>
+                            <?php } ?>
                             <td>
                                 <div class="dropdown dropleft text-center">
                                     <button class="btn btn-secondary btn-sm" type="button" data-toggle="dropdown">
