@@ -54,8 +54,7 @@ if (isset($_POST['add_database'])) {
     $database = filter_var(trim($_POST['database']), FILTER_SANITIZE_STRING);
     $username = filter_var(trim($_POST['username']), FILTER_SANITIZE_STRING);
     $password = filter_var(trim($_POST['password']), FILTER_SANITIZE_STRING);
-    $config_base_url = $_SERVER['HTTP_HOST'] . dirname($_SERVER['REQUEST_URI']);
-    $config_base_url = rtrim($config_base_url, '/');
+    $config_base_url = $_SERVER['HTTP_HOST'];
 
     $installation_id = randomString(32);
 

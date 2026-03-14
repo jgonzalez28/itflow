@@ -8,8 +8,8 @@ $sql = mysqli_query($mysqli, "SELECT contact_name FROM contacts WHERE contact_id
 $row = mysqli_fetch_assoc($sql);
 $contact_name = nullable_htmlentities($row['contact_name']);
 
-// Generate the HTML form content using output buffering.
 ob_start();
+
 ?>
 
 <div class="modal-header bg-dark">
@@ -20,6 +20,7 @@ ob_start();
 </div>
 
 <form action="post.php" method="post" autocomplete="off">
+    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
     <input type="hidden" name="contact_id" value="<?php echo $contact_id; ?>">
 
     <div class="modal-body">

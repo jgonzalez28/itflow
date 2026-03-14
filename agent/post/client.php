@@ -252,6 +252,8 @@ if (isset($_POST['add_client'])) {
 
 if (isset($_POST['edit_client'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_client', 2);
 
     require_once 'client_model.php';
@@ -392,7 +394,7 @@ if (isset($_GET['delete_client'])) {
     while($row = mysqli_fetch_assoc($sql)) {
         $quote_id = $row['quote_id'];
 
-        mysqli_query($mysqli, "DELETE FROM invoice_items WHERE item_quote_id = $quote_id");
+        mysqli_query($mysqli, "DELETE FROM quote_items WHERE item_quote_id = $quote_id");
     }
     mysqli_query($mysqli, "DELETE FROM quotes WHERE quote_client_id = $client_id");
 
@@ -400,7 +402,7 @@ if (isset($_GET['delete_client'])) {
     $sql = mysqli_query($mysqli, "SELECT recurring_invoice_id FROM recurring_invoices WHERE recurring_invoice_client_id = $client_id");
     while($row = mysqli_fetch_assoc($sql)) {
         $recurring_invoice_id = $row['recurring_invoice_id'];
-        mysqli_query($mysqli, "DELETE FROM invoice_items WHERE item_recurring_invoice_id = $recurring_invoice_id");
+        mysqli_query($mysqli, "DELETE FROM recurring_invoice_items WHERE item_recurring_invoice_id = $recurring_invoice_id");
     }
     mysqli_query($mysqli, "DELETE FROM recurring_invoices WHERE recurring_invoice_client_id = $client_id");
 
@@ -442,6 +444,8 @@ if (isset($_GET['delete_client'])) {
 }
 
 if (isset($_POST['export_clients_csv'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_client', 1);
 
@@ -492,6 +496,8 @@ if (isset($_POST['export_clients_csv'])) {
 }
 
 if (isset($_POST["import_clients_csv"])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_client', 2);
     $error = false;
@@ -939,6 +945,40 @@ if (isset($_POST['bulk_edit_client_hourly_rate'])) {
 
 }
 
+if (isset($_POST['bulk_edit_client_net_terms'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
+
+    enforceUserPermission('module_client', 2);
+
+    $net_terms = intval($_POST['net_terms']);
+
+    if (isset($_POST['client_ids'])) {
+
+        $count = count($_POST['client_ids']);
+
+        foreach($_POST['client_ids'] as $client_id) {
+            $client_id = intval($client_id);
+
+            $sql = mysqli_query($mysqli,"SELECT client_name FROM clients WHERE client_id = $client_id");
+            $row = mysqli_fetch_assoc($sql);
+            $client_name = sanitizeInput($row['client_name']);
+
+            mysqli_query($mysqli,"UPDATE clients SET client_net_terms = $net_terms WHERE client_id = $client_id");
+
+            logAction("Client", "Edit", "$session_name set net terms to $net_terms days for $client_name", $client_id);
+
+        }
+
+        logAction("Client", "Bulk Edit", "$session_name set the net terms to $net_terms days for $count client(s)", $client_id);
+
+        flash_alert("Set Net Term to <strong>$net_terms days</strong> for <strong>$count</strong> client(s)");
+    }
+
+    redirect();
+
+}
+
 if (isset($_POST['bulk_assign_client_tags'])) {
 
     validateCSRFToken($_POST['csrf_token']);
@@ -985,6 +1025,10 @@ if (isset($_POST['bulk_assign_client_tags'])) {
 }
 
 if (isset($_POST['bulk_send_client_email']) && isset($_POST['client_ids'])) {
+
+    validateCSRFToken($_POST['csrf_token']);
+
+    enforceUserPermission('module_client', 1);
 
     $client_ids = array_map('intval', $_POST['client_ids']);
     $count = count($client_ids);
@@ -1140,6 +1184,8 @@ if (isset($_POST['bulk_unarchive_clients'])) {
 }
 
 if (isset($_POST["export_client_pdf"])) {
+
+    validateCSRFToken($_POST['csrf_token']);
 
     // Enforce permissions
     enforceUserPermission("module_client", 3);

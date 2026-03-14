@@ -205,7 +205,7 @@ if (isset($_GET['project_id'])) {
                     </div>
                 <?php } ?>
                 <?php if (($tickets_closed_percent == 100 || $tickets_resolved_percent == 100) && empty($project_completed_at)) { ?>
-                    <a class="btn btn-dark btn-sm confirm-link" href="post.php?close_project=<?php echo $project_id; ?>">
+                    <a class="btn btn-dark btn-sm confirm-link" href="post.php?close_project=<?= $project_id ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>">
                         <i class="fas fa-fw fa-check mr-2"></i>Close
                     </a>
                 <?php } ?>
@@ -221,7 +221,7 @@ if (isset($_GET['project_id'])) {
                             </a>
                         <?php } ?>
                         <?php if (!empty($project_completed_at) && empty($project_archived_at) && lookupUserPermission("module_support" >= 2)) { ?>
-                            <a class="dropdown-item text-danger text-bold confirm-link" href="post.php?archive_project=<?php echo $project_id; ?>">
+                            <a class="dropdown-item text-danger text-bold confirm-link" href="post.php?archive_project=<?= $project_id ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>">
                                 <i class="fas fa-fw fa-archive mr-2"></i>Archive
                             </a>
                         <?php } ?>
@@ -345,7 +345,7 @@ if (isset($_GET['project_id'])) {
                             <table class="table table-border table-hover">
                                 <thead class="thead-light">
                                 <tr>
-                                    <td class="bg-light pr-0">
+                                    <td class="bg-light checkbox-column">
                                         <div class="form-check">
                                             <input class="form-check-input" id="selectAllCheckbox" type="checkbox" onclick="checkAll(this)" onkeydown="checkAll(this)">
                                         </div>
@@ -460,7 +460,7 @@ if (isset($_GET['project_id'])) {
                                     ?>
 
                                     <tr>
-                                        <td class="pr-0 bg-light">
+                                        <td class="bg-light checkbox-column">
                                             <!-- Ticket Bulk Select (for open tickets) -->
                                             <?php if (empty($ticket_closed_at)) { ?>
                                             <div class="form-check">
@@ -527,7 +527,7 @@ if (isset($_GET['project_id'])) {
                                     <?php if ($task_completed_at) { ?>
                                         <i class="far fa-check-square text-success mr-2"></i>
                                     <?php } else { ?>
-                                        <a href="post.php?complete_task=<?php echo $task_id; ?>">
+                                        <a href="post.php?complete_task=<?= $task_id ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>">
                                             <i class="far fa-square text-secondary mr-2"></i>
                                         </a>
                                     <?php } ?>

@@ -8,9 +8,15 @@ defined('FROM_POST_HANDLER') || die("Direct file access is not allowed");
 
 if (isset($_POST['add_network'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     require_once 'network_model.php';
+
+    $client_id = intval($_POST['client_id']);
+
+    enforceClientAccess();
 
     mysqli_query($mysqli,"INSERT INTO networks SET network_name = '$name', network_description = '$description', network_vlan = $vlan, network = '$network', network_subnet = '$subnet', network_gateway = '$gateway', network_primary_dns = '$primary_dns', network_secondary_dns = '$secondary_dns', network_dhcp_range = '$dhcp_range', network_notes = '$notes', network_location_id = $location_id, network_client_id = $client_id");
 
@@ -26,12 +32,19 @@ if (isset($_POST['add_network'])) {
 
 if (isset($_POST['edit_network'])) {
 
+    validateCSRFToken($_POST['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
-    $network_id = intval($_POST['network_id']);
     require_once 'network_model.php';
 
-    mysqli_query($mysqli,"UPDATE networks SET network_name = '$name', network_description = '$description', network_vlan = $vlan, network = '$network', network_subnet = '$subnet', network_gateway = '$gateway', network_primary_dns = '$primary_dns', network_secondary_dns = '$secondary_dns', network_dhcp_range = '$dhcp_range', network_notes = '$notes', network_location_id = $location_id WHERE network_id = $network_id");
+    $network_id = intval($_POST['network_id']);
+
+    $client_id = intval(getFieldById('networks', $network_id, 'network_client_id'));
+
+    enforceClientAccess();
+
+    mysqli_query($mysqli,"UPDATE networks SET network_name = '$name', network_description = '$description', network_vlan = $vlan, network = '$network', network_gateway = '$gateway', network_primary_dns = '$primary_dns', network_secondary_dns = '$secondary_dns', network_dhcp_range = '$dhcp_range', network_notes = '$notes', network_location_id = $location_id WHERE network_id = $network_id");
 
     logAction("Network", "Edit", "$session_name edited network $name", $client_id, $network_id);
 
@@ -43,6 +56,8 @@ if (isset($_POST['edit_network'])) {
 
 if (isset($_GET['archive_network'])) {
 
+    validateCSRFToken($_GET['csrf_token']);
+
     enforceUserPermission('module_support', 2);
 
     $network_id = intval($_GET['archive_network']);
@@ -52,6 +67,8 @@ if (isset($_GET['archive_network'])) {
     $row = mysqli_fetch_assoc($sql);
     $network_name = sanitizeInput($row['network_name']);
     $client_id = intval($row['network_client_id']);
+
+    enforceClientAccess();
 
     mysqli_query($mysqli,"UPDATE networks SET network_archived_at = NOW() WHERE network_id = $network_id");
 
@@ -63,11 +80,13 @@ if (isset($_GET['archive_network'])) {
 
 }
 
-if (isset($_GET['unarchive_network'])) {
+if (isset($_GET['restore_network'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
 
     enforceUserPermission('module_support', 2);
 
-    $network_id = intval($_GET['unarchive_network']);
+    $network_id = intval($_GET['restore_network']);
 
     // Get Network Name and Client ID for logging and alert message
     $sql = mysqli_query($mysqli,"SELECT network_name, network_client_id FROM networks WHERE network_id = $network_id");
@@ -75,9 +94,11 @@ if (isset($_GET['unarchive_network'])) {
     $network_name = sanitizeInput($row['network_name']);
     $client_id = intval($row['network_client_id']);
 
+    enforceClientAccess();
+
     mysqli_query($mysqli,"UPDATE networks SET network_archived_at = NULL WHERE network_id = $network_id");
 
-    logAction("Network", "Unarchive", "$session_name restored contact $contact_name", $client_id, $network_id);
+    logAction("Network", "Restore", "$session_name restored contact $contact_name", $client_id, $network_id);
 
     flash_alert("Network <strong>$network_name</strong> restored");
 
@@ -86,6 +107,8 @@ if (isset($_GET['unarchive_network'])) {
 }
 
 if (isset($_GET['delete_network'])) {
+
+    validateCSRFToken($_GET['csrf_token']);
 
     enforceUserPermission('module_support', 3);
 
@@ -96,6 +119,8 @@ if (isset($_GET['delete_network'])) {
     $row = mysqli_fetch_assoc($sql);
     $network_name = sanitizeInput($row['network_name']);
     $client_id = intval($row['network_client_id']);
+
+    enforceClientAccess();
 
     mysqli_query($mysqli,"DELETE FROM networks WHERE network_id = $network_id");
 
@@ -129,6 +154,8 @@ if (isset($_POST['bulk_delete_networks'])) {
             $network_name = sanitizeInput($row['network_name']);
             $client_id = intval($row['network_client_id']);
 
+            enforceClientAccess();
+
             mysqli_query($mysqli, "DELETE FROM networks WHERE network_id = $network_id AND network_client_id = $client_id");
 
             logAction("Network", "Delete", "$session_name deleted network $network_name", $client_id);
@@ -147,20 +174,21 @@ if (isset($_POST['bulk_delete_networks'])) {
 
 if (isset($_POST['export_networks_csv'])) {
 
-    enforceUserPermission('module_support', 2);
+    enforceUserPermission('module_support');
 
     if ($_POST['client_id']) {
         $client_id = intval($_POST['client_id']);
         $client_query = "AND network_client_id = $client_id";
         $client_name = getFieldById('clients', $client_id, 'client_name');
         $file_name_prepend = "$client_name-";
+        enforceClientAccess();
     } else {
         $client_query = '';
         $client_id = 0;
         $file_name_prepend = "$session_company_name-";
     }
 
-    $sql = mysqli_query($mysqli,"SELECT * FROM networks WHERE network_archived_at IS NULL $client_query ORDER BY network_name ASC");
+    $sql = mysqli_query($mysqli,"SELECT * FROM networks LEFT JOIN client ON client_id = network_client_id WHERE network_archived_at IS NULL $client_query $access_permission_query ORDER BY network_name ASC");
 
     $num_rows = mysqli_num_rows($sql);
 
@@ -174,12 +202,12 @@ if (isset($_POST['export_networks_csv'])) {
         $f = fopen('php://memory', 'w');
 
         //set column headers
-        $fields = array('Name', 'Description', 'vLAN', 'IP/Network', 'Subnet Mask', 'Gateway', 'Primary DNS', 'Secondary DNS', 'DHCP Range');
+        $fields = array('Name', 'Description', 'VLAN', 'Network (CIDR)', 'Gateway', 'IP Range', 'Primary DNS', 'Secondary DNS');
         fputcsv($f, $fields, $delimiter, $enclosure, $escape);
 
         //output each row of the data, format line as csv and write to file pointer
         while ($row = $sql->fetch_assoc()) {
-            $lineData = array($row['network_name'], $row['network_description'], $row['network_vlan'], $row['network'], $row['network_subnet'], $row['network_gateway'], $row['network_primary_dns'], $row['network_secondary_dns'], $row['network_dhcp_range']);
+            $lineData = array($row['network_name'], $row['network_description'], $row['network_vlan'], $row['network'], $row['network_gateway'], $row['network_dhcp_range'], $row['network_primary_dns'], $row['network_secondary_dns']);
             fputcsv($f, $lineData, $delimiter, $enclosure, $escape);
         }
 

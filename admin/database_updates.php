@@ -4193,10 +4193,152 @@ if (LATEST_DATABASE_VERSION > CURRENT_DATABASE_VERSION) {
         mysqli_query($mysqli, "UPDATE `settings` SET `config_current_database_version` = '2.4.0'");
     }
 
-    // if (CURRENT_DATABASE_VERSION == '2.4.0') {
-    //     // Insert queries here required to update to DB version 2.4.1
+    if (CURRENT_DATABASE_VERSION == '2.4.0') {
+
+        mysqli_query($mysqli, "
+            CREATE TABLE `quote_items` (
+              `item_id` int(11) NOT NULL AUTO_INCREMENT,
+              `item_name` varchar(200) NOT NULL,
+              `item_description` text DEFAULT NULL,
+              `item_quantity` decimal(15,2) NOT NULL DEFAULT 0.00,
+              `item_price` decimal(15,2) NOT NULL DEFAULT 0.00,
+              `item_subtotal` decimal(15,2) NOT NULL DEFAULT 0.00,
+              `item_tax` decimal(15,2) NOT NULL DEFAULT 0.00,
+              `item_total` decimal(15,2) NOT NULL DEFAULT 0.00,
+              `item_order` int(11) NOT NULL DEFAULT 0,
+              `item_created_at` datetime NOT NULL DEFAULT current_timestamp(),
+              `item_updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
+              `item_archived_at` datetime DEFAULT NULL,
+              `item_tax_id` int(11) NOT NULL DEFAULT 0,
+              `item_product_id` int(11) NOT NULL DEFAULT 0,
+              `item_quote_id` int(11) NOT NULL,
+              PRIMARY KEY (`item_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+        ");
+
+        mysqli_query($mysqli, "
+            CREATE TABLE `recurring_invoice_items` (
+              `item_id` int(11) NOT NULL AUTO_INCREMENT,
+              `item_name` varchar(200) NOT NULL,
+              `item_description` text DEFAULT NULL,
+              `item_quantity` decimal(15,2) NOT NULL DEFAULT 0.00,
+              `item_price` decimal(15,2) NOT NULL DEFAULT 0.00,
+              `item_subtotal` decimal(15,2) NOT NULL DEFAULT 0.00,
+              `item_tax` decimal(15,2) NOT NULL DEFAULT 0.00,
+              `item_total` decimal(15,2) NOT NULL DEFAULT 0.00,
+              `item_order` int(11) NOT NULL DEFAULT 0,
+              `item_created_at` datetime NOT NULL DEFAULT current_timestamp(),
+              `item_updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
+              `item_archived_at` datetime DEFAULT NULL,
+              `item_tax_id` int(11) NOT NULL DEFAULT 0,
+              `item_product_id` int(11) NOT NULL DEFAULT 0,
+              `item_recurring_invoice_id` int(11) NOT NULL,
+              PRIMARY KEY (`item_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+        ");
+
+        mysqli_query($mysqli, "UPDATE `settings` SET `config_current_database_version` = '2.4.1'");
+    }
+
+    if (CURRENT_DATABASE_VERSION == '2.4.1') {
+
+        // Migrate Items
+        mysqli_query($mysqli, "
+            INSERT INTO `recurring_invoice_items` (
+              `item_name`,
+              `item_description`,
+              `item_quantity`,
+              `item_price`,
+              `item_subtotal`,
+              `item_tax`,
+              `item_total`,
+              `item_order`,
+              `item_created_at`,
+              `item_updated_at`,
+              `item_archived_at`,
+              `item_tax_id`,
+              `item_product_id`,
+              `item_recurring_invoice_id`
+            )
+            SELECT
+              `item_name`,
+              `item_description`,
+              `item_quantity`,
+              `item_price`,
+              `item_subtotal`,
+              `item_tax`,
+              `item_total`,
+              `item_order`,
+              `item_created_at`,
+              `item_updated_at`,
+              `item_archived_at`,
+              `item_tax_id`,
+              `item_product_id`,
+              `item_recurring_invoice_id`
+            FROM `invoice_items`
+            WHERE `item_recurring_invoice_id` != 0
+        ");
+
+        mysqli_query($mysqli, "
+            INSERT INTO `quote_items` (
+              `item_name`,
+              `item_description`,
+              `item_quantity`,
+              `item_price`,
+              `item_subtotal`,
+              `item_tax`,
+              `item_total`,
+              `item_order`,
+              `item_created_at`,
+              `item_updated_at`,
+              `item_archived_at`,
+              `item_tax_id`,
+              `item_product_id`,
+              `item_quote_id`
+            )
+            SELECT
+              `item_name`,
+              `item_description`,
+              `item_quantity`,
+              `item_price`,
+              `item_subtotal`,
+              `item_tax`,
+              `item_total`,
+              `item_order`,
+              `item_created_at`,
+              `item_updated_at`,
+              `item_archived_at`,
+              `item_tax_id`,
+              `item_product_id`,
+              `item_quote_id`
+            FROM `invoice_items`
+            WHERE `item_quote_id` != 0
+        ");
+
+        mysqli_query($mysqli, "
+            DELETE FROM `invoice_items`
+            WHERE `item_recurring_invoice_id` != 0
+        ");
+
+        mysqli_query($mysqli, "
+            DELETE FROM `invoice_items`
+            WHERE `item_quote_id` != 0
+        ");
+
+        mysqli_query($mysqli, "
+            ALTER TABLE `invoice_items`
+            DROP COLUMN `item_quote_id`,
+            DROP COLUMN `item_recurring_invoice_id`
+        ");
+
+        mysqli_query($mysqli, "UPDATE `settings` SET `config_current_database_version` = '2.4.2'");
+
+    }
+    //
+    // // if (CURRENT_DATABASE_VERSION == '2.4.2') {
+    //     // Insert queries here required to update to DB version 2.4.3
     //     // Then, update the database to the next sequential version
-    //     mysqli_query($mysqli, "UPDATE `settings` SET `config_current_database_version` = '2.4.1'");
+    //     mysqli_query($mysqli, "UPDATE `settings` SET `config_current_database_version` = '2.4.3'");
     // }
 
 } else {

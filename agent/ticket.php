@@ -368,7 +368,13 @@ if (isset($_GET['ticket_id'])) {
                     <div class="card-tools d-print-none">
                         <div class="btn-toolbar">
 
-                            <?php if ($config_module_enable_accounting && $ticket_billable == 1 && empty($invoice_id) && lookupUserPermission("module_sales") >= 2) { ?>
+                            <?php if ($config_module_enable_accounting && $ticket_billable == 1 && empty($quote_id) && empty($invoice_id) && lookupUserPermission("module_sales") >= 2) { ?>
+                            <a href="#" class="btn btn-light btn-sm ml-3 ajax-modal" href="#" data-modal-url="modals/ticket/ticket_quote_add.php?ticket_id=<?= $ticket_id ?>" data-modal-size="lg">
+                                <i class="fas fa-fw fa-comment-dollar mr-2"></i>Quote
+                            </a>
+                            <?php }
+
+                            if ($config_module_enable_accounting && $ticket_billable == 1 && empty($invoice_id) && lookupUserPermission("module_sales") >= 2) { ?>
                                 <a href="#" class="btn btn-light btn-sm ml-3 ajax-modal" href="#" data-modal-url="modals/ticket/ticket_invoice_add.php?ticket_id=<?= $ticket_id ?>" data-modal-size="lg">
                                     <i class="fas fa-fw fa-file-invoice mr-2"></i>Invoice
                                 </a>
@@ -377,7 +383,7 @@ if (isset($_GET['ticket_id'])) {
                             if (empty($ticket_closed_at)) { ?>
 
                                 <?php if (empty($ticket_closed_at) && !empty($ticket_resolved_at)) { ?>
-                                    <a href="post.php?reopen_ticket=<?php echo $ticket_id; ?>" class="btn btn-light btn-sm ml-3">
+                                    <a href="post.php?reopen_ticket=<?= $ticket_id ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>" class="btn btn-light btn-sm ml-3">
                                         <i class="fas fa-fw fa-redo mr-2"></i>Reopen
                                     </a>
                                 <?php } ?>
@@ -568,6 +574,7 @@ if (isset($_GET['ticket_id'])) {
                 <?php if (lookupUserPermission("module_support") >= 2 && empty($ticket_resolved_at) && empty($ticket_closed_at)) { ?>
 
                         <form action="post.php" method="post" autocomplete="off">
+                            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                             <input type="hidden" name="ticket_id" id="ticket_id" value="<?php echo $ticket_id; ?>">
                             <input type="hidden" name="client_id" id="client_id" value="<?php echo $client_id; ?>">
 
@@ -752,7 +759,7 @@ if (isset($_GET['ticket_id'])) {
                                                         <i class="fas fa-fw fa-edit text-secondary mr-2"></i>Edit
                                                     </a>
                                                     <div class="dropdown-divider"></div>
-                                                    <a class="dropdown-item text-danger confirm-link" href="post.php?archive_ticket_reply=<?php echo $ticket_reply_id; ?>">
+                                                    <a class="dropdown-item text-danger confirm-link" href="post.php?archive_ticket_reply=<?= $ticket_reply_id ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>">
                                                         <i class="fas fa-fw fa-archive mr-2"></i>Archive
                                                     </a>
                                                     <?php } ?>
@@ -912,11 +919,11 @@ if (isset($_GET['ticket_id'])) {
                                         <i class="fas fa-ellipsis-v"></i>
                                     </button>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item text-success" href="post.php?complete_all_tasks=<?php echo $ticket_id; ?>">
+                                        <a class="dropdown-item text-success" href="post.php?complete_all_tasks=<?= $ticket_id ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>">
                                             <i class="fas fa-fw fa-check-double mr-2"></i>Mark All Complete
                                         </a>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="post.php?undo_complete_all_tasks=<?php echo $ticket_id; ?>">
+                                        <a class="dropdown-item" href="post.php?undo_complete_all_tasks=<?= $ticket_id ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>">
                                             <i class="far fa-fw fa-square mr-2"></i>Mark All Incomplete
                                         </a>
                                         <div class="dropdown-divider"></div>
@@ -932,6 +939,7 @@ if (isset($_GET['ticket_id'])) {
 
                             <?php if (empty($ticket_resolved_at) && lookupUserPermission("module_support") >= 2) { ?>
                                 <form action="post.php" method="post" autocomplete="off">
+                                    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                     <input type="hidden" name="ticket_id" value="<?php echo $ticket_id; ?>">
                                     <div class="form-group px-2 pt-3">
                                         <div class="input-group input-group-sm">
@@ -951,7 +959,6 @@ if (isset($_GET['ticket_id'])) {
                                 while ($row = mysqli_fetch_assoc($sql_tasks)) {
                                     $task_id = intval($row['task_id']);
                                     $task_name = nullable_htmlentities($row['task_name']);
-                                    //$task_description = nullable_htmlentities($row['task_description']); // not in db yet
                                     $task_completion_estimate = intval($row['task_completion_estimate']);
                                     $task_completed_at = nullable_htmlentities($row['task_completed_at']);
 
@@ -1010,12 +1017,12 @@ if (isset($_GET['ticket_id'])) {
 
                                                     <?php if ($user_can_approve) { ?>
                                                         <a class="confirm-link" href="post.php?approve_ticket_task=<?= $task_id ?>&approval_id=<?= $approval_id ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>">
-                                                            <i class="fas fa-thumbs-up text-green"></i>
+                                                            <i class="fas fa-thumbs-up text-green" title="Approve task"></i>
                                                         </a>
                                                     <?php } ?>
 
                                                 <?php } else { ?>
-                                                    <a href="post.php?complete_task=<?php echo $task_id; ?>">
+                                                    <a href="post.php?complete_task=<?= $task_id ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>">
                                                         <i class="far fa-square text-dark"></i>
                                                     </a>
                                                 <?php } ?>
@@ -1048,7 +1055,7 @@ if (isset($_GET['ticket_id'])) {
                                                                     </a>
                                                                 <?php } ?>
                                                                 <?php if ($task_completed_at) { ?>
-                                                                    <a class="dropdown-item" href="post.php?undo_complete_task=<?php echo $task_id; ?>">
+                                                                    <a class="dropdown-item" href="post.php?undo_complete_task=<?= $task_id ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>">
                                                                         <i class="fas fa-fw fa-arrow-circle-left mr-2"></i>Mark incomplete
                                                                     </a>
                                                                 <?php } ?>
@@ -1152,7 +1159,7 @@ if (isset($_GET['ticket_id'])) {
                                 <div class='mt-1'>
                                     <i class="fa fa-fw fa-envelope text-secondary mr-2"></i><?php echo $ticket_watcher_email; ?>
                                     <?php if (empty($ticket_closed_at)) { ?>
-                                        <a class="confirm-link float-right" href="post.php?delete_ticket_watcher=<?php echo $watcher_id; ?>">
+                                        <a class="confirm-link float-right" href="post.php?delete_ticket_watcher=<?= $watcher_id ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>">
                                             <i class="fas fa-fw fa-times text-secondary"></i>
                                         </a>
                                     <?php } ?>
@@ -1197,7 +1204,7 @@ if (isset($_GET['ticket_id'])) {
                                         <i class="fa fa-fw fa-<?php echo $additional_asset_icon; ?> text-secondary mr-2"></i><?php echo $additional_asset_name; ?>
                                     </a>
                                     <?php if (empty($ticket_closed_at)) { ?>
-                                        <a class="confirm-link float-right" href="post.php?delete_ticket_additional_asset=<?php echo $additional_asset_id; ?>&ticket_id=<?php echo $ticket_id; ?>" title="Remove asset from ticket">
+                                        <a class="confirm-link float-right" href="post.php?delete_ticket_additional_asset=<?= $additional_asset_id; ?>&ticket_id=<?= $ticket_id ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>" title="Remove asset from ticket">
                                             <i class="fas fa-fw fa-times text-secondary"></i>
                                         </a>
                                     <?php } ?>
@@ -1338,6 +1345,7 @@ new Sortable(document.querySelector('table#tasks tbody'), {
 
         $.post('ajax.php', {
             update_ticket_tasks_order: true,
+            csrf_token: '<?= $_SESSION['csrf_token'] ?>',
             ticket_id: <?php echo $ticket_id; ?>,
             positions: positions
         });
