@@ -8,6 +8,8 @@ defined('FROM_POST_HANDLER') || die("Direct file access is not allowed");
 
 if (isset($_POST['add_client'])) {
 
+    // JQ - Using Prepared MySQLi Statements here for show this is not our standard and is only used in the client add/edit POST.
+
     validateCSRFToken($_POST['csrf_token']);
 
     enforceUserPermission('module_client', 2);
