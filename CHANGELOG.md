@@ -9,6 +9,12 @@ This file documents all notable changes made to ITFlow.
 - Client: Fix Edit erroring on certain characters.
 - Category: Fix Add/Edit due to missing CSRF fields.
 - Invoice: Do not apply late fee on first overdue reminder (1 day).
+- Ticket: Fix issue with contact not being added with Add contact modal v1.
+
+### New Features & Updates 
+- Categories: Add Description Field.
+- Categories: Add DB Field for order.
+- Categories: Move Asset Status and Network Interface Type to categories so custom ones can be created and edited. More to come...
 
 ## [26.03] Stable Release
 ### Bug Fixes
