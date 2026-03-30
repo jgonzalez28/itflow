@@ -89,6 +89,12 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                            } else {
                                echo 'btn-default';
                            } ?>">Network Interface</a>
+                        <a href="?category=asset_status"
+                           class="btn <?php if ($category == 'asset_status') {
+                               echo 'btn-primary';
+                           } else {
+                               echo 'btn-default';
+                           } ?>">Asset Status</a>
                         <a href="?<?php echo $url_query_strings_sort ?>&archived=1"
                             class="btn <?php if (isset($_GET['archived'])) {
                                 echo 'btn-primary';
@@ -120,6 +126,7 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                     while ($row = mysqli_fetch_assoc($sql)) {
                         $category_id = intval($row['category_id']);
                         $category_name = nullable_htmlentities($row['category_name']);
+                        $category_description = nullable_htmlentities($row['category_description']);
                         $category_color = nullable_htmlentities($row['category_color']);
 
                         ?>
@@ -128,6 +135,7 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                                 <a class="text-dark ajax-modal" href="#"
                                     data-modal-url="modals/category/category_edit.php?id=<?= $category_id ?>">
                                     <?php echo $category_name; ?>
+                                    <div><small class="text-secondary"><?= $category_description ?></small></div>
                                 </a>
                             </td>
                             <td><i class="fa fa-3x fa-circle" style="color:<?php echo $category_color; ?>;"></i></td>

@@ -60,6 +60,16 @@ $category_types_array = ['Expense', 'Income', 'Referral', 'Ticket'];
             </div>
         </div>
 
+        <div class="form-group">
+            <label>Description</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-fw fa-align-left"></i></span>
+                </div>
+                <input type="text" class="form-control" name="description" placeholder="Enter a description" maxlength="200">
+            </div>
+        </div>
+
     </div>
     <div class="modal-footer">
         <button type="submit" name="add_category" class="btn btn-primary text-bold"><i class="fa fa-check mr-2"></i>Create Category</button>

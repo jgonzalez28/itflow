@@ -243,15 +243,6 @@ $document_types_array = array (
     '2'=>'Global Template'
 );
 
-$asset_status_array = array (
-    'Ready to Deploy',
-    'Deployed',
-    'Out for Repair',
-    'Lost',
-    'Stolen',
-    'Retired'
-);
-
 $ticket_status_array = array (
     'Open',
     'On Hold',
