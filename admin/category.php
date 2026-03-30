@@ -83,6 +83,12 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                            } else {
                                echo 'btn-default';
                            } ?>">Ticket</a>
+                        <a href="?category=network_interface"
+                           class="btn <?php if ($category == 'network_interface') {
+                               echo 'btn-primary';
+                           } else {
+                               echo 'btn-default';
+                           } ?>">Network Interface</a>
                         <a href="?<?php echo $url_query_strings_sort ?>&archived=1"
                             class="btn <?php if (isset($_GET['archived'])) {
                                 echo 'btn-primary';
