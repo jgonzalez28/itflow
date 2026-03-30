@@ -28,14 +28,14 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
 <div class="card card-dark">
     <div class="card-header py-2">
         <h3 class="card-title mt-2"><i class="fa fa-fw fa-list-ul mr-2"></i>
-            <?php echo nullable_htmlentities($category); ?> Categories
+            <?= nullable_htmlentities(ucwords(str_replace('_', ' ', $category))); ?> Categories
         </h3>
         <?php
             if (!isset($_GET['archived'])) {
         ?>
         <div class="card-tools">
             <button type="button" class="btn btn-primary ajax-modal" data-modal-url="modals/category/category_add.php?category=<?= nullable_htmlentities($category) ?>"><i
-                    class="fas fa-plus mr-2"></i>New <?php echo nullable_htmlentities($category); ?> Category</button>
+                    class="fas fa-plus mr-2"></i>New <?= nullable_htmlentities(ucwords(str_replace('_', ' ', $category))); ?> Category</button>
         </div>
         <?php
             }
@@ -51,7 +51,7 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                             value="<?php if (isset($q)) {
                                 echo stripslashes(nullable_htmlentities($q));
                             } ?>"
-                            placeholder="Search <?php echo nullable_htmlentities($category); ?> Categories ">
+                            placeholder="Search <?= nullable_htmlentities(ucwords(str_replace('_', ' ', $category))); ?> Categories ">
                         <div class="input-group-append">
                             <button class="btn btn-primary"><i class="fa fa-search"></i></button>
                         </div>
