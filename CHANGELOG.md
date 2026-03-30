@@ -2,6 +2,14 @@
 
 This file documents all notable changes made to ITFlow.
 
+## [26.03.1] Maint Release
+### Bug Fixes
+- Racks: Fix Device Removal.
+- Table Lists: replace class table-responsive-sm with just table-reponsive was causing ui issues with certain screen sizes.
+- Client: Fix Edit erroring on certain characters.
+- Category: Fix Add/Edit due to missing CSRF fields.
+- Invoice: Do not apply late fee on first overdue reminder (1 day).
+
 ## [26.03] Stable Release
 ### Bug Fixes
 - Ticket Templates: Fix Task Sorting.
