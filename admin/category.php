@@ -95,6 +95,24 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                            } else {
                                echo 'btn-default';
                            } ?>">Asset Status</a>
+                        <a href="?category=software_type"
+                           class="btn <?php if ($category == 'software_type') {
+                               echo 'btn-primary';
+                           } else {
+                               echo 'btn-default';
+                           } ?>">Software Type</a>
+                        <a href="?category=rack_type"
+                           class="btn <?php if ($category == 'rack_type') {
+                               echo 'btn-primary';
+                           } else {
+                               echo 'btn-default';
+                           } ?>">Rack Type</a>
+                        <a href="?category=contact_note_type"
+                           class="btn <?php if ($category == 'contact_note_type') {
+                               echo 'btn-primary';
+                           } else {
+                               echo 'btn-default';
+                           } ?>">Contact Note Type</a>
                         <a href="?<?php echo $url_query_strings_sort ?>&archived=1"
                             class="btn <?php if (isset($_GET['archived'])) {
                                 echo 'btn-primary';

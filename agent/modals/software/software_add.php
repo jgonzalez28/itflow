@@ -79,8 +79,17 @@ ob_start();
                         </div>
                         <select class="form-control select2" name="type" required>
                             <option value="">- Select Type -</option>
-                            <?php foreach ($software_types_array as $software_type) { ?>
-                                <option><?php echo $software_type; ?></option>
+                            <<?php
+                            $sql_software_types_select = mysqli_query($mysqli, "
+                                SELECT category_name FROM categories
+                                WHERE category_type = 'software_type'
+                                AND category_archived_at IS NULL
+                                ORDER BY category_order ASC, category_name ASC
+                            ");
+                            while ($row = mysqli_fetch_assoc($sql_software_types_select)) {
+                                $software_type_select = nullable_htmlentities($row['category_name']);
+                                ?>
+                                <option><?= $software_type_select ?></option>
                             <?php } ?>
                         </select>
                     </div>
