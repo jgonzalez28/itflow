@@ -166,9 +166,9 @@ $num_rows = mysqli_fetch_row(mysqli_query($mysqli, "SELECT FOUND_ROWS()"));
                                         <?php
                                         if ($archived) {
                                             ?>
-                                            <a class="dropdown-item text-success confirm-link"
+                                            <a class="dropdown-item text-info confirm-link"
                                                 href="post.php?restore_category=<?php echo $category_id; ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>">
-                                                <i class="fas fa-fw fa-archive mr-2"></i>Restore
+                                                <i class="fas fa-fw fa-redo mr-2"></i>Restore
                                             </a>
                                             <a class="dropdown-item text-danger confirm-link"
                                                 href="post.php?delete_category=<?php echo $category_id; ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>">

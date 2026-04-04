@@ -68,7 +68,7 @@ if (isset($_GET['restore_category'])) {
 
     validateCSRFToken($_GET['csrf_token']);
 
-    $category_id = intval($_GET['retore_category']);
+    $category_id = intval($_GET['restore_category']);
 
     // Get Category Name and Type for logging
     $sql = mysqli_query($mysqli,"SELECT category_name, category_type FROM categories WHERE category_id = $category_id");
