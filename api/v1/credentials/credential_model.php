@@ -61,8 +61,6 @@ if (isset($_POST['credential_password'])) {
     $password_changed = false;
 }
 
-
-
 if (isset($_POST['credential_otp_secret'])) {
     $otp_secret = sanitizeInput($_POST['credential_otp_secret']);
 } elseif (isset($credential_row) && isset($credential_row['credential_otp_secret'])) {
@@ -79,12 +77,12 @@ if (isset($_POST['credential_note'])) {
     $note = '';
 }
 
-if (isset($_POST['credential_important'])) {
-    $important = intval($_POST['credential_important']);
-} elseif (isset($credential_row) && isset($credential_row['credential_important'])) {
-    $important = $credential_row['credential_important'];
+if (isset($_POST['credential_favorite'])) {
+    $favorite = intval($_POST['credential_favorite']);
+} elseif (isset($credential_row) && isset($credential_row['credential_favorite'])) {
+    $favorite = $credential_row['credential_favorite'];
 } else {
-    $important = '';
+    $favorite = 0;
 }
 
 if (isset($_POST['credential_contact_id'])) {
@@ -92,7 +90,7 @@ if (isset($_POST['credential_contact_id'])) {
 } elseif (isset($credential_row) && isset($credential_row['credential_contact_id'])) {
     $contact_id = $credential_row['credential_contact_id'];
 } else {
-    $contact_id = '';
+    $contact_id = 0;
 }
 
 if (isset($_POST['credential_vendor_id'])) {
@@ -100,7 +98,7 @@ if (isset($_POST['credential_vendor_id'])) {
 } elseif (isset($credential_row) && isset($credential_row['credential_vendor_id'])) {
     $vendor_id = $credential_row['credential_vendor_id'];
 } else {
-    $vendor_id = '';
+    $vendor_id = 0;
 }
 
 if (isset($_POST['credential_asset_id'])) {
@@ -108,7 +106,7 @@ if (isset($_POST['credential_asset_id'])) {
 } elseif (isset($credential_row) && isset($credential_row['credential_asset_id'])) {
     $asset_id = $credential_row['credential_asset_id'];
 } else {
-    $asset_id = '';
+    $asset_id = 0;
 }
 
 if (isset($_POST['credential_software_id'])) {
@@ -116,5 +114,5 @@ if (isset($_POST['credential_software_id'])) {
 } elseif (isset($credential_row) && isset($credential_row['credential_software_id'])) {
     $software_id = $credential_row['credential_software_id'];
 } else {
-    $software_id = '';
+    $software_id = 0;
 }
