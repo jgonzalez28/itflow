@@ -2,7 +2,7 @@
 
 This file documents all notable changes made to ITFlow.
 
-## [26.03.1] Maint Release
+## [26.04] Stable Release
 ### Bug Fixes
 - Racks: Fix Device Removal.
 - Table Lists: replace class table-responsive-sm with just table-reponsive was causing ui issues with certain screen sizes.
@@ -26,7 +26,7 @@ This file documents all notable changes made to ITFlow.
 
 ## [26.03] Stable Release
 ### Bug Fixes
-- Ticket Templates: Fix Task Sorting.
+- Ticket Templates: Fix Task Sortinhahahg.
 - Ticket: Lower autoclose setting minimum value from 48 to 24 Hours.
 - Ticket: Fix Task Approval.
 - Recurring Ticket: add empty value placeholder for Ticket Frequency.
