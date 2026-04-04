@@ -11,7 +11,7 @@ if (isset($_POST['api_key_decrypt_password'])) {
 if (isset($_POST['credential_name'])) {
     $name = sanitizeInput($_POST['credential_name']);
 } elseif (isset($credential_row) && isset($credential_row['credential_name'])) {
-    $name = $credential_row['credential_name'];
+    $name = mysqli_real_escape_string($mysqli, $credential_row['credential_name']);
 } else {
     $name = '';
 }
@@ -19,7 +19,7 @@ if (isset($_POST['credential_name'])) {
 if (isset($_POST['credential_description'])) {
     $description = sanitizeInput($_POST['credential_description']);
 } elseif (isset($credential_row) && isset($credential_row['credential_description'])) {
-    $description = $credential_row['credential_description'];
+    $description = mysqli_real_escape_string($mysqli, $credential_row['credential_description']);
 } else {
     $description = '';
 }
@@ -27,7 +27,7 @@ if (isset($_POST['credential_description'])) {
 if (isset($_POST['credential_uri'])) {
     $uri = sanitizeInput($_POST['credential_uri']);
 } elseif (isset($credential_row) && isset($credential_row['credential_uri'])) {
-    $uri = $credential_row['credential_uri'];
+    $uri = mysqli_real_escape_string($mysqli, $credential_row['credential_uri']);
 } else {
     $uri = '';
 }
@@ -35,7 +35,7 @@ if (isset($_POST['credential_uri'])) {
 if (isset($_POST['credential_uri_2'])) {
     $uri_2 = sanitizeInput($_POST['credential_uri_2']);
 } elseif (isset($credential_row) && isset($credential_row['credential_uri_2'])) {
-    $uri_2 = $credential_row['credential_uri_2'];
+    $uri_2 = mysqli_real_escape_string($mysqli, $credential_row['credential_uri_2']);
 } else {
     $uri_2 = '';
 }
@@ -66,7 +66,7 @@ if (isset($_POST['credential_password'])) {
 if (isset($_POST['credential_otp_secret'])) {
     $otp_secret = sanitizeInput($_POST['credential_otp_secret']);
 } elseif (isset($credential_row) && isset($credential_row['credential_otp_secret'])) {
-    $otp_secret = $credential_row['credential_otp_secret'];
+    $otp_secret = mysqli_real_escape_string($mysqli, $credential_row['credential_otp_secret']);
 } else {
     $otp_secret = '';
 }
@@ -74,7 +74,7 @@ if (isset($_POST['credential_otp_secret'])) {
 if (isset($_POST['credential_note'])) {
     $note = sanitizeInput($_POST['credential_note']);
 } elseif (isset($credential_row) && isset($credential_row['credential_note'])) {
-    $note = $credential_row['credential_note'];
+    $note = mysqli_real_escape_string($mysqli, $credential_row['credential_note']);
 } else {
     $note = '';
 }
