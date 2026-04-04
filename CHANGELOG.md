@@ -10,6 +10,12 @@ This file documents all notable changes made to ITFlow.
 - Category: Fix Add/Edit due to missing CSRF fields.
 - Invoice: Do not apply late fee on first overdue reminder (1 day).
 - Ticket: Fix issue with contact not being added with Add contact modal v1.
+- Quote: Fix Copy was missing client.
+- API: Don't set client ID from POST - this is properly done via require_post_method instead only if it's an all-clients key.
+- API: Prevent error 500s when existing data can't be cleanly re-inserted to database.
+- API: Add more helpful errors.
+- API: Fix asset read uri_2 field.
+- API: Various other field fixes.
 
 ### New Features & Updates 
 - Categories: Add Description Field.
