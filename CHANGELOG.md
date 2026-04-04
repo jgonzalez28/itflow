@@ -20,7 +20,9 @@ This file documents all notable changes made to ITFlow.
 ### New Features & Updates 
 - Categories: Add Description Field.
 - Categories: Add DB Field for order.
-- Categories: Move Asset Status and Network Interface Type to categories so custom ones can be created and edited. More to come...
+- Categories: Move Asset Status and Network Interface Type to categories so custom ones can be created and edited.
+- Categories: Moved note type, software type, rack type to be creatable/editable Categories with common defaults and descriptions
+- Files: Allow .swb file for MikroTik Backup Files.
 
 ## [26.03] Stable Release
 ### Bug Fixes
