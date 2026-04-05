@@ -24,6 +24,7 @@ This file documents all notable changes made to ITFlow.
 - Categories: Move Asset Status and Network Interface Type to categories so custom ones can be created and edited.
 - Categories: Moved note type, software type, rack type to be creatable/editable Categories with common defaults and descriptions
 - Files: Allow .swb file for MikroTik Backup Files.
+- Software: Added additonal License Types including Perpetual, Site, etc.
 
 ## [26.03] Stable Release
 ### Bug Fixes
