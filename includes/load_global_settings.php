@@ -158,17 +158,6 @@ $colors_array = array (
     'olive'
 );
 
-$net_terms_array = array (
-    '0'=>'On Receipt',
-    '7'=>'7 Days',
-    '10'=>'10 Days',
-    '15'=>'15 Days',
-    '30'=>'30 Days',
-    '45'=>'45 Days',
-    '60'=>'60 Days',
-    '90'=>'90 Days'
-);
-
 $records_per_page_array = array ('5','10','15','20','30','50','100');
 
 include_once "settings_localization_array.php";
@@ -188,27 +177,4 @@ $asset_types_array = array (
     'Camera'=>'fa-video',
     'Virtual Machine'=>'fa-cloud',
     'Other'=>'fa-tag'
-);
-
-$license_types_array = array (
-    'Device',
-    'User',
-    'Site',
-    'Concurrent',
-    'Trial',
-    'Perpetual',
-    'Usage-based'
-);
-
-$document_types_array = array (
-    '0'=>'Document',
-    '1'=>'Template',
-    '2'=>'Global Template'
-);
-
-$start_page_select_array = array (
-    'dashboard.php'=>'Dashboard',
-    'clients.php'=> 'Client Management',
-    'tickets.php'=> 'Support Tickets',
-    'invoices.php' => 'Invoices'
 );

@@ -13,8 +13,18 @@ $software_type = nullable_htmlentities($row['software_template_type']);
 $software_license_type = nullable_htmlentities($row['software_template_license_type']);
 $software_notes = nullable_htmlentities($row['software_template_notes']);
 
-// Generate the HTML form content using output buffering.
+$license_types_array = array (
+    'Device',
+    'User',
+    'Site',
+    'Concurrent',
+    'Trial',
+    'Perpetual',
+    'Usage-based'
+);
+
 ob_start();
+
 ?>
 
 <div class="modal-header bg-dark">

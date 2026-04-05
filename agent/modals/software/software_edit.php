@@ -41,9 +41,20 @@ while ($row = mysqli_fetch_assoc($contact_licenses_sql)) {
 }
 $contact_licenses = implode(',', $contact_licenses_array);
 
-// Generate the HTML form content using output buffering.
+$license_types_array = array (
+    'Device',
+    'User',
+    'Site',
+    'Concurrent',
+    'Trial',
+    'Perpetual',
+    'Usage-based'
+);
+
 ob_start();
+
 ?>
+
 <div class="modal-header bg-dark">
     <h5 class="modal-title"><i class="fa fa-fw fa-cube mr-2"></i>Editing license: <strong><?php echo $software_name; ?></strong></h5>
     <button type="button" class="close text-white" data-dismiss="modal">

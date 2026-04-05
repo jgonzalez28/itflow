@@ -4,6 +4,16 @@ require_once '../../../includes/modal_header.php';
 
 $client_id = intval($_GET['client_id'] ?? 0);
 
+$license_types_array = array (
+    'Device',
+    'User',
+    'Site',
+    'Concurrent',
+    'Trial',
+    'Perpetual',
+    'Usage-based'
+);
+
 ob_start();
 
 ?>
