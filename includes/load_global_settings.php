@@ -135,28 +135,6 @@ $config_whitelabel_key = $row['config_whitelabel_key'];
 
 
 // Select Arrays
-
-$theme_colors_array = array (
-    'lightblue',
-    'blue',
-    'cyan',
-    'green',
-    'olive',
-    'teal',
-    'red',
-    'maroon',
-    'pink',
-    'purple',
-    'indigo',
-    'fuchsia',
-    'yellow',
-    'orange',
-    'yellow',
-    'black',
-    'navy',
-    'gray'
-);
-
 $colors_array = array (
     'lightblue',
     'blue',
@@ -214,7 +192,12 @@ $asset_types_array = array (
 
 $license_types_array = array (
     'Device',
-    'User'
+    'User',
+    'Site',
+    'Concurrent',
+    'Trial',
+    'Perpetual',
+    'Usage-based'
 );
 
 $document_types_array = array (

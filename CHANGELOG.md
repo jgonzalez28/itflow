@@ -8,6 +8,7 @@ This file documents all notable changes made to ITFlow.
 - Table Lists: replace class table-responsive-sm with just table-reponsive was causing ui issues with certain screen sizes.
 - Client: Fix Edit erroring on certain characters.
 - Category: Fix Add/Edit due to missing CSRF fields.
+- Category: Fix Restore function and Icon and text color.
 - Invoice: Do not apply late fee on first overdue reminder (1 day).
 - Ticket: Fix issue with contact not being added with Add contact modal v1.
 - Quote: Fix Copy was missing client.
