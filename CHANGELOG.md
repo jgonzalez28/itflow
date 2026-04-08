@@ -35,7 +35,6 @@ This file documents all notable changes made to ITFlow.
 - Documents/Files: Fix redirect after File Upload to redirect to files instead of the non existent documents.
 - Setup: Fix base url tacking on /setup when not installing via script.
 
-
 ### New Features & Updates 
 - Clients: Net Terms: Added common 45 and 15 Days, removed 14 Days not as common.
 - Clients: Bulk Action Set Net Terms Added.
