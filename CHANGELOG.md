@@ -26,6 +26,7 @@ This file documents all notable changes made to ITFlow.
 - Files: Allow .swb file for MikroTik Backup Files.
 - Software: Added additonal License Types including Perpetual, Site, etc.
 - API: Add Invoice Items Endpoint.
+- Networks: Added Import.
 - Bump TinyMCE from 8.3.2 to 8.4.0.
 - Bump stripe-php from 19.4.1 to 20.0.0.
 
