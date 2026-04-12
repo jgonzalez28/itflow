@@ -25,8 +25,7 @@ This file documents all notable changes made to ITFlow.
 - Categories: Moved note type, software type, rack type to be creatable/editable Categories with common defaults and descriptions
 - Files: Allow .swb file for MikroTik Backup Files.
 - Software: Added additonal License Types including Perpetual, Site, etc.
-- API: Add Invoice Items Endpoint.
-- API: Add missing CRUD endpoints across all modules.
+- API: Invoice Items: Add read endpoint.
 - API: Certificates: Add update and delete endpoints.
 - API: Clients: Add delete endpoint.
 - API: Credentials: Add delete endpoint.
