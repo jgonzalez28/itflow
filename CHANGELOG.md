@@ -36,7 +36,6 @@ This file documents all notable changes made to ITFlow.
 - API: Invoices: Add create, update, and delete endpoints.
 - API: Locations: Add update and delete endpoints.
 - API: Networks: Add create, update, and delete endpoints.
-- API: Payments: Add create, update, and delete endpoints.
 - API: Products: Add create, update, and delete endpoints.
 - API: Quotes: Add create, update, and delete endpoints.
 - API: Software: Add create, update, and delete endpoints.
