@@ -105,7 +105,7 @@ logApp("Cron", "info", "Cron Started");
 mysqli_query($mysqli, "TRUNCATE TABLE ticket_views");
 
 // Clean-up shared items that have been used
-mysqli_query($mysqli, "DELETE FROM shared_items WHERE item_views = item_view_limit");
+mysqli_query($mysqli, "DELETE FROM shared_items WHERE item_view_limit > 0 AND item_views >= item_view_limit");
 
 // Clean-up shared items that have expired
 mysqli_query($mysqli, "DELETE FROM shared_items WHERE item_expire_at < NOW()");
