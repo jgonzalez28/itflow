@@ -66,6 +66,7 @@ $countries_array = array(
     "Georgia",
     "Germany",
     "Ghana",
+    "Gibraltar",
     "Greece",
     "Grenada",
     "Guatemala",
@@ -772,4 +773,3 @@ $locales_array = [
     'zu_ZA'       => 'Zulu (South Africa)',
     'zu'          => 'Zulu',
 ];
-?>

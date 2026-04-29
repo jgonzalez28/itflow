@@ -36,7 +36,7 @@ $invoices_sql = mysqli_query($mysqli, "SELECT * FROM invoices WHERE invoice_clie
             <tbody>
 
             <?php
-            while ($row = mysqli_fetch_array($invoices_sql)) {
+            while ($row = mysqli_fetch_assoc($invoices_sql)) {
                 $invoice_id = intval($row['invoice_id']);
                 $invoice_prefix = nullable_htmlentities($row['invoice_prefix']);
                 $invoice_number = intval($row['invoice_number']);
@@ -86,7 +86,6 @@ $invoices_sql = mysqli_query($mysqli, "SELECT * FROM invoices WHERE invoice_clie
                             <?php echo $invoice_status; ?>
                         </span>
                     </td>
-
                 </tr>
             <?php } ?>
 
@@ -100,4 +99,3 @@ $invoices_sql = mysqli_query($mysqli, "SELECT * FROM invoices WHERE invoice_clie
 
 <?php
 require_once "includes/footer.php";
-

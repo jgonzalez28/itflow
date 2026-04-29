@@ -21,16 +21,16 @@
 </p>
 
 
-<?php require_once "../includes/inc_confirm_modal.php"; ?>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/includes/inc_confirm_modal.php'; ?>
 
 <!-- jQuery -->
-<script src="../plugins/jquery/jquery.min.js"></script>
+<script src="/plugins/jquery/jquery.min.js"></script>
 
 <!-- Bootstrap 4 -->
-<script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 <!--- TinyMCE -->
-<script src="../plugins/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
+<script src="/plugins/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
 
 <script>
     
@@ -45,6 +45,7 @@
         branding: false,
         menubar: false,
         statusbar: false,
+        license_key: 'gpl',
         toolbar: [
             { name: 'styles', items: [ 'styles' ] },
             { name: 'formatting', items: [ 'bold', 'italic', 'forecolor' ] },
@@ -57,13 +58,15 @@
         mobile: {
         menubar: false,
         plugins: 'autosave lists autolink',
-        toolbar: 'undo bold italic styles'
+        toolbar: 'undo bold italic styles',
     },
         plugins: 'link image lists table code codesample fullscreen autoresize',
     });
 
 </script>
 
-<script src="../js/pretty_content.js"></script>
+<script src="/js/pretty_content.js"></script>
 
-<script src="../js/confirm_modal.js"></script>
+<script src="/js/confirm_modal.js"></script>
+
+<script src="/js/keepalive.js"></script>

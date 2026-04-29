@@ -12,7 +12,7 @@ if(isset($_POST['change_records_per_page'])){
 
     mysqli_query($mysqli,"UPDATE user_settings SET user_config_records_per_page = $records_per_page WHERE user_id = $session_user_id");
 
-    header("Location: " . $_SERVER["HTTP_REFERER"]);
+    redirect();
 
 }
 
@@ -20,16 +20,18 @@ if(isset($_POST['change_records_per_page'])){
 
 if (isset($_GET['dismiss_notification'])) {
 
+    validateCSRFToken($_GET['csrf_token']);
+
     $notification_id = intval($_GET['dismiss_notification']);
 
-    mysqli_query($mysqli,"UPDATE notifications SET notification_dismissed_at = NOW(), notification_dismissed_by = $session_user_id WHERE notification_id = $notification_id");
+    mysqli_query($mysqli,"UPDATE notifications SET notification_dismissed_at = NOW(), notification_dismissed_by = $session_user_id WHERE notification_user_id = $session_user_id AND notification_id = $notification_id");
 
     // Logging
     logAction("Notification", "Dismiss", "$session_name dismissed notification");
 
     $_SESSION['alert_message'] = "Notification Dismissed";
 
-    header("Location: " . $_SERVER["HTTP_REFERER"]);
+    redirect();
 
 }
 
@@ -41,7 +43,7 @@ if (isset($_GET['dismiss_all_notifications'])) {
 
     $num_notifications = mysqli_num_rows($sql);
 
-    while($row = mysqli_fetch_array($sql)) {
+    while($row = mysqli_fetch_assoc($sql)) {
         $notification_id = intval($row['notification_id']);
         $notification_dismissed_at = sanitizeInput($row['notification_dismissed_at']);
 
@@ -54,7 +56,7 @@ if (isset($_GET['dismiss_all_notifications'])) {
 
     $_SESSION['alert_message'] = "<strong>$num_notifications</strong> Notifications Dismissed";
 
-    header("Location: " . $_SERVER["HTTP_REFERER"]);
+    redirect();
 
 }
 
@@ -65,7 +67,7 @@ if (isset($_GET['deactivate_shared_item'])) {
 
     // Get details of the shared link
     $sql = mysqli_query($mysqli, "SELECT item_type, item_related_id, item_client_id FROM shared_items WHERE item_id = $item_id");
-    $row = mysqli_fetch_array($sql);
+    $row = mysqli_fetch_assoc($sql);
     $item_type = sanitizeInput($row['item_type']);
     $item_related_id = intval($row['item_related_id']);
     $client_id = intval($row['item_client_id']);
@@ -78,5 +80,5 @@ if (isset($_GET['deactivate_shared_item'])) {
 
     $_SESSION['alert_message'] = "Share Link deactivated";
 
-    header("Location: " . $_SERVER["HTTP_REFERER"]);
+    redirect();
 }

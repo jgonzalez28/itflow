@@ -6,6 +6,9 @@
 
 require_once 'includes/inc_all.php';
 
+// Allow clients to select a related asset when raising a ticket
+$sql_assets = mysqli_query($mysqli, "SELECT asset_id, asset_name, asset_type FROM assets WHERE asset_contact_id = $session_contact_id AND asset_client_id = $session_client_id AND asset_archived_at IS NULL ORDER BY asset_name ASC");
+
 ?>
 
     <ol class="breadcrumb d-print-none">
@@ -22,6 +25,7 @@ require_once 'includes/inc_all.php';
 
     <div class="col-md-8">
         <form action="post.php" method="post">
+            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
 
             <div class="form-group">
                 <label>Subject <strong class="text-danger">*</strong></label>
@@ -61,7 +65,7 @@ require_once 'includes/inc_all.php';
                             <option value="0">- No Category -</option>
                             <?php
                             $sql_categories = mysqli_query($mysqli, "SELECT category_id, category_name FROM categories WHERE category_type = 'Ticket' AND category_archived_at IS NULL");
-                            while ($row = mysqli_fetch_array($sql_categories)) {
+                            while ($row = mysqli_fetch_assoc($sql_categories)) {
                                 $category_id = intval($row['category_id']);
                                 $category_name = nullable_htmlentities($row['category_name']);
 
@@ -75,6 +79,30 @@ require_once 'includes/inc_all.php';
                 </div>
             </div>
 
+            <?php if (mysqli_num_rows($sql_assets) > 0) { ?>
+                <div class="form-group">
+                    <label>Asset</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-fw fa-desktop"></i></span>
+                        </div>
+                        <select class="form-control select2" name="asset">
+                            <option value="0">- None -</option>
+                            <?php
+
+                            while ($row = mysqli_fetch_assoc($sql_assets)) {
+                                $asset_id = intval($row['asset_id']);
+                                $asset_name = sanitizeInput($row['asset_name']);
+                                $asset_type = sanitizeInput($row['asset_type']);
+                                ?>
+                                <option value="<?php echo $asset_id ?>"><?php echo "$asset_name ($asset_type)"; ?></option>
+                                <?php
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+            <?php } ?>
 
 
             <div class="form-group">
@@ -89,4 +117,3 @@ require_once 'includes/inc_all.php';
 
 <?php
 require_once 'includes/footer.php';
-
