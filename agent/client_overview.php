@@ -349,7 +349,10 @@ $sql_asset_retired = mysqli_query(
 
     <?php } ?>
 
-    <?php if (mysqli_num_rows($sql_favorite_credentials) > 0) { ?>
+    <?php
+    // Credential Permission check
+    if (lookupUserPermission('module_credential')) {
+    if (mysqli_num_rows($sql_favorite_credentials) > 0) { ?>
 
     <div class="col-md-4">
 
@@ -411,7 +414,7 @@ $sql_asset_retired = mysqli_query(
 
     </div>
 
-    <?php } ?>
+    <?php }  } ?>
 
     <?php if (mysqli_num_rows($sql_shared_items) > 0) { ?>
 
