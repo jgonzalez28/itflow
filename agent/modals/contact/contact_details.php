@@ -665,9 +665,7 @@ ob_start();
                         </table>
                     </div>
                 </div>
-                <?php }
-                    } // End Cred Enforcement
-                ?>
+                <?php } ?>
 
                 <?php if ($recurring_ticket_count) { ?>
                 <div class="tab-pane fade <?= ($first_tab === "recurring") ? "show active" : "" ?>" id="pills-contact-recurring-tickets<?= $contact_id ?>">
