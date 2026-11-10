@@ -93,7 +93,7 @@ $error_html = $database_error !== '' ? '<div class="alert alert-danger d-flex ga
                         <label class="form-label" for="setupDatabasePassword">Password</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fa fa-fw fa-lock"></i></span>
-                            <input type="password" class="form-control" id="setupDatabasePassword" data-toggle="password" name="password" placeholder="The user's password" autocomplete="new-password" <?= $database_error !== '' ? 'autofocus' : '' ?>>
+                            <input type="password" class="form-control" id="setupDatabasePassword" data-toggle="password" name="password" value="<?= escapeHtml($defaultdbpassword ?? '') ?>" placeholder="The user's password" autocomplete="new-password" <?= $database_error !== '' ? 'autofocus' : '' ?>>
                             <span class="input-group-text"><i class="fa fa-fw fa-eye"></i></span>
                         </div>
                     </div>
