@@ -20,6 +20,15 @@ if (file_exists("../config.php")) {
     }
 }
 
+// Quick install: optional database defaults for the Database step (filled in by the install script)
+$defaultdbhost = 'localhost';
+$defaultdbusername = '';
+$defaultdbpassword = '';
+$defaultdatabase = '';
+if (file_exists("../db.php")) {
+    include "../db.php";
+}
+
 include "../functions.php"; // Global Functions
 include "../includes/database_version.php";
 define('FROM_SETUP', true);
@@ -163,7 +172,7 @@ $errorLog = ini_get('error_log') ?: "Debian/Ubuntu default is usually /var/log/a
 $timezones = DateTimeZone::listIdentifiers();
 
 // The Database step's form, when it has something to say about what was typed
-$database_form = ['database' => '', 'host' => 'localhost', 'username' => ''];
+$database_form = ['database' => $defaultdatabase, 'host' => $defaultdbhost, 'username' => $defaultdbusername];
 $database_error = '';
 $config_manual = '';
 
